@@ -80,9 +80,10 @@ begin
     
     writeln('----------------------------------------------');
     writeln('----------Los numeros generados son ----------');
-    repeat
-        ale:= A + random(B-A +1);
+    ale:= A + random(B-A +1);
+    while (ale <> F) do begin
         write(ale,'-');
-    until (ale=F);
+        ale:= A + random(B-A +1);
+    end;
 
 end.
