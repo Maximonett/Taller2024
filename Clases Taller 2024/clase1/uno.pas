@@ -21,11 +21,11 @@ type dias = 1..31;
      rango1 = 0..15;
      rango2 = 1..99;
      rango3 = 0..dimF;
-     venta = record
-                dia: dias;
+    venta = record
+        dia: dias;
 				codigoP: rango1;
 				cantidad: rango2;
-			 end;
+		end;
 	 vector = array [1..dimF] of venta;
 	 lista = ^nodo;
 	 nodo = record
@@ -104,10 +104,10 @@ begin
    for j := i+1 to dimL do 
         if (v[j].codigoP < v[pos].codigoP) then pos:=j;
 
-   {intercambia v[i] y v[pos]}
-   item := v[pos];   
-   v[pos] := v[i];   
-   v[i] := item;
+  {intercambia v[i] y v[pos]}
+  item := v[pos];   
+  v[pos] := v[i];   
+  v[i] := item;
  end;
 end;
 procedure Eliminar (var v: vector; var dimL: rango3; valorInferior, valorSuperior: rango1);
@@ -117,7 +117,7 @@ procedure Eliminar (var v: vector; var dimL: rango3; valorInferior, valorSuperio
   begin
     pos:= 1;
     while (pos <= dimL) and (elemABuscar > v[pos].codigoP) do
-       pos:= pos + 1;
+      pos:= pos + 1;
     if (pos > dimL) then BuscarPosicion:= 0
                     else BuscarPosicion:= pos;
   end;
@@ -125,37 +125,43 @@ procedure Eliminar (var v: vector; var dimL: rango3; valorInferior, valorSuperio
   function BuscarPosicionDesde (v: vector; dimL, pos : integer; elemABuscar: rango1): rango3;
   begin
     while (pos <= dimL) and (elemABuscar >= v[pos].codigoP) do
-       pos:= pos + 1;
+      pos:= pos + 1;
     if (pos > dimL) then BuscarPosicionDesde:= dimL
                     else BuscarPosicionDesde:= pos - 1;
   end;
 
-var posInferior, posSuperior, salto, i: rango3; 
+var posInferior, posSuperior, i: rango3; 
 Begin
   posInferior:= BuscarPosicion (v, dimL, valorInferior);
-  if (posInferior <> 0)
-  then begin
-         posSuperior:= BuscarPosicionDesde (v, dimL, posInferior, valorSuperior);
-         {Escribir el código correspondiente para hacer el corrimiento y disminuir la dimensión lógica}
+  if (posInferior <> 0) then begin
+      posSuperior:= BuscarPosicionDesde (v, dimL, posInferior, valorSuperior);
+        {Escribir el código correspondiente para hacer el corrimiento y disminuir la dimensión lógica}
          // Corrimiento de los elementos
-        for i := posSuperior + 1 to dimL do
+      for i := posSuperior + 1 to dimL do
             v[posInferior] := v[i];
     
         // Disminuir la dimensión lógica
         dimL := dimL - (posSuperior - posInferior + 1);
-       end;
+      end;
 end;
 
 procedure GenerarLista (v: vector; dimL: rango3; var L: lista);
 
   procedure AgregarAdelante (var L: lista; elem: venta);
+  var 
+    nue:lista;
   begin
-    { Completar }
+    new(nue);
+    nue^.dato:=elem;
+    nue^.sig:=L;
+    L:=nue;
   end;
   
   function Cumple (num: rango1): boolean;
   begin
-    { Completar }
+    Cumple:=false;
+    if (num>=1) and (num<=15)then
+      Cumple:=true;
   end;
   
 var i: rango3; 
@@ -167,7 +173,13 @@ end;
 
 procedure ImprimirLista (L: lista);
 begin
- { Completar }
+  if (L=nil) then 
+    write('No Hay Mas Ventas disponibles')
+  else begin
+    WriteLn('Codigo de Producto: ',L^.dato.codigoP);
+    WriteLn('Cantidad Vendida: ',L^.dato.cantidad);
+    ImprimirLista(L^.sig);
+  end;
 end;
 
 var v: vector;
@@ -188,7 +200,7 @@ Begin
                        writeln;
                        Ordenar (v, dimL);
                        ImprimirVector (v, dimL);
-                       {write ('Ingrese valor inferior: ');
+                       write ('Ingrese valor inferior: ');
                        readln (valorInferior);
                        write ('Ingrese valor superior: ');
                        readln (valorSuperior);
@@ -207,7 +219,7 @@ Begin
                                                                 writeln;
                                                                 ImprimirLista (L);
                                                               end;
-                                          end;}
+                                          end;
                       end;
                        
 end.
