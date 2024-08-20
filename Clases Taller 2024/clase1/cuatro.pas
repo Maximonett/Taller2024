@@ -131,7 +131,7 @@ var
     i: integer;
 begin
     for i := 1 to dimL do
-        writeln('Precio del producto ', i, ': ', vP[i].precio:0:2);
+        writeln('Precio del producto ', vP[i].codigoP, ': ', vP[i].precio:0:2);
 end;
 
 procedure calcularPromedio(vP: vectorP; dimL: integer);
@@ -145,6 +145,18 @@ begin
     writeln('Promedio de precios: ', suma / dimL:0:2);
 end;
 
+procedure mostrarVector(vP:vectorP; dimL:integer);
+var
+    i:integer;
+begin
+    for i:=1 to dimL do begin
+        WriteLn('------------------------------------');
+        writeln('El Codigo de Producto es:',vP[i].codigoP);
+        writeln('El Codigo de Rubro es: ',vP[i].codigoR);
+        writeln('El precio del producto  es: ',vP[i].precio:0:2);
+        WriteLn('------------------------------------');
+    end;
+end;
 
 
 var
@@ -157,7 +169,18 @@ begin
     cargarVectordDeListas(v);
     mostrarCodigosPorRubro(v);
     rubroTres(v,vP,dimL);
+    WriteLn('-------------------------');
+    WriteLn('----Lista desordenada----');
+    mostrarVector(vP,dimL);
     OrdenacionPorInsercion(vP,dimL);
+    WriteLn('------------------------------------');
+    WriteLn('----Lista ordenada por insercion----');
+    WriteLn('------------------------------------');
+    mostrarVector(vP,dimL);
+    WriteLn('------------------------------------');
+    WriteLn('------------------------------------');
     mostrarPrecios(vP, dimL);
+    WriteLn('------------------------------------');
+    WriteLn('----------Promedio------------------');
     calcularPromedio(vP, dimL);
 end.
