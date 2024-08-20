@@ -15,6 +15,8 @@ e. Muestre  los precios  del vector resultante  del punto d).
 f. Calcule el promedio  de los precios del vector resultante  del punto  d).}
 
 program cuatro;
+const
+    dimF=30;
 
 type
     rubro=1..8;
@@ -30,6 +32,7 @@ nodo=record
     sig:lista;
 end;
 vector = array [rubro] of lista;
+vectorP =array [1..dimF] of producto;
 
 procedure leerProducto(var p:producto);
 begin
@@ -94,12 +97,67 @@ begin
     end;
 end;
 
+procedure rubroTres(v:vector; var vP:vectorP;var dimL:integer);
+var
+    aux:lista;
+begin
+    aux:=v[3];
+    dimL:=0;
+    while (aux<>nil) and (dimL<dimF)do begin
+        dimL:=dimL+1;
+        vP[dimL]:=aux^.dato;
+        aux:=aux^.sig;
+    end;
+end;
+procedure OrdenacionPorInsercion(var vP: vectorP; dimL: integer);
+var 
+	i, j: integer;
+    actual:producto;
+begin
+
+	for i:= 2 to dimL do begin
+   		actual:=vP[i];
+   		j:= i-1;
+   		while (j > 0) and (vP[j].precio > actual.precio) do begin
+     			vP[j+1]:=vP[j];
+     			j := j-1;
+     		end;
+		vP[j+1] := actual;
+	end;
+end;
+
+procedure mostrarPrecios(vP: vectorP; dimL: integer);
+var
+    i: integer;
+begin
+    for i := 1 to dimL do
+        writeln('Precio del producto ', i, ': ', vP[i].precio:0:2);
+end;
+
+procedure calcularPromedio(vP: vectorP; dimL: integer);
+var
+    suma: real;
+    i: integer;
+begin
+    suma := 0;
+    for i := 1 to dimL do
+        suma := suma + vP[i].precio;
+    writeln('Promedio de precios: ', suma / dimL:0:2);
+end;
+
+
 
 var
     v:vector;
+    dimL:integer;
+    vP:vectorP;
 
 begin
     inicializarVector(v);
     cargarVectordDeListas(v);
     mostrarCodigosPorRubro(v);
+    rubroTres(v,vP,dimL);
+    OrdenacionPorInsercion(vP,dimL);
+    mostrarPrecios(vP, dimL);
+    calcularPromedio(vP, dimL);
 end.
