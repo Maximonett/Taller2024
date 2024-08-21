@@ -143,6 +143,25 @@ begin
     end;
 end;
 
+function prodcutoMayorVenta(aP: arbolP): integer;
+var
+    maxProducto: integer;
+begin
+    if (aP = nil) then
+        prodcutoMayorVenta := -1
+    else begin
+        maxProducto := aP^.dato.codigoP;
+        if (aP^.hi <> nil) then
+            if (prodcutoMayorVenta(aP^.hi) > maxProducto) then
+                maxProducto := prodcutoMayorVenta(aP^.hi);
+        if (aP^.hd <> nil) then
+            if (prodcutoMayorVenta(aP^.hd) > maxProducto) then
+                maxProducto := prodcutoMayorVenta(aP^.hd);
+        prodcutoMayorVenta := maxProducto;
+    end;
+end;
+
+
 var
     aV: arbolV;
     aP: arbolP;
@@ -153,5 +172,6 @@ begin
     cargarProductos(aP, aV);  // Procesar ventas y cargar árbol de productos
     writeln('Arbol de Productos en Pre orden');
     ImprimirArbol(aP);
-    codigoPmayorCantidadVendida(aP);
+    writeln('El codigo de producto con mayor ventas es el:',prodcutoMayorVenta(aP));
+    writeln('El codigo de producto con mayor ventas es el: ',Maximo(aP));
 end.
