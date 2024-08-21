@@ -2,8 +2,8 @@
 Implementar un programa que invoque los siguientes módulos:
 a. Un módulo que retorne la información de las ventas en un vector. 
 De cada venta se conoce el día de la venta, código del producto (entre 1 y 15) y cantidad vendida
- (como máximo 99 unidades). El código y el dia deben generarse automáticamente (random) y la cantidad se debe leer. 
- El ingreso de las ventas finaliza con el día de venta 0 (no se procesa).
+(como máximo 99 unidades). El código y el dia deben generarse automáticamente (random) y la cantidad se debe leer. 
+El ingreso de las ventas finaliza con el día de venta 0 (no se procesa).
 b. Un módulo que muestre el contenido del vector resultante del punto a).
 c. Un módulo que ordene el vector de ventas por código.
 d. Un módulo que muestre el contenido del vector resultante del punto c).
@@ -200,9 +200,9 @@ Begin
                        writeln;
                        Ordenar (v, dimL);
                        ImprimirVector (v, dimL);
-                       write ('Ingrese valor inferior: ');
+                       write ('Ingrese valor inferior para eliminar: ');
                        readln (valorInferior);
-                       write ('Ingrese valor superior: ');
+                       write ('Ingrese valor superior para eliminar: ');
                        readln (valorSuperior);
                        Eliminar (v, dimL, valorInferior, valorSuperior);
                        if (dimL = 0) then writeln ('--- Vector sin elementos, luego de la eliminacion ---')
