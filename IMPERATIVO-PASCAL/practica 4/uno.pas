@@ -17,67 +17,64 @@ entre los dos valores recibidos (sin incluir)}
 program uno;
 
 type
-
-    venta=record
-        codigoV:integer;
-        codigoP:integer;
-        cantV:integer;
-        precioU:real;
+    venta = record
+        codigoV: integer;
+        codigoP: integer;
+        cantV: integer;
+        precioU: real;
     end;
 
-    producto=record
-        codigoP:integer;
-        cantTotal:integer;
-        montoTotal:real;
+    producto = record
+        codigoP: integer;
+        cantTotal: integer;
+        montoTotal: real;
     end;
 
-
-    arbolV=^nodoV;
-    nodoV=record
-        dato:venta;
-        hi:arbolV;
-        hd:arbolV;
+    arbolV = ^nodoV;
+    nodoV = record
+        dato: venta;
+        hi: arbolV;
+        hd: arbolV;
     end;
 
-    arbolP=^nodoP;
-    nodoP=record
-        dato:producto;
-        hi:arbolP;
-        hd:arbolP;
+    arbolP = ^nodoP;
+    nodoP = record
+        dato: producto;
+        hi: arbolP;
+        hd: arbolP;
     end;
 
-procedure leerVentas(var v:venta);
+procedure leerVentas(var v: venta);
 begin
-    writeln('Codigo de Venta: ');readln(v.codigoV);
-    if (v.codigoV<>-1)then begin
-        writeln('Codigo de Producto: ');readln(v.codigoP);
-        writeln('Cantidad Vendida: ');readln(v.cantV);
-        writeln('Precio por unidad: ');readln(v.precioU);
+    writeln('Codigo de Venta: '); readln(v.codigoV);
+    if (v.codigoV <> -1) then begin
+        writeln('Codigo de Producto: '); readln(v.codigoP);
+        writeln('Cantidad Vendida: '); readln(v.cantV);
+        writeln('Precio por unidad: '); readln(v.precioU);
     end;
 end;
 
-procedure agregarVenta(var aV:arbolV; v:venta);
+procedure agregarVenta(var aV: arbolV; v: venta);
 begin
-    if (aV=nil) then begin
+    if (aV = nil) then begin
         new(aV);
-        aV^.dato:=v;
-        aV^.hi:=nil;
-        aV^.hd:=nil;
+        aV^.dato := v;
+        aV^.hi := nil;
+        aV^.hd := nil;
     end
+    else if (v.codigoP < aV^.dato.codigoP) then
+        agregarVenta(aV^.hi, v)
     else
-        if (v.codigoP < aV^.dato.codigoP) then 
-            agregarVenta(aV^.hi,v)
-        else 
-            agregarVenta(aV^.hd,v);        
+        agregarVenta(aV^.hd, v);
 end;
 
-procedure cargarVentas(var a:arbolV);
+procedure cargarVentas(var a: arbolV);
 var
-    v:venta;
+    v: venta;
 begin
     leerVentas(v);
-    while (v.codigoV<> -1) do begin
-        agregarVenta(a,v);
+    while (v.codigoV <> -1) do begin
+        agregarVenta(a, v);
         leerVentas(v);
     end;
 end;
@@ -108,7 +105,7 @@ begin
     if (a <> nil) then begin
         // Recorrer árbol en in-order
         cargarProductos(aP, a^.hi);
-        
+
         // Procesar la venta actual
         p.codigoP := a^.dato.codigoP;
         p.cantTotal := a^.dato.cantV;
@@ -119,52 +116,45 @@ begin
     end;
 end;
 
-procedure ImprimirArbol(aP:arbolP);
+procedure ImprimirArbol(aP: arbolP);
 begin
-    if (aP<>nil)then begin
-        writeln('Codigo de Producto: ',aP^.dato.codigoP);
-        writeln('Cantidad Total Vendido: ',aP^.dato.cantTotal);
-        writeln('Monto ganado Total: $',aP^.dato.montoTotal:0:2);
+    if (aP <> nil) then begin
+        writeln('Codigo de Producto: ', aP^.dato.codigoP);
+        writeln('Cantidad Total Vendido: ', aP^.dato.cantTotal);
+        writeln('Monto ganado Total: $', aP^.dato.montoTotal:0:2);
         ImprimirArbol(aP^.hi);
         ImprimirArbol(aP^.hd);
     end;
 end;
 
-function Maximo(aP: arbolP): integer;
+function ContarMenores(aP: arbolP; codigo: integer): integer;
 begin
     if (aP = nil) then
-        Maximo := -1  // Retornar -1 si el árbol está vacío
-    else begin
-        // Recorre el árbol hasta el nodo más a la derecha (el mayor en un BST)
-        while (aP^.hd <> nil) do
-            aP := aP^.hd;
-        // Retorna el código del producto con la mayor cantidad vendida
-        Maximo := aP^.dato.codigoP;
-    end;
+        ContarMenores := 0
+    else if (aP^.dato.codigoP < codigo) then
+        ContarMenores := 1 + ContarMenores(aP^.hi, codigo) + ContarMenores(aP^.hd, codigo)
+    else
+        ContarMenores := ContarMenores(aP^.hi, codigo);
 end;
 
-function prodcutoMayorVenta(aP: arbolP): integer;
-var
-    maxProducto: integer;
+function MontoTotalEntre(aP: arbolP; codigoInf, codigoSup: integer): real;
 begin
     if (aP = nil) then
-        prodcutoMayorVenta := -1
-    else begin
-        maxProducto := aP^.dato.codigoP;
-        if (aP^.hi <> nil) then
-            if (prodcutoMayorVenta(aP^.hi) > maxProducto) then
-                maxProducto := prodcutoMayorVenta(aP^.hi);
-        if (aP^.hd <> nil) then
-            if (prodcutoMayorVenta(aP^.hd) > maxProducto) then
-                maxProducto := prodcutoMayorVenta(aP^.hd);
-        prodcutoMayorVenta := maxProducto;
-    end;
+        MontoTotalEntre := 0
+    else if (aP^.dato.codigoP <= codigoInf) then
+        MontoTotalEntre := MontoTotalEntre(aP^.hd, codigoInf, codigoSup)
+    else if (aP^.dato.codigoP >= codigoSup) then
+        MontoTotalEntre := MontoTotalEntre(aP^.hi, codigoInf, codigoSup)
+    else
+        MontoTotalEntre := aP^.dato.montoTotal + MontoTotalEntre(aP^.hi, codigoInf, codigoSup) 
+        + MontoTotalEntre(aP^.hd, codigoInf, codigoSup);
 end;
-
 
 var
     aV: arbolV;
     aP: arbolP;
+    codigoBuscar, codigoInf, codigoSup: integer;
+    montoTotal: real;
 begin
     aV := nil;
     aP := nil;
@@ -172,6 +162,15 @@ begin
     cargarProductos(aP, aV);  // Procesar ventas y cargar árbol de productos
     writeln('Arbol de Productos en Pre orden');
     ImprimirArbol(aP);
-    writeln('El codigo de producto con mayor ventas es el:',prodcutoMayorVenta(aP));
-    writeln('El codigo de producto con mayor ventas es el: ',Maximo(aP));
+
+
+    writeln('Ingrese un código de producto para contar menores: '); readln(codigoBuscar);
+    writeln('Cantidad de códigos menores: ', ContarMenores(aP, codigoBuscar));
+    writeln('------------------------------------------');
+    writeln('------------------------------------------');
+    writeln('------------MONTO TOTAL ENTRE LOS PRODUCTOS INF Y SUP-----------------------');
+    writeln('Ingrese el código inferior: '); readln(codigoInf);
+    writeln('Ingrese el código superior: '); readln(codigoSup);
+    montoTotal := MontoTotalEntre(aP, codigoInf, codigoSup);
+    writeln('Monto total entre códigos ', codigoInf, ' y ', codigoSup, ': $ ', montoTotal:0:2);
 end.
