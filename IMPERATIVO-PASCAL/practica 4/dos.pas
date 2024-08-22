@@ -1,27 +1,6 @@
 {2.Una biblioteca nos ha encargado procesar la información de los préstamos realizados
 durante el año 2021. De cada préstamo se conoce el ISBN del libro, el número de socio, día
-y mes del préstamo y cantidad de días prestados. Implementar un programa con:
-b. Un módulo recursivo que reciba la estructura generada en i. y retorne el ISBN más
-grande.
-c. Un módulo recursivo que reciba la estructura generada en ii. y retorne el ISBN más
-pequeño.
-d. Un módulo recursivo que reciba la estructura generada en i. y un número de socio. El
-módulo debe retornar la cantidad de préstamos realizados a dicho socio.
-e. Un módulo recursivo que reciba la estructura generada en ii. y un número de socio. El
-módulo debe retornar la cantidad de préstamos realizados a dicho socio.
-f. Un módulo que reciba la estructura generada en i. y retorne una nueva estructura
-ordenada ISBN, donde cada ISBN aparezca una vez junto a la cantidad total de veces
-que se prestó.
-g. Un módulo que reciba la estructura generada en ii. y retorne una nueva estructura
-ordenada ISBN, donde cada ISBN aparezca una vez junto a la cantidad total de veces
-que se prestó.
-h. Un módulo recursivo que reciba la estructura generada en h. y muestre su contenido.
-i. Un módulo recursivo que reciba la estructura generada en i. y dos valores de ISBN. El
-módulo debe retornar la cantidad total de préstamos realizados a los ISBN
-comprendidos entre los dos valores recibidos (incluidos).
-j. Un módulo recursivo que reciba la estructura generada en ii. y dos valores de ISBN. El
-módulo debe retornar la cantidad total de préstamos realizados a los ISBN
-comprendidos entre los dos valores recibidos (incluidos).}
+y mes del préstamo y cantidad de días prestados. Implementar un programa con:}
 
 program dos;
 
@@ -63,6 +42,18 @@ ii. En otra estructura, cada nodo debe contener todos los préstamos realizados 
         prestamos: listaP;
         hi: arbolLP;
         hd: arbolLP;
+    end;
+    
+    contadorP = record
+        isbn: integer;
+        cantidad: integer;
+    end;
+
+    arbolContadorP = ^nodoContadorP;
+    nodoContadorP = record
+        dato: contadorP;
+        hi: arbolContadorP;
+        hd: arbolContadorP;
     end;
 
 procedure leerPrestamos(var p:prestamo);
@@ -124,7 +115,6 @@ end;
 procedure cargarPrestamos(var aP:arbolP; var aLP:arbolLP);
 var 
     p:prestamo;
-    L:listaP;
 begin
     leerPrestamos(p);
     while (p.isbn <> -1) do begin
@@ -164,14 +154,162 @@ begin
         mostrarArbolListaPrestamos(aLP^.hd);  // Recorre el subárbol derecho
     end;
 end;
+{b. Un módulo recursivo que reciba la estructura generada en i. y retorne el ISBN más
+grande.}
+
+function Maximo(aP:arbolP):Integer;
+begin
+    if (aP=nil)then
+        Maximo:=-1
+    else 
+        if (aP^.hd=nil) then
+            Maximo:=aP^.dato.isbn
+        else 
+            Maximo:=Maximo(aP^.hd);       
+end;
+
+{c. Un módulo recursivo que reciba la estructura generada en ii. y retorne el ISBN más
+pequeño.}
+function Minimo(aLP:arbolLP):integer;
+begin
+    if (aLP=nil)then 
+        Minimo:=999
+    else 
+        if (aLP^.hi=nil) then
+            Minimo:=aLP^.isbn
+        else 
+            Minimo:=Minimo(aLP^.hi);
+end;
+
+{d. Un módulo recursivo que reciba la estructura generada en i. y un número de socio. El
+módulo debe retornar la cantidad de préstamos realizados a dicho socio.}
+
+function cantidadPrestamos(aP:arbolP; socio:integer):integer;
+begin
+    if (aP=nil)then
+        cantidadPrestamos:=0
+    else if (aP^.dato.numS=socio)then
+        cantidadPrestamos:=1 + cantidadPrestamos(aP^.hi,socio) + cantidadPrestamos(aP^.hd,socio)
+    else
+        cantidadPrestamos := cantidadPrestamos(aP^.hi, socio) + cantidadPrestamos(aP^.hd, socio);    
+end;
+
+{e. Un módulo recursivo que reciba la estructura generada en ii. y un número de socio. El
+módulo debe retornar la cantidad de préstamos realizados a dicho socio.}
+
+function contarPrestamosEnLista(L: listaP; socio: integer): integer;
+begin
+    if (L = nil) then
+        contarPrestamosEnLista := 0
+    else if (L^.dato.numS = socio) then
+        contarPrestamosEnLista := 1 + contarPrestamosEnLista(L^.sig, socio)
+    else
+        contarPrestamosEnLista := contarPrestamosEnLista(L^.sig, socio);
+end;
+
+function cantidadPrestamosII(aLP: arbolLP; socio: integer): integer;
+begin
+    if (aLP = nil) then 
+        cantidadPrestamosII := 0
+    else 
+        cantidadPrestamosII := contarPrestamosEnLista(aLP^.prestamos, socio) 
+                            + cantidadPrestamosII(aLP^.hi, socio) 
+                            + cantidadPrestamosII(aLP^.hd, socio);
+end;
+
+{f. Un módulo que reciba la estructura generada en i. y retorne una nueva estructura
+ordenada ISBN, donde cada ISBN aparezca una vez junto a la cantidad total de veces
+que se prestó.}
+
+procedure agregarOActualizar(var aC: arbolContadorP; isbn: integer);
+begin
+    if (aC = nil) then begin
+        new(aC);
+        aC^.dato.isbn := isbn;
+        aC^.dato.cantidad := 1;
+        aC^.hi := nil;
+        aC^.hd := nil;
+    end
+    else if (isbn = aC^.dato.isbn) then
+        aC^.dato.cantidad := aC^.dato.cantidad + 1
+    else if (isbn < aC^.dato.isbn) then
+        agregarOActualizar(aC^.hi, isbn)
+    else
+        agregarOActualizar(aC^.hd, isbn);
+end;
+procedure construirArbolContador(aP: arbolP; var aC: arbolContadorP);
+begin
+    if (aP <> nil) then begin
+        agregarOActualizar(aC, aP^.dato.isbn);
+        construirArbolContador(aP^.hi, aC);
+        construirArbolContador(aP^.hd, aC);
+    end;
+end;
+
+{g. Un módulo que reciba la estructura generada en ii. y retorne una nueva estructura
+ordenada ISBN, donde cada ISBN aparezca una vez junto a la cantidad total de veces
+que se prestó.}
+
+procedure agregarOActualizar(var aC: arbolContadorP; isbn: integer; cant: integer);
+begin
+    if (aC = nil) then begin
+        new(aC);
+        aC^.dato.isbn := isbn;
+        aC^.dato.cantidad := cant;
+        aC^.hi := nil;
+        aC^.hd := nil;
+    end
+    else if (isbn = aC^.dato.isbn) then
+        aC^.dato.cantidad := aC^.dato.cantidad + cant
+    else if (isbn < aC^.dato.isbn) then
+        agregarOActualizar(aC^.hi, isbn, cant)
+    else
+        agregarOActualizar(aC^.hd, isbn, cant);
+end;
+
+function contarPrestamosEnLista(L: listaP): integer;
+begin
+    if (L = nil) then
+        contarPrestamosEnLista := 0
+    else
+        contarPrestamosEnLista := 1 + contarPrestamosEnLista(L^.sig);
+end;
+
+procedure construirArbolContadorDesdeArbolLP(aLP: arbolLP; var aC: arbolContadorP);
+var
+    cant: integer;
+begin
+    if (aLP <> nil) then begin
+        count := contarPrestamosEnLista(aLP^.prestamos);
+        agregarOActualizar(aC, aLP^.isbn, cant);
+        construirArbolContadorDesdeArbolLP(aLP^.hi, aC);
+        construirArbolContadorDesdeArbolLP(aLP^.hd, aC);
+    end;
+end;
+
+{h. Un módulo recursivo que reciba la estructura generada en h. y muestre su contenido.}
+
+
+{i. Un módulo recursivo que reciba la estructura generada en i. y dos valores de ISBN. El
+módulo debe retornar la cantidad total de préstamos realizados a los ISBN
+comprendidos entre los dos valores recibidos (incluidos).}
+
+{j. Un módulo recursivo que reciba la estructura generada en ii. y dos valores de ISBN. El
+módulo debe retornar la cantidad total de préstamos realizados a los ISBN
+comprendidos entre los dos valores recibidos (incluidos).}
 
 
 var
     aP: arbolP;
     aLP: arbolLP;
+    socio:integer;
+    aC:arbolContadorP;
+
 begin
     aP := nil;
     aLP := nil;
+    aC:=nil;
+
     cargarPrestamos(aP, aLP);
 
     writeln('Arbol de Préstamos: ');
@@ -179,4 +317,16 @@ begin
 
     writeln('Arbol de Listas de Préstamos: ');
     mostrarArbolListaPrestamos(aLP);
+    writeln('---------------------------------------------');
+    writeln('El maximo ISBN en la estructura i es el numero: ',Maximo(aP));
+    writeln('El minimo ISBN en la estructura ii es el numero: ',Minimo(aLP));
+    WriteLn('Elija un numero de socio para ver la cantida de libros prestados: ');ReadLn(socio);
+    writeln('-----Estructura i-----');
+    writeln('La cantidad de prestamos otorgados al socio ',socio,' es: ',cantidadPrestamos(aP,socio));
+    writeln('-----Estructura ii----');
+    writeln('La cantidad de prestamos otorgados al socio ',socio,' es: ',cantidadPrestamosII(aLP,socio));
+    
+    construirArbolContador(aP,aC);
+    construirArbolContadorDesdeArbolLP(aLP,aC);
+
 end.
