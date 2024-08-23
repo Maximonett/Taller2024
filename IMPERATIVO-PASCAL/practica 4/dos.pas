@@ -280,19 +280,31 @@ var
     cant: integer;
 begin
     if (aLP <> nil) then begin
-        count := contarPrestamosEnLista(aLP^.prestamos);
+        cant := contarPrestamosEnLista(aLP^.prestamos);
         agregarOActualizar(aC, aLP^.isbn, cant);
         construirArbolContadorDesdeArbolLP(aLP^.hi, aC);
         construirArbolContadorDesdeArbolLP(aLP^.hd, aC);
     end;
 end;
 
-{h. Un módulo recursivo que reciba la estructura generada en h. y muestre su contenido.}
+{h. Un módulo recursivo que reciba la estructura generada en g. y muestre su contenido.}
 
+procedure mostraArbolContador(aC:arbolContadorP);
+begin
+    If (aC <>nil) then begin
+        mostraArbolContador(aC^.hi);
+        WriteLn('El ISBN es: ',aC^.dato.isbn);
+        WriteLn('La cantida de prestamos que tuvo fue de: ',aC^.dato.cantidad);
+        mostraArbolContador(aC^.hd);
+    end;
+end;
 
 {i. Un módulo recursivo que reciba la estructura generada en i. y dos valores de ISBN. El
 módulo debe retornar la cantidad total de préstamos realizados a los ISBN
 comprendidos entre los dos valores recibidos (incluidos).}
+
+
+
 
 {j. Un módulo recursivo que reciba la estructura generada en ii. y dos valores de ISBN. El
 módulo debe retornar la cantidad total de préstamos realizados a los ISBN
@@ -328,5 +340,9 @@ begin
     
     construirArbolContador(aP,aC);
     construirArbolContadorDesdeArbolLP(aLP,aC);
+    writeln('-----------------------');
+    writeln('-----Arbol Contador----');
+    writeln('-----------------------');
+    mostraArbolContador(aC);
 
 end.
