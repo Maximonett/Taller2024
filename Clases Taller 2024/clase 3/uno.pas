@@ -173,13 +173,15 @@ procedure AumentarEdadNumeroImpar (a: arbol);
   function AumentarEdad (a: arbol): integer;
   var resto: integer;
   begin
-     if (a = nil) 
-     then AumentarEdad:= 0
-     else begin
-            resto:= a^.dato.edad mod 2;
-            if (resto = 1) then a^.dato.edad:= a^.dato.edad + 1;
-            AumentarEdad:= resto + AumentarEdad (a^.HI) + AumentarEdad (a^.HD);
-          end;  
+      if (a = nil) then 
+        AumentarEdad:= 0
+      else 
+      begin
+        resto:= a^.dato.edad mod 2;
+        if (resto = 1) then 
+          a^.dato.edad:= a^.dato.edad + 1;
+        AumentarEdad:= resto + AumentarEdad (a^.HI) + AumentarEdad (a^.HD);
+      end;  
   end;
 
 begin
