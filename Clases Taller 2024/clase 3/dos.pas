@@ -35,6 +35,19 @@ type
         HD:arbolV;
     end;
         
+    producto=record
+        codP:integer;
+        cantTotalV:integer;
+    end;
+
+    arbolP=^nodoP;
+    nodoP=record
+        dato:producto;
+        HI:arbolP;
+        Hd:arbolP;
+    end;
+
+
 procedure GenerarArbol(var aV:arbolV);
 
     procedure cargarVentas(var v:venta);
@@ -82,10 +95,54 @@ begin
         mostrarArbol(a^.HD);
     end;
 end;
+
+function sumar(a:arbolV):integer;
+begin
+    if (a=nil) then
+        sumar:=0
+    else
+        sumar:=a^.dato.cantU +sumar(a^.HI)+ sumar(a^.HD);
+end;
+
+procedure InsertarElementoP(var aP:arbolP; p:producto);
+    begin
+        if (aP=nil) then begin
+            new(aP);
+            aP^.dato:=p;
+            aP^.HI:=nil;
+            aP^.HD:=nil;
+        end
+        else 
+            if (p.codP<aP^.dato.codP) then
+                InsertarElementoP(aP^.HI,p)
+            else 
+                InsertarElementoP(aP^.HD,p);
+    end;
+
+{ii. Generar y retornar otro árbol binario de búsqueda de productos 
+vendidos ordenado por código de producto. 
+Cada nodo del árbol debe contener el código de producto y la
+cantidad total de unidades vendidas.}
+
+procedure generarArbolP(aV:arbolV;var aP:arbolP);
+var
+    p:producto;
+begin
+    p.codP:=aV^.dato.codP;
+    if (p.codP<>0) then begin
+        p.cantTotalV:=sumar(aV);
+        InsertarElementoP(aP,p);
+    end; 
+end;
+
+procedure mostrarArbolP(a:arbolP);
 var 
     a:arbolV;
+    aP:arbolP;
 begin
     randomize();
     GenerarArbol(a);
     mostrarArbol(a);
+    generarArbolP(a,aP)
+    mostrarArbolP(aP);
 end.

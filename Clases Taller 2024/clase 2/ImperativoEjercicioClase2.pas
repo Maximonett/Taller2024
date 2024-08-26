@@ -81,9 +81,10 @@ function Sumar (v: vector; dimL: integer): integer;
   function SumarRecursivo (v: vector; pos, dimL: integer): integer;
 
   Begin
-    if (pos <= dimL)  
-    then SumarRecursivo:= SumarRecursivo (v, pos + 1, dimL) + v[pos]  
-    else SumarRecursivo:=0  
+    if (pos <= dimL)  then //cado base 
+        SumarRecursivo:= SumarRecursivo (v, pos + 1, dimL) + v[pos]  
+    else 
+        SumarRecursivo:=0  
   End;
  
 var pos: integer; 
