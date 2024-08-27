@@ -232,6 +232,7 @@ var
             end;
             buscarMaximo(aP^.HI);
             buscarMaximo(aP^.HD);
+        end;
     end;
 begin
     maxCantidad := -1;  // Inicia con un valor bajo
@@ -240,6 +241,46 @@ begin
     codigoProductoMasVendido := maxCodigo;  // Retorna el código con más ventas
 end;
 
+{c. Implemente un módulo que reciba el árbol generado en iii. 
+y retorne el código de producto con mayor cantidad de ventas.}
+
+function contarVentas(L:listaV):integer;
+var
+    contador:integer;
+begin
+    contador:=0;
+    while (L<>nil) do begin
+        contador:=contador +1;
+        L:=L^.sig;
+    end;
+    contarVentas:=contador;
+end;
+
+function codigoProductoMasVendidoII(aLV: arbolLV): integer;
+var
+    maxCodigo: integer;
+    maxVentas: integer;
+
+    procedure buscarMaximo(aLV: arbolLV);
+    var
+        cantidadVentas: integer;
+    begin
+        if aLV <> nil then begin
+            cantidadVentas := contarVentas(aLV^.ventas);
+            if cantidadVentas > maxVentas then begin
+                maxVentas := cantidadVentas;
+                maxCodigo := aLV^.codigoP;
+            end;
+            buscarMaximo(aLV^.HI);
+            buscarMaximo(aLV^.HD);
+        end;
+    end;
+begin
+    maxVentas := -1;   // Inicia con un valor bajo
+    maxCodigo := -1;   // Inicia con un código no válido
+    buscarMaximo(aLV); // Llama al procedimiento recursivo para encontrar el máximo
+    codigoProductoMasVendidoII := maxCodigo;  // Retorna el código con más ventas
+end;
 
 var
     a: arbolV;
@@ -271,5 +312,18 @@ begin
     WriteLn('Elija una fecha para ver la cantidad de productos vendidos ese dia: ');
     ReadLn(fecha);
     WriteLn('La cantidad de productos vendidos el dia ', fecha,' fue ', cantidadProductos(a,fecha),' productos.');
-    
+    writeln();
+    WriteLn('+++++++++++++++++++++++++++++++++++++++++++');
+    WriteLn('++++++Codigo de Producto mas vendido ++++++');
+    writeln();
+    writeln('El codigo de producto mas vendido es: ',codigoProductoMasVendido(aP));
+    writeln();
+    WriteLn('++++++++++++++++++++++++++++++++++++++++++');
+    writeln();
+    WriteLn('+++++++++++++++++++++++++++++++++++++++++++');
+    WriteLn('++++++Codigo de Producto mas vendido ++++++');
+    writeln();
+    writeln('El codigo de producto mas vendido es: ',codigoProductoMasVendidoII(aLV));
+    writeln();
+    WriteLn('++++++++++++++++++++++++++++++++++++++++++');
 end.
