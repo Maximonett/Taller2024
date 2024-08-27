@@ -9,7 +9,7 @@ b. Un módulo que reciba la estructura generada en a. y retorne la cantidad
 de alumnos con legajo impar.
 c. Un módulo que reciba la estructura generada en a. e informe, para cada alumno, 
 su legajo y su cantidad de finales aprobados (nota mayor o igual a 4).
-c. Un módulo que reciba la estructura generada en a. y un valor real. 
+d. Un módulo que reciba la estructura generada en a. y un valor real. 
 Este módulo debe retornar los legajos y promedios de los alumnos cuyo 
 promedio supera el valor ingresado.}
 
@@ -60,13 +60,13 @@ procedure leerAleatorio(var al: alumno);
 var
     unFinal: final;
 begin
-    al.legajo := random(100) * 100;
+    al.legajo := random(100);
     al.finales := nil; //inicializo la lista de finales
     while (random(10) > 2) do begin //esto limita la cantidad de finales que puede tener el alumno 
         unFinal.codigoM := random(20) + 1;
         unFinal.fecha := vFechas[random(10)];
         unFinal.nota := random(11);
-        agregarAdelante(al.finales, unFinal);
+        agregarAdelante(al.finales, unFinal); //carga la lista de fianles
     end;
 end;
 
@@ -116,13 +116,99 @@ begin
     end;
 end;
 
+{b. Un módulo que reciba la estructura generada en a. y retorne la cantidad 
+de alumnos con legajo impar.}
+
+function cantidadImpar(a:arbolA):integer;
+begin
+    if (a=nil) then 
+        cantidadImpar:=0
+    else 
+        if (a^.dato.legajo mod 2<>0) then
+            cantidadImpar:= 1 + cantidadImpar(a^.hi) + cantidadImpar(a^.hd)
+        else
+            cantidadImpar:= cantidadImpar(a^.hi) + cantidadImpar(a^.hd)
+end;
+
+{c. Un módulo que reciba la estructura generada en a. e informe, para cada alumno, 
+su legajo y su cantidad de finales aprobados (nota mayor o igual a 4).}
+
+function contarAprobados(L: listaF): integer;
+begin
+    contarAprobados := 0;
+    while (L <> nil) do begin
+        if (L^.dato.nota >= 4) then
+            contarAprobados := contarAprobados + 1;
+        L := L^.sig;
+    end;
+end;
+
+procedure informarAprobados(a: arbolA);
+var
+    cantAprobados: integer;
+begin
+    if (a <> nil) then begin
+        informarAprobados(a^.hi);
+        cantAprobados := contarAprobados(a^.dato.finales);
+        writeln('Legajo: ', a^.dato.legajo, ' - Finales aprobados: ', cantAprobados);
+        informarAprobados(a^.hd);
+    end;
+end;
+
+{d. Un módulo que reciba la estructura generada en a. y un valor real. 
+Este módulo debe retornar los legajos y promedios de los alumnos cuyo 
+promedio supera el valor ingresado.}
+function calcularPromedio(L: listaF): real;
+var
+    suma, cant: integer;
+begin
+    suma := 0;
+    cant := 0;
+    while (L <> nil) do begin
+        suma := suma + L^.dato.nota;
+        cant := cant + 1;
+        L := L^.sig;
+    end;
+    if (cant > 0) then
+        calcularPromedio := suma / cant
+    else
+        calcularPromedio := 0;
+end;
+
+procedure informarPromediosSuperiores(a: arbolA; valor: real);
+var
+    promedio: real;
+begin
+    if (a <> nil) then begin
+        informarPromediosSuperiores(a^.hi, valor);
+        promedio := calcularPromedio(a^.dato.finales);//llamo a  la funcion con la lista 
+        if (promedio > valor) then
+            writeln('Legajo: ', a^.dato.legajo, ' - Promedio: ', promedio:0:2);
+        informarPromediosSuperiores(a^.hd, valor);
+    end;
+end;
+
+
+
 var
     arbol: arbolA;
-
+    valor:real;
 begin
     randomize;
     arbol := nil;
     cargarArbolAlumnos(arbol);
     writeln('--- Árbol de Alumnos ---');
     mostrarArbolAlumnos(arbol);
+    WriteLn();
+    WriteLn('La cantidad de alumnos con numero de legajo impar es: ',cantidadImpar(arbol));
+    WriteLn();
+
+    writeln('--- Informar alumnos y cantidad de finales aprobados ---');
+    informarAprobados(arbol);
+    writeln;
+
+    writeln('--- Informar alumnos con promedio superior a un valor dado ---');
+    write('Ingrese un valor de promedio: ');
+    readln(valor);
+    informarPromediosSuperiores(arbol, valor);
 end.
