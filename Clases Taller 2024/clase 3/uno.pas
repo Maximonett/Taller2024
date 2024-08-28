@@ -54,15 +54,15 @@ procedure GenerarArbol (var a: arbol);
   
   Procedure InsertarElemento (var a: arbol; elem: socio);
   Begin
-    if (a = nil) 
+    if (a = nil)  // el arbol esta vacio
     then begin
            new(a);
            a^.dato:= elem; 
            a^.HI:= nil; 
            a^.HD:= nil;
          end
-    else if (elem.numero < a^.dato.numero) 
-         then InsertarElemento(a^.HI, elem)
+    else if (elem.numero < a^.dato.numero) // orden de carga de los datos
+         then InsertarElemento(a^.HI, elem)  // por izquierda y por derecha
          else InsertarElemento(a^.HD, elem); 
   End;
 
@@ -109,11 +109,11 @@ procedure InformarSociosOrdenDeCreciente (a: arbol);
 {ii. Informar los datos de los socios en orden decreciente.}
   procedure InformarDatosOrdenDecreciente(a:arbol);
   begin
-    if (a<> nil) then begin
+    if (a<> nil) and (a^.HD<>nil) then //pregunto si el arbol esta vacio y por el arbol el hijo de la derecha
       InformarDatosOrdenDecreciente(a^.HD);
-      writeln('Numero: ',a^.dato.numero, ' Nombre: ',a^.dato.nombre,' Edad: ',a^.dato.edad);
+    writeln('Numero: ',a^.dato.numero, ' Nombre: ',a^.dato.nombre,' Edad: ',a^.dato.edad);
+    if (a<>nil)and (a^.HI<>nil)then  //pregunto si el arbol esta vacio y por el arbol el hijo de la izquierda
       InformarDatosOrdenDecreciente(a^.HI);
-    end;
   end;
 
 begin

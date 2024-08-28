@@ -189,7 +189,6 @@ begin
 end;
 
 
-
 var
     arbol: arbolA;
     valor:real;
