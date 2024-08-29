@@ -160,15 +160,81 @@ begin
     end;
 end;
 
+//Leer un codigo de cliente e informar la cantidad de correos sin leer.
+
+function cantidadSinLeer(L:lista):integer;
+begin
+	if (L=nil) then 
+		cantidadSinLeer:=0
+	else 
+		if (L^.dato.leido=false) then 
+			cantidadSinLeer:= 1 + cantidadSinLeer(L^.sig)
+		else
+			cantidadSinLeer:=cantidadSinLeer(L^.sig);
+end;
+
+
+function cantidadCorreosSinLeer(a:arbol; codigo:integer):integer;
+begin
+	if (a=nil) then 
+		cantidadCorreosSinLeer:=0
+	else begin
+		if (a^.dato.cli.cod = codigo) then 
+			cantidadCorreosSinLeer:=cantidadSinLeer(a^.dato.mensajes)
+		else
+			cantidadCorreosSinLeer:=0;
+			
+		cantidadCorreosSinLeer:= cantidadCorreosSinLeer
+									+ cantidadCorreosSinLeer(a^.hd,codigo) 
+									+ cantidadCorreosSinLeer(a^.hi,codigo);
+	end;								
+end;
+
+
+function cantidadCorreosDesdeDireccion(a: arbol; direccion: string): integer;
+var
+    cantidad: integer;
+    L: lista;
+begin
+    if (a = nil) then 
+        cantidadCorreosDesdeDireccion := 0
+    else begin
+        // Inicializamos el contador para este nodo
+        cantidad := 0;
+        L := a^.dato.mensajes;
+        // Recorremos la lista de mensajes del cliente actual
+        while (L <> nil) do begin
+            if (L^.dato.emisor = direccion) then
+                cantidad := cantidad + 1;
+            L := L^.sig;
+        end;
+        // Sumamos la cantidad de este nodo con la de los subárboles
+        cantidadCorreosDesdeDireccion := cantidad  
+                                         + cantidadCorreosDesdeDireccion(a^.hi, direccion) 
+                                         + cantidadCorreosDesdeDireccion(a^.hd, direccion);
+    end;
+end;
+
 
 var
     a: arbol;
+    codigo:integer;
+    direccion:string;
 
 begin
     randomize;  // Inicializa la generación de números aleatorios
     a := nil;
     cargarArbol(a);
     mostrarArbol(a);
+    writeln('');
+    writeln('Elegir un codigo de cliente para contar los correos no leidos: ');
+    readln(codigo);
+    writeln('La cantidad de correos sin leer del cliente nº ',codigo,' es '
+			,cantidadCorreosSinLeer(a,codigo));
+	writeln('');
+    writeln('Introduzca una dirección de correo para contar los correos enviados desde ella: ');
+    readln(direccion);
+    writeln('La cantidad de correos enviados desde ', direccion, ' es ', cantidadCorreosDesdeDireccion(a, direccion));
 end.
 
 
