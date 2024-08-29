@@ -8,10 +8,10 @@ Leer una direccon de correo e informar la cantidad de correos enviado pdesde dic
 program arbolLista;
 
 const
-    maxCod = 100;
+    maxCod = 1000;
 
 type
-    rangoCod = 1..maxCod;
+    rangoCod = 0..maxCod;
 
     mensaje = record
         emisor: string;
