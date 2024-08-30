@@ -17,7 +17,7 @@ d) Un módulo recursivo que retorne el monto total de las expensas}
 program uno;
 
 const
-	dimF=10;
+	dimF=30;
 
 type
 	
@@ -107,6 +107,14 @@ begin
 		pos:=0;
 end;
 
+function montoTotal(v:vectorO;dimL:integer):real;
+begin
+	if (dimL=0) then  //caso base sin elementos
+		montoTotal:=0
+	else
+		montoTotal:=v[dimL].expensas + montoTotal(v,dimL-1); //resursivo disminuyendo la dimL
+end;
+
 
 var
 	o:oficina;
@@ -131,4 +139,5 @@ begin
 	if (pos<>0)then
 		writeln('El codigo de oficina ',cod,' se encuentra en la posicion ',pos,
 		' y el numero de dni el propitario es ',v[pos].dni);
+	writeln('El monto Total de Expensas recaudadas por todos las oficinas es de $ ',montoTotal(v,dimL):0:2);
 end.
