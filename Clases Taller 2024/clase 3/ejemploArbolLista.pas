@@ -237,8 +237,3 @@ begin
     writeln('La cantidad de correos enviados desde ', direccion, ' es ', cantidadCorreosDesdeDireccion(a, direccion));
 end.
 
-
-
-
-		
-		
