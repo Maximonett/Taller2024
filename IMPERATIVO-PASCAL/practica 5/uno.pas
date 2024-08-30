@@ -86,10 +86,34 @@ begin
 	end;
 end;
 
+procedure busquedaDicotomica(v:vectorO;var pos:integer;dimL:integer;cod:integer);
+var 
+	pri,ult,medio:integer;
+begin
+	pos:=0;
+	pri:=1;
+	ult:=dimL;
+	medio:=(pri+ult)div 2;
+	while (pri<=ult) and(cod<>v[medio].cod) do begin
+		if (cod<v[medio].cod)then
+			ult:=medio -1
+		else
+			pri:=medio+1;
+		medio:=(pri+ult)div 2;
+	end;
+	if (pri<=ult) then
+		pos:=medio
+	else
+		pos:=0;
+end;
+
+
 var
 	o:oficina;
 	v:vectorO;
 	dimL:integer;
+	cod:integer;
+	pos:integer;
 begin
 	randomize();
 	cargarVector(v,dimL);
@@ -100,4 +124,11 @@ begin
 	writeln('------------------');
 	writeln('Vector Ordenado');
 	mostrarVector(v,dimL);
+	writeln();
+	writeln('Elegir un codigo de oficina y para ver si se encuntra dentro del vector:');
+	readln(cod);
+	busquedaDicotomica(v,pos,dimL,cod);
+	if (pos<>0)then
+		writeln('El codigo de oficina ',cod,' se encuentra en la posicion ',pos,
+		' y el numero de dni el propitario es ',v[pos].dni);
 end.
