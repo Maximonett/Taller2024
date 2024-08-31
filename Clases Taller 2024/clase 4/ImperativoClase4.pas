@@ -155,7 +155,13 @@ procedure ModuloD (a: arbol);
   
   function CantidadDeCodigosMenores (a: arbol; cod: integer): integer;
   begin
-    { COMPLETAR }
+	if (a=nil) then 
+		CantidadDeCodigosMenores:=0
+	else
+		If(a^.dato.codigo< cod) then
+			CantidadDeCodigosMenores:= 1+ CantidadDeCodigosMenores(a^.hi,cod)+CantidadDeCodigosMenores(a^.hd,cod)
+		else
+			CantidadDeCodigosMenores:= CantidadDeCodigosMenores(a^.hi,cod)+CantidadDeCodigosMenores(a^.hd,cod);
   end;
    
 var cantidad, unCodigo: integer;
@@ -175,13 +181,30 @@ begin
 end;
 
 procedure ModuloE (a: arbol);
-{ Contenga un módulo que reciba la estructura generada en el punto a y dos códigos de producto y retorne el monto total entre todos los códigos de productos 
+{ Contenga un módulo que reciba la estructura generada en el punto a y dos códigos de producto 
+y retorne el monto total entre todos los códigos de productos 
 comprendidos entre los dos valores recibidos (sin incluir). }
   
-  function ObtenerMontoTotalEntreDosCodigos (a: arbol; codigo1, codigo2: integer): real;
-  begin
-    { COMPLETAR }
-  end;
+function ObtenerMontoTotalEntreDosCodigos(a: arbol; codigo1, codigo2: integer): real;
+begin
+    if (a = nil) then
+        ObtenerMontoTotalEntreDosCodigos := 0
+    else
+    begin
+        if (a^.dato.codigo >= codigo1) and (a^.dato.codigo <= codigo2) then
+            // Sumar el monto del nodo actual si su código está dentro del rango
+            ObtenerMontoTotalEntreDosCodigos := a^.dato.montoTotal +
+                                                ObtenerMontoTotalEntreDosCodigos(a^.hi, codigo1, codigo2) +
+                                                ObtenerMontoTotalEntreDosCodigos(a^.hd, codigo1, codigo2)
+        else if (a^.dato.codigo < codigo1) then
+            // Si el código es menor que codigo1, solo explorar el subárbol derecho
+            ObtenerMontoTotalEntreDosCodigos := ObtenerMontoTotalEntreDosCodigos(a^.hd, codigo1, codigo2)
+        else
+            // Si el código es mayor que codigo2, solo explorar el subárbol izquierdo
+            ObtenerMontoTotalEntreDosCodigos := ObtenerMontoTotalEntreDosCodigos(a^.hi, codigo1, codigo2);
+    end;
+end;
+
    
 var codigo1, codigo2: integer;
     montoTotal: real;
@@ -199,7 +222,7 @@ begin
   then writeln ('No hay codigos entre ', codigo1, ' y ', codigo2)
   else begin
          writeln;
-         writeln ('El monto total entre el codigo', codigo1, ' y el codigo : ', codigo2, ' es: ', montoTotal); 
+         writeln ('El monto total entre el codigo', codigo1, ' y el codigo : ', codigo2, ' es: ', montoTotal:0:2); 
          writeln;
        end;
   writeln;
@@ -213,8 +236,7 @@ Begin
   ModuloA (a);
   ModuloB (a);
   ModuloC (a);
-  {
-    ModuloD (a);
-    ModuloE (a);
-  }   
+  
+  ModuloD (a);
+  ModuloE (a);   
 End.
