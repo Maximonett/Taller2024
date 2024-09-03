@@ -56,6 +56,8 @@ type
 		hi:arbolF;
 		hd:arbolF;
 	end;
+
+vectorF=array[rango]of listaA;
 	
 var 
 	vPatentes:array[0..4] of string=('AD YB 018','0','AT IU 000','ER GU 098','AD YR 900');
@@ -321,6 +323,35 @@ begin
     end;
 end;
 
+{d) Invoque a un módulo que reciba el árbol generado en a) i y retorne una estructura con
+la información de los autos agrupados por año de fabricación.}
+
+procedure vectorDeListas(aP: arbolP; var v: vectorF);
+begin
+	if (aP <> nil) then begin
+		// Agrega el auto en la lista correspondiente al año
+		agregarListaAdelante(v[aP^.dato.anio], aP^.dato);
+
+		// Recorrer subárbol izquierdo y derecho
+		vectorDeListas(aP^.hi, v);
+		vectorDeListas(aP^.hd, v);
+	end;
+end;
+
+procedure mostrarVectorDeListas(v: vectorF);
+var
+	i: rango;
+begin
+	for i := 2010 to 2018 do begin
+		writeln('Autos del año ', i, ':');
+		if (v[i] <> nil) then
+			mostraLista(v[i])
+		else
+			writeln('No hay autos para este año.');
+		writeln('--------------------------');
+	end;
+end;
+
 
 
 var
@@ -329,6 +360,7 @@ var
 	marca:string;
 	aF:arbolF;
 	patente:string;
+	v:vectorF;
 begin
 	randomize();
 	aP:=nil;
@@ -360,6 +392,8 @@ begin
 	writeln('seleccion una patente para ver que modelos de auto es: '); readln(patente);
 	writeln('El auto con patente ',patente,' es modelo ', modelo(aP,patente));
 	writeln('El auto con patente ',patente,' es modelo ', modeloII(aM,patente));
+	vectorDeListas(aP,v);
+	mostrarVectorDeListas(v);
 end.
 
 

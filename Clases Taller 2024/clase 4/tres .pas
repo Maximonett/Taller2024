@@ -136,7 +136,54 @@ end;
 que se recibe como parámetro.}
 {------------------------------------------------------------------------------}
 
+function CantidadDeCodigosMenores(aP:arbolP; valor:integer):integer;
+begin
+	if (aP=nil) then
+			cantidadDeCodigosMenores:=0
+	else begin
+		if (aP^.dato.codP< valor) then
+			cantidadDeCodigosMenores:= 1 +cantidadDeCodigosMenores(aP^.hi,valor)
+									+ cantidadDeCodigosMenores(aP^.hd,valor)
+		else
+			//recorre el subarbol izquierdo por si hay un valor que no se conto
+			cantidadDeCodigosMenores:=cantidadDeCodigosMenores(aP^.hi,valor);
+		
+	end;	
+end;
 
+{e. Retornar el monto total entre todos los códigos de productos comprendidos entre dos
+valores recibidos (sin incluir) como parámetros.}
+
+procedure montoEntreCodigosII(aP:arbolP);
+var 
+	ini,fin:integer;
+
+	function montoEntreCodigos(aP: arbolP; ini, fin: integer): real;
+	begin
+		if aP = nil then
+			montoEntreCodigos := 0
+		else begin
+			// Caso 1: El código del producto actual está dentro del rango (sin incluir los límites)
+			if (aP^.dato.codP > ini) and (aP^.dato.codP < fin) then
+				montoEntreCodigos := aP^.dato.montoTotal 
+									 + montoEntreCodigos(aP^.hi, ini, fin)
+									 + montoEntreCodigos(aP^.hd, ini, fin)
+			else begin
+				// Caso 2: El código del producto es menor o igual que `ini`, buscar en el subárbol derecho
+				if aP^.dato.codP <= ini then
+					montoEntreCodigos := montoEntreCodigos(aP^.hd, ini, fin)
+				else
+					// Caso 3: El código del producto es mayor o igual que `fin`, buscar en el subárbol izquierdo
+					montoEntreCodigos := montoEntreCodigos(aP^.hi, ini, fin);
+			end;
+		end;
+	end;
+begin
+	ini:=50;
+	fin:=80;
+	writeln();
+	writeln('El monto total entre los codigos con valor 50 y 80 es ',montoEntreCodigos(aP,ini,fin):0:2);
+end;
 
 
 
@@ -145,12 +192,16 @@ que se recibe como parámetro.}
 
 var
 	aP: arbolP;
+	valor:integer;
 begin
 	aP := nil;
 	cargarArbolProductos(aP);
 	imprimirArbolProductos(aP);
 	writeln('El codigo de productos con mayor ventas es: ',codigoMayorCantidadVendido(aP));
-	
+	writeln('Elegir un numero de codigo: ');
+	readln(valor);
+	writeln('La cantidad de codigo de productos menores al valor de codigo proporcionado es: ',cantidadDeCodigosMenores(aP,valor));
+	montoEntreCodigosII(aP);
 end.
 
 
