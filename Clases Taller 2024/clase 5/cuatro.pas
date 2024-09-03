@@ -133,12 +133,43 @@ end;
 {c) Un módulo que reciba la estructura generada en a) y dos DNI y retorne la cantidad de
 reclamos efectuados por todos los DNI comprendidos entre los dos DNI recibidos.}
 
+function cantidadReclamosEntre(aR: arbolR; ini: integer; fin: integer): integer;
+begin
+	if (aR = nil) then
+		cantidadReclamosEntre := 0
+	else if (aR^.dni >= ini) and (aR^.dni <= fin) then //las dos condiciones juntas !!!
+		cantidadReclamosEntre := aR^.CantidadTotal + cantidadReclamosEntre(aR^.hi, ini, fin) + cantidadReclamosEntre(aR^.hd, ini, fin)
+	else if (aR^.dni < ini) then
+		cantidadReclamosEntre := cantidadReclamosEntre(aR^.hd, ini, fin)
+	else
+		cantidadReclamosEntre := cantidadReclamosEntre(aR^.hi, ini, fin);
+end;
+
+{d) Un módulo que reciba la estructura generada en a) y un año y retorne los códigos de
+los reclamos realizados en el año recibido}
+
+procedure codigosReclamosPorAnio(aR: arbolR; anio: integer);
+var 
+	L: listaR;
+begin
+	if (aR <> nil) then begin
+		L := aR^.ListaReclamos;
+		while (L <> nil) do begin
+			if (anio = L^.dato.anio) then begin
+				writeln('Codigo de reclamo del año ', anio, ': ', L^.dato.cod);
+			end;
+			L := L^.sig;
+		end;
+		codigosReclamosPorAnio(aR^.hi, anio);
+		codigosReclamosPorAnio(aR^.hd, anio);
+	end;
+end;
 
 
 
 var
 	aR: arbolR;
-	dni:integer;
+	ini,fin,dni,anio:integer;
 Begin
 	randomize();
 	aR := nil; // Inicializa el árbol
@@ -149,5 +180,13 @@ Begin
 	writeln('Elija un DNI para ver las cantidad de Reclamos del mismo: ');
 	readln(dni);
 	writeln('La cantidad de reclamos del DNI ',dni,' fue ',cantidadReclamos(aR,dni));
+	writeln('Elija 2 DNIs para ver las cantidad de Reclamos emtre los  mismo: ');
+	readln(ini);
+	readln(fin);
+	writeln('La cantidad de reclamos entre los DNIs ',ini,' y', fin ,' fue ',cantidadReclamosEntre(aR,ini,fin));
+	writeln('Elija un aÑO para ver los Codigos de Reclamos del mismo: ');
+	readln(anio);
+	Writeln('Codigos de Reclamos por año: ');
+	codigosReclamosPorAnio(aR,anio);
 end.
 
