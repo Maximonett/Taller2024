@@ -17,7 +17,6 @@ type
 	
 	reclamo=record
 		cod:integer;
-		dni:integer;
 		anio:integer;
 		tipo:rangoTipo;
 	end;
@@ -27,6 +26,7 @@ type
 		dato:reclamo;
 		sig:listaR;
 	end;
+	
 	
 	arbolR=^nodoAR;
 	nodoAR=record
@@ -47,21 +47,21 @@ begin
 	L:=nue;
 end;
 
-procedure leerAleatorio(var r:reclamo);
+procedure leerAleatorio(var r:reclamo; var dni:integer);
 begin
 	r.cod:=random(101);
 	if (r.cod<> 0) then begin
-		r.dni:=random(10)+1;
+		dni:=random(10)+1;
 		r.anio:=1998 + random(2500-1998+1);
 		r.tipo:=random(4)+1;
 	end;
 end;
 		
-procedure agregarArbolReclamos(var aR:arbolR; r:reclamo);
+procedure agregarArbolReclamos(var aR:arbolR; r:reclamo; dni:integer);
 begin
 	if (aR=nil) then begin
 		new(aR);
-		aR^.dni:=r.dni;
+		aR^.dni:=dni;
 		aR^.ListaReclamos:=nil;
 		agregarListaAdelante(aR^.ListaReclamos,r);
 		aR^.CantidadTotal:= 1; //inicia con uno
@@ -69,11 +69,11 @@ begin
 		aR^.hd:=nil;
 	end
 	else 
-		if (r.dni < aR^.dni) then
-			agregarArbolReclamos(aR^.hi,r)
+		if (dni < aR^.dni) then
+			agregarArbolReclamos(aR^.hi,r,dni)
 		else 
-			if(r.dni> aR^.dni) then
-				agregarArbolReclamos(aR^.hd,r)
+			if(dni> aR^.dni) then
+				agregarArbolReclamos(aR^.hd,r,dni)
 			else begin
 				agregarListaAdelante(aR^.ListaReclamos,r); //agrega otro reclamo a la lista
 				aR^.CantidadTotal:= aR^.CantidadTotal +1; //incrementa la cantidad
@@ -83,12 +83,12 @@ end;
 
 procedure cargarArbolReclamos(var aR:arbolR);
 var
-	r:reclamo;
+	r:reclamo;dni:integer;
 begin
-	leerAleatorio(r);
+	leerAleatorio(r,dni);
 	while(r.cod <> 0)do begin
-		agregarArbolReclamos(aR,r);
-		leerAleatorio(r);
+		agregarArbolReclamos(aR,r,dni);
+		leerAleatorio(r,dni);
 	end;
 end;
 
@@ -96,7 +96,6 @@ procedure imprimirLista(L:listaR);
 begin
 	while(L<>nil) do begin
 		writeln('Codigo de Reclamo: ',L^.dato.cod);
-		writeln('DNI de la persona: ',L^.dato.dni);
 		writeln('Año del Reclamo: ',L^.dato.anio);
 		writeln('Tipo de Reclamo: ',L^.dato.tipo);
 		L:=L^.sig;
@@ -152,8 +151,8 @@ procedure codigosReclamosPorAnio(aR: arbolR; anio: integer);
 var 
 	L: listaR;
 begin
-	if (aR <> nil) then begin
-		L := aR^.ListaReclamos;
+	if (aR <> nil) then begin   //modularizarlo
+		L := aR^.ListaReclamos;  
 		while (L <> nil) do begin
 			if (anio = L^.dato.anio) then begin
 				writeln('Codigo de reclamo del año ', anio, ': ', L^.dato.cod);
