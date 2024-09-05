@@ -50,6 +50,16 @@ type
 		hi:arbolA;
 		hd:arbolA;
 	end;
+		
+		
+	listaA=^nodo;
+	nodo=record
+		dato:auto;
+		sig:listaA;
+	end;
+	
+	
+	VectorLista=array[rango_anio] of listaA;
 	
 var
 	Vmodelo:array[1..5] of String=('A','B','C','D','E');
@@ -138,9 +148,68 @@ begin
 end;
 
 
+{d) Invoque a un módulo que reciba el árbol generado en a) i y retorne una estructura con
+la información de los autos agrupados por año de fabricación.}
+
+
+procedure agregarAdelante(var L:listaA; a:auto);
+var
+	nue:listaA;
+begin
+	new(nue);
+	nue^.dato:=a;
+	nue^.sig:=L;
+	L:=nue;
+end;
+
+procedure inicializarVectorLista(var v:VectorLista);
+var
+	i:rango_anio;
+begin
+	for i:=2010 to 2018 do 
+		v[i]:=nil;
+end;
+
+procedure autosPorFabricacion(aP:arbolA; var v:VectorLista);
+begin
+	if (aP<>nil) then begin
+		agregarAdelante(v[aP^.dato.anio],aP^.dato);
+		
+		autosPorFabricacion(aP^.hi,v);
+		autosPorFabricacion(aP^.hd,v);
+	end;
+end;
+
+procedure mostrarLista(L:listaA);
+begin
+	while (L<>nil) do begin
+		writeln();
+		writeln('Marca: ', L^.dato.marca);
+		writeln('Modelo: ', L^.dato.modelo);
+		writeln();
+		L:=L^.sig;
+	end;
+end;
+
+procedure mostrarVector(v:VectorLista);
+var
+	i:rango_anio;
+begin
+	for i:=2010 to 2018 do begin
+		writeln();
+		writeln('-----Autos del Año ',i,'------');
+		writeln();
+			if (v[i]<> nil) then
+				mostrarLista(v[i])
+			else
+				writeln('No hay autos para mostrar');
+			writeln('--------------------------');			
+	end; 
+end;
+
 var
 	aM:arbolAM; aP:arbolA;
-	marca:string;
+	marca:string; v:VectorLista;
 begin
 	randomize();
 	aM:=nil;
@@ -151,6 +220,8 @@ begin
 	readln(marca);
 	writeln('La cantidad de autos de la Marca ',marca,' son ',cantidadAutosMarca(aP,marca));
 	writeln('La cantidad de autos de la Marca ',marca,' son ',cantidadAutosMarcaII(aM,marca));
+	autosPorFabricacion(aP,v);
+	mostrarVector(v);
 end.
 	
 	
