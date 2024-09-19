@@ -18,7 +18,7 @@ public abstract class Figura {
     }
     
     public String toString(){
-        String aux = "Area: " + this.calcularArea() +
+        String aux = " Area: " + this.calcularArea() +
                      " Perimetro: " + this.calcularPerimetro()+
                      " CR: "  + getColorRelleno() + 
                       " CL: " + getColorLinea();             

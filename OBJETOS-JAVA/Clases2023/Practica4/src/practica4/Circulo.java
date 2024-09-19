@@ -29,7 +29,9 @@ public class Circulo extends Figura{
     }
     
     public double calcularPerimetro(){
-        return (Math.PI)*2*(getRadio());
+        double valor=Math.PI;
+        
+        return (valor)*2*(getRadio());
     }
     
     public void despintar(){
@@ -38,7 +40,7 @@ public class Circulo extends Figura{
     }
     
     public String toString(){
-        String aux = "Radio: " + getRadio() + super.toString();
+        String aux = super.toString()+ " Radio: " + getRadio();
         return aux;
     }
 }
