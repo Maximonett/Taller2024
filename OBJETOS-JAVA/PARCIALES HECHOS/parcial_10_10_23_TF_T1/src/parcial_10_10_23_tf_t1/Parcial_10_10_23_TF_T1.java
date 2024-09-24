@@ -22,7 +22,7 @@ public class Parcial_10_10_23_TF_T1{
         Encargado e2 =new Encargado(3, "Miguel", "35897645", 2009, 300000);
         Encargado e3 =new Encargado(3, "Miguel", "35897645", 2009, 300000);
         
-        Empresa E1=new Empresa("La Calañas", "Calle Falsa Nº 1234",d1);
+        Empresa E1=new Empresa("La Calañas", "Calle Falsa Nº 1234",d1, 5);
         E1.setN(10);
         
         

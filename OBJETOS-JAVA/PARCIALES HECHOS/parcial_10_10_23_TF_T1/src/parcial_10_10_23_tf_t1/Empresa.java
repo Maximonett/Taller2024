@@ -12,10 +12,11 @@ public class Empresa {
     private String nombre;
     private String direccion;
     private Director director; 
-    private int N=0;
-    Encargado[] sucursales=new Encargado[N];
+    private int N;
+    Encargado[] sucursales;
 
-    public Empresa(String nombre, String direccion, Director director) {
+    public Empresa(String nombre, String direccion, Director director, int N) {
+        this.sucursales = new Encargado[N];
         this.nombre = nombre;
         this.direccion = direccion;
         this.director = director;
@@ -77,13 +78,13 @@ public class Empresa {
     }
     
     public String toString(){
-        String aux="Nombre "+ getNombre()+" Direccion: "+getDireccion()+" Director: "+director.toString()
+        String aux="Nombre "+ this.getNombre()+" Direccion: "+this.getDireccion()+" Director: "+director.toString()
                 + " Encargados: \n";
                     
                     for (int i=0;i<N;i++){
                         aux+= " Sucursal " + i + " : ";
                         if (sucursales[i]!=null){
-                            aux+=sucursales[i].toString()+"\n";
+                            aux+=sucursales[i]+"\n";
                         }else{
                             aux+="Sin encargado\n";
                         }

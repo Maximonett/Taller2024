@@ -46,7 +46,7 @@ public class Torneo {
     public String toString() {
         String resultado = "Torneo: " + nombre + "\n";
         for (int i = 0; i < fechas.length; i++) {
-            resultado += "Fecha #" + (i + 1) + " / " + fechas[i].toString() + "\n";
+            resultado += "Fecha " + (i + 1) + " / " + fechas[i].toString() + "\n";
         }
         return resultado;
     }

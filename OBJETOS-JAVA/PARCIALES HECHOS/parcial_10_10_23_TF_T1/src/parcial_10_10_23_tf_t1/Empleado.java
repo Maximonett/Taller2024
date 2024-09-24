@@ -18,6 +18,7 @@ public abstract class Empleado {
     }
 
     public Empleado(String nombre, String DNI, int anoingreso, double basico) {
+        super();
         this.nombre = nombre;
         this.DNI = DNI;
         this.anoingreso = anoingreso;
