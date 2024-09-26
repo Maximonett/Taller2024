@@ -5,10 +5,12 @@ public class Estante {
     private Libro[] estante;
     private int indiceEstante = 0;
 
-    public Estante(int capacidad) {
-        this.maxLugar = capacidad;
-        this.estante = new Libro[capacidad];
+
+    public Estante(int maxLugar) {
+        this.maxLugar = maxLugar;
+        this.estante=new Libro[maxLugar];
     }
+    
 
     public int getMaxLugar() {
         return maxLugar;
@@ -33,7 +35,7 @@ public class Estante {
 
     public Libro quitarLibro(int posicion) {
         if (posicion >= 0 && posicion < maxLugar && estante[posicion] != null) {
-            Libro libro = estante[posicion];
+            Libro libro = estante[posicion];//guardo temporalmente al libro para poder devolverlo
             estante[posicion] = null;
             indiceEstante--;
             return libro;
@@ -43,11 +45,12 @@ public class Estante {
         }
     }
 
-    public double calcularPesoTotal() {
-        double pesoTotal = 0;
-        for (Libro libro : estante) {
-            if (libro != null) {
-                pesoTotal += libro.getPeso();
+    
+    public double calcularPesoTotal(){
+        double pesoTotal=0;
+        for (int i=0;i<estante.length;i++){
+            if (estante[i]!=null){
+                pesoTotal+=estante[i].getPeso();
             }
         }
         return pesoTotal;
