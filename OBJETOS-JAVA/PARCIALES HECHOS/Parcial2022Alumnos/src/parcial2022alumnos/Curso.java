@@ -74,7 +74,6 @@ public abstract class Curso {
                 System.out.println("Se incremento correctamente las asistencias del alumno con DNI "+dni);
             }                                       
         }
-        System.out.println("Alumno con DNI "+dni+" no encontrado");
     }
     
     public void aprobarAutoevalucion(int dni){
@@ -85,7 +84,6 @@ public abstract class Curso {
                 System.out.println("Se increment con existo la cantidad de autoevalciones aprobadas por el alumno DNI "+dni);
             }
         }
-        System.out.println("No se encontro el alumno de DNI "+dni);
     }
     
     public abstract boolean puedeRendir(Alumno alumno);

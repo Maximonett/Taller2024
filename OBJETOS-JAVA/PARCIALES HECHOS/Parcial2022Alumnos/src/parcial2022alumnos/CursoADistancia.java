@@ -41,11 +41,9 @@ public class CursoADistancia extends Curso {
     }
     
     public boolean puedeRendir(Alumno alumno){
-        if (alumno.getCantAutoelvaluacionesAprobadas()>=3 && alumno.getCantAsistencias()>=1){
-            System.out.println("El alumno cumple con las condiciones,puede rendir");
+        if (alumno.getCantAutoelvaluacionesAprobadas()>=3 && alumno.getCantAsistencias()>=1){            
             return true;
-        }else{
-            System.out.println("El alumno NO cumple con las condiciones, NO puede Rendir");
+        }else{            
             return false;
         }
     }
