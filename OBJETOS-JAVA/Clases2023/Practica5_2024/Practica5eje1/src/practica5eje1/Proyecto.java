@@ -76,4 +76,17 @@ public class Proyecto {
         }
     }
     
+    public String toString(){
+        String aux="Nombre de Proytecto: "+this.nombre+" Codigo: "+this.codigo
+                +" Nombre del Director:  "+this.nombreDirector+"\n";
+        for (int i=0;i<cantidadInvestigadores;i++){
+            aux+=" Nombre de Investigador: "+investigadores[i].getNombreCompleto()+"\n"
+                    +" Categoria: "+ investigadores[i].getCategoria()+"\n"
+                    +" Especialidad:  " + investigadores[i].getEspecialidad()+ "\n"
+                    +" Dinero Total  por los subsidios otorgados: "+ investigadores[i].montoTotal()+"\n";
+        }
+        return aux;
+    }
+    
+    
 }

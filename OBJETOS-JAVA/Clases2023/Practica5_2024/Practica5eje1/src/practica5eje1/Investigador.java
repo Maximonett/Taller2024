@@ -92,5 +92,13 @@ public class Investigador {
         this.cantidadSubsidios = cantidadSubsidios;
     }
     
-    
+    public double montoTotal(){
+        double total=0;
+        for (int i=0;i<cantidadSubsidios;i++){
+            if(subsidios[i]!=null && subsidios[i].isOtorgado()){
+                total+=subsidios[i].getMonto();
+            }
+        }
+        return total;
+    }
 }
