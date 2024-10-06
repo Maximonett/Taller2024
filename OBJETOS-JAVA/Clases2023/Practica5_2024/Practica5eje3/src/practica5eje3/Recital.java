@@ -60,7 +60,7 @@ public abstract class Recital {
     }
 
     public String[] getListaDeTemas() {
-        return listaDeTemas;
+        return this.listaDeTemas;
     }
 
     public void setListaDeTemas(String[] listaDeTemas) {

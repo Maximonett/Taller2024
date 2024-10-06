@@ -37,11 +37,26 @@ public class RecitalGira extends Recital{
         }
     }
     
-    public String actuar(){
-        String aux="";
-        
-        return aux;
-    }
+    /*/PREGUNTAR!!!!
+    
+    public String actuar() {
+    // Obtener la fecha actual
+        Fecha actual = gira[getNumeroActualFecha()];
+
+        String aux = "Buenas Noches " + actual.getCiudad() + "\n";
+
+        // Agregar la lista de temas al mensaje
+        aux += "Lista de Temas:\n";  
+        for (int i = 0; i < getCantidadTemas(); i++) {
+            aux += "- " + getListaDeTemas()[i] + "\n";  
+        }
+
+
+        setNumeroActualFecha(actual.getNumeroSiguienteFecha());
+
+        return aux;  
+    }*/
+
 
     public String getNombreGira() {
         return nombreGira;

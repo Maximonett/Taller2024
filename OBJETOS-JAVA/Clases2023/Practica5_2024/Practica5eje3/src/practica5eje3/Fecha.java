@@ -37,7 +37,7 @@ public class Fecha {
     }
 
     public int getNumeroActualFecha() {
-        return numeroActualFecha;
+        return this.numeroActualFecha;
     }
 
     public void setNumeroActualFecha(int numeroActualFecha) {
@@ -45,7 +45,7 @@ public class Fecha {
     }
 
     public int getNumeroSiguienteFecha() {
-        return numeroSiguienteFecha;
+        return this.numeroSiguienteFecha;
     }
 
     public void setNumeroSiguienteFecha(int numeroSiguienteFecha) {
