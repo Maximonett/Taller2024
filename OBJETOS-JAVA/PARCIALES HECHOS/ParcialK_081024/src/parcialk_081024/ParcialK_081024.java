@@ -52,7 +52,7 @@ representación String de la empresa.
         e1.agregarProgramador(p1);
         
         e1.incrementarBasico(12);
-        
+        System.out.println("El Monto total en sueldos de la Empresa es de: $"+e1.montoEnSueldosAbonar());
         System.out.println(e1.toString());
         
         
