@@ -35,6 +35,21 @@ public class SistemaBanco {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        Banco b1=new BancoDigital("www.bancodigital.com", 100);
+        
+        Cuenta c1=new Cuenta(123, "dameplata", "25789456", "pesos");
+        Cuenta c2=new Cuenta(124, "plata", "25469456", "pesos");
+        
+        b1.agregarCuenta(c2);
+        b1.agregarCuenta(c1);
+        
+        b1.depositarDinero(123, 120000);
+        b1.depositarDinero(124, 25000);
+        
+        System.out.println(b1.obtenerCuenta(123));
+        
+        
     }
     
 }
