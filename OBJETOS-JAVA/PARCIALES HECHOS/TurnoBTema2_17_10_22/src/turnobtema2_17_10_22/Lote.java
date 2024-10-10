@@ -9,12 +9,15 @@ package turnobtema2_17_10_22;
  * @author maximosimonetti
  */
 public class Lote {
-    private double precio;
+    private double precio=50000;
     private Comprador comprador;
 
     public Lote(double precio) {
         this.precio = precio;
         this.comprador=null;
+    }
+    
+    public Lote(){
     }
     
     public void incrementarPrecioPorcentaje(double porcentaje){

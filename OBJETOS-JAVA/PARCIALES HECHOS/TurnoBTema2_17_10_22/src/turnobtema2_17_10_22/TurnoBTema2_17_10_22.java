@@ -47,31 +47,22 @@ alice un programa que instancie el barrio "Los teros" de 6 manzanas con 9 lotes 
         Comprador c2=new Comprador("32565432", "Juan Baglieto", "La Plata");
         Comprador c3=new Comprador("32565432", "Juan Baglieto", "La Plata");
         
-        Lote l1=new Lote(30000);
-        Lote l2=new Lote(20000);
-        Lote l3=new Lote(20000);
-        
-        System.out.println("Precio del Lote $"+l1.getPrecio());
-        System.out.println("Precio del Lote $"+l2.getPrecio());
-        System.out.println("Precio del Lote $"+l3.getPrecio());
         
         b1.agregarCompradorAUnLote(c3, 4, 3);
         b1.agregarCompradorAUnLote(c1, 3, 5);
         b1.agregarCompradorAUnLote(c2, 4, 4);
         
-        b1.incrementarPorcentajeDePrecioAUnaManzana(60.2, 4);
+        b1.incrementarPorcentajeDePrecioAUnaManzana(50, 4);
         
-        System.out.println("Precio del Lote $"+l1.getPrecio());
-        System.out.println("Precio del Lote $"+l2.getPrecio());
-        System.out.println("Precio del Lote $"+l3.getPrecio());
         
-        l1.setComprador(c3);
+        b1.agregarCompradorAUnLote(c3, 4, 1);
+        b1.agregarCompradorAUnLote(c1, 4, 5);
+        b1.agregarCompradorAUnLote(c2, 4, 2);
         
-        b1.agregarCompradorAUnLote(c3, 4, 3);
-        b1.agregarCompradorAUnLote(c1, 3, 5);
-        b1.agregarCompradorAUnLote(c2, 4, 4);
+        
         
         System.out.println(b1.toString());
+        
         
     }
     

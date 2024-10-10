@@ -26,10 +26,11 @@ public class Barrio {
     public void inicializarBarrio(){
         for (int i=0; i<this.manzanas;i++){
             for (int j=0;j<this.lotesXManzana;j++){
-                barrio[i][j]=new Lote(50000);
+                barrio[i][j]=new Lote();
             }
         }
     }
+    
     
     public double totalRecuadadoEnLosLotesVendidos(){
         double total=0;
@@ -37,6 +38,7 @@ public class Barrio {
             for (int j=0;j<lotesXManzana;j++){
                 if(barrio[i][j].getComprador()!=null){
                     total+=barrio[i][j].getPrecio();
+                    System.out.println("Precio del lote: "+barrio[i][j].getPrecio());
                 }
             }
         
