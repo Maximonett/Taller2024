@@ -30,7 +30,7 @@ public class Caja {
     }
     
     public void agregarUnTicket(Ticket unTicket){
-        if(ticketsEmitidos[cantidadDeticketsEmitidos]==null && cantidadDeticketsEmitidos<maxTicketsEmitidos){
+        if(ticketsEmitidos[getCantidadDeticketsEmitidos()]==null && cantidadDeticketsEmitidos<maxTicketsEmitidos){
             ticketsEmitidos[cantidadDeticketsEmitidos]=unTicket;
             cantidadDeticketsEmitidos++;
         }
