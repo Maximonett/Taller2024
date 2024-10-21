@@ -1,0 +1,41 @@
+programa eje1_a
+procesos
+  proceso juntarFlores(ES flor:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flor:=flor +1
+  fin
+  proceso contarEsquinasSinFlores(ES esquina:numero)
+  comenzar
+    si ~(HayFlorEnLaEsquina)
+      esquina:=esquina +1
+  fin
+  proceso avenida
+  variables
+    flor,esquina:numero
+  comenzar
+    flor:=0
+    esquina:=0
+    repetir 99
+      contarEsquinasSinFlores(esquina)
+      juntarFlores(flor)
+      mover
+    Informar(esquina)
+    Informar(flor)
+  fin
+areas
+  ciudad:AreaC(1,1,100,100)
+robots
+  robot tipo1
+  variables
+    flor,esquina:numero
+  comenzar
+    avenida
+  fin
+variables
+  robot1:tipo1
+comenzar
+  AsignarArea(robot1,ciudad)
+  Iniciar(robot1,1,1)
+fin 

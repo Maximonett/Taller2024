@@ -1,0 +1,64 @@
+programa eje1_b
+procesos
+  proceso contarFlores(ES flor:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flor:=flor +1
+  fin
+  proceso contarPapeles(ES papel:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papel:=papel +1
+  fin
+  proceso izquierda
+  comenzar  
+    repetir 3
+      derecha
+  fin
+      
+  proceso escalon
+  variables
+    flor,papel,alto,ancho,escalones:numero
+  comenzar
+    escalones:=0
+    alto:=1
+    ancho:=1
+    repetir 4
+      repetir alto
+        contarFlores(flor)
+        contarPapeles(papel)
+        mover
+      derecha
+      repetir ancho
+        contarFlores(flor)
+        contarPapeles(papel)
+        mover
+      izquierda
+      alto:=alto + 1
+      ancho:=ancho +1
+      si (flor+1<papel)
+        escalones:= escalones+1
+    Informar(escalones)
+  fin
+areas
+  ciudad:AreaC(1,1,100,100)
+robots
+  robot tipo1
+  variables
+    flor,esquina:numero
+  comenzar
+    escalon
+  fin
+variables
+  robot1,robot2,robot3:tipo1
+comenzar
+  AsignarArea(robot1,ciudad)
+  AsignarArea(robot2,ciudad)
+  AsignarArea(robot3,ciudad)
+  Iniciar(robot1,12,14)
+  Iniciar(robot2,17,10)
+  Iniciar(robot3,22,6)
+
+fin 
