@@ -21,7 +21,10 @@ procesos
       depositarPapel 
   fin 
 areas 
-  ciudad:AreaC(1,1,100,100) 
+  ciudad1:AreaP(1,74,16,81)
+  ciudad2:AreaP(74,79,81,100)
+  ciudad3:AreaP(69,1,100,71)
+  ciudad4:AreaP(1,1,16,11) 
 robots 
   robot tipo1 
   comenzar 
@@ -89,10 +92,10 @@ variables
   robot3:tipo3 
   robot4:tipo4 
 comenzar 
-  AsignarArea(robot1,ciudad)
-  AsignarArea(robot2,ciudad)
-  AsignarArea(robot3,ciudad)
-  AsignarArea(robot4,ciudad)
+  AsignarArea(robot1,ciudad1)
+  AsignarArea(robot2,ciudad2)
+  AsignarArea(robot3,ciudad3)
+  AsignarArea(robot4,ciudad4)
   Iniciar(robot1,1,75)
   Iniciar(robot2,75,80)
   Iniciar(robot3,70,15)
