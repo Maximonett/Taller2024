@@ -1,0 +1,90 @@
+programa eje1
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso recorrerAvenida(ES f:numero)
+  comenzar
+    f:=0
+    repetir 9
+      juntarFlores(f)
+      mover
+    juntarFlores(f)
+  fin
+areas
+  area1:AreaP(1,1,1,10)
+  area2:AreaP(2,11,2,20)
+  area3:AreaP(3,21,3,30)
+  area4:AreaP(4,31,4,40)
+  area5:AreaP(5,41,5,50)
+  area6:AreaP(6,51,6,60)
+  areaFiscaliza:AreaP(2,1,2,1)
+  
+robots
+  robot tipo1
+  variables
+    f:numero
+    f2:numero
+    fresta:numero
+  comenzar
+    f:=0
+    f2:=0
+    fresta:=0
+    recorrerAvenida(f)
+    EnviarMensaje(f,fiscalizador)
+  fin 
+  robot tipo3 
+  variables
+    fmax:numero
+    fmin:numero 
+    f2:numero 
+    fresta:numero
+    c:numero 
+  comenzar 
+    c:=6 
+    f2:=0
+    RecibirMensaje(f2,*)
+    fmax:=f2
+    fmin:=f2 
+    c:=c-1
+    mientras (c<>0)
+      RecibirMensaje(f2,*)
+      c:=c-1 
+      si (f2>fmax) 
+        fmax:=f2
+      si (f2<fmin)
+        fmin:=f2
+    fresta:=fmax-fmin    
+    Informar('Diferencia',fresta)
+    Informar('cantidadFloresMaxima',fmax)
+    Informar('cantidadFloresMinima',fmin) 
+  fin 
+variables
+  robot1:tipo1
+  robot2:tipo1
+  robot3:tipo1
+  robot4:tipo1
+  robot5:tipo1
+  robot6:tipo1
+  fiscalizador:tipo3
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot3,area3)
+  AsignarArea(robot4,area4)
+  AsignarArea(robot5,area5)
+  AsignarArea(robot6,area6)
+  AsignarArea(fiscalizador,areaFiscaliza)
+  Iniciar(robot1,1,1)
+  Iniciar(robot2,2,11)
+  Iniciar(robot3,3,21)
+  Iniciar(robot4,4,31)
+  Iniciar(robot5,5,41)
+  Iniciar(robot6,6,51)
+  Iniciar(fiscalizador,2,1)
+fin
+    
+    

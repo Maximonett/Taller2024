@@ -1,0 +1,63 @@
+programa eje1
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso recorrerAvenida(ES f:numero)
+  comenzar
+    f:=0
+    repetir 9
+      juntarFlores(f)
+      mover
+    juntarFlores(f)
+  fin
+areas
+  area1:AreaP(1,1,1,10)
+  area2:AreaP(2,1,2,10)
+robots
+  robot tipo1
+  variables
+    f:numero
+    f2:numero
+    fresta:numero
+  comenzar
+    f:=0
+    f2:=0
+    fresta:=0
+    recorrerAvenida(f)
+    EnviarMensaje(f,robot2)
+    RecibirMensaje(f2,robot2)
+    si (f2>f)
+      fresta:=f2-f
+      Informar('Diferencia',fresta)
+  fin
+  robot tipo2
+  variables
+    f:numero 
+    f2:numero 
+    fresta:numero 
+  comenzar 
+    f:=0 
+    f2:=0 
+    fresta:=0 
+    recorrerAvenida(f) 
+    EnviarMensaje(f,robot1) 
+    RecibirMensaje(f2,robot1) 
+    si (f2>f) 
+      fresta:=f2-f
+      Informar('Diferencia',fresta) 
+  fin 
+variables
+  robot1:tipo1
+  robot2:tipo2
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area2)
+  Iniciar(robot1,1,1)
+  Iniciar(robot2,2,1)
+fin
+    
+    
