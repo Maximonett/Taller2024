@@ -1,0 +1,81 @@
+programa eje2
+procesos
+  proceso contarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1 
+  fin
+  proceso contarPapeles(ES p:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso cuatroEscalones
+  variables
+    f,p,cantEsc,alto:numero
+  comenzar
+    cantEsc:=0
+    repetir 4
+      f:=0
+      p:=0
+      Random(alto,1,5)
+      repetir alto
+        contarFlores(f)
+        contarPapeles(p)
+        mover
+      derecha
+      mover
+      contarFlores(f)
+      contarPapeles(p)
+      izquierda
+      si (f>p)
+        cantEsc:=cantEsc+1
+    EnviarMensaje(cantEsc,jefe)     
+  fin
+areas
+  ciudad:AreaC(1,1,100,100)
+robots
+  robot contador
+  variables
+    f:numero
+    id:numero
+  comenzar
+    RecibirMensaje(id,jefe)
+    cuatroEscalones
+  fin
+  robot jefe
+  variables
+    id:numero
+    f:numero
+    cantEsc:numero
+  comenzar
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    repetir 3
+      RecibirMensaje(cantEsc,*)
+      cantEsc:=cantEsc+1 
+    Informar('LaSumaDeLosEscalonesEs',cantEsc)   
+  fin
+variables
+  jefe:jefe
+  robot1:contador
+  robot2:contador
+  robot3:contador
+comenzar
+  AsignarArea(jefe,ciudad)
+  AsignarArea(robot1,ciudad)
+  AsignarArea(robot2,ciudad)
+  AsignarArea(robot3,ciudad)
+  Iniciar(jefe,1,1)
+  Iniciar(robot1,2,1)
+  Iniciar(robot2,7,1)
+  Iniciar(robot3,12,1)
+fin
