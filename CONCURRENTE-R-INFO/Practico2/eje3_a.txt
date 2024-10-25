@@ -1,0 +1,83 @@
+programa eje3
+procesos
+  proceso juntarPapeles(ES p:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso recorrerJuntandoPapeles(ES p:numero)
+  comenzar
+    derecha
+    repetir 9
+      juntarPapeles(p)
+      mover
+    juntarPapeles(p)
+  fin
+  proceso recorrerJuntandoFlores(ES f:numero)
+  comenzar
+    derecha
+    repetir 9
+      juntarFlores(f)
+      mover
+    juntarFlores(f)
+  fin
+areas
+  areaA1:AreaP(1,1,10,1)
+  areaA2:AreaP(11,1,20,1)
+  areaB1:AreaP(1,5,10,5)
+  areaB2:AreaP(11,5,20,5)
+robots
+  robot tipo1
+  variables
+    p:numero
+  comenzar
+    recorrerJuntandoPapeles(p)
+    EnviarMensaje(p,a2)
+  fin
+  robot tipo2
+  variables
+    p:numero
+  comenzar
+    p:=0
+    RecibirMensaje(p,a1)
+    recorrerJuntandoPapeles(p)
+    Informar('CantidadDePapelesJuntados',p)
+  fin
+  robot tipo3
+  variables
+    f:numero
+  comenzar
+    recorrerJuntandoFlores(f)
+    EnviarMensaje(f,b2)
+  fin
+  robot tipo4
+  variables
+    f:numero
+  comenzar
+    f:=0
+    RecibirMensaje(f,b1)
+    recorrerJuntandoFlores(f)
+    Informar('CantidadDeFloresJunatadas',f)
+  fin  
+variables
+  a1:tipo1
+  a2:tipo2
+  b1:tipo3
+  b2:tipo4
+comenzar
+  AsignarArea(a1,areaA1)
+  AsignarArea(a2,areaA2)
+  AsignarArea(b1,areaB1)
+  AsignarArea(b2,areaB2)
+  Iniciar(a1,1,1)
+  Iniciar(a2,11,1)
+  Iniciar(b1,1,5)
+  Iniciar(b2,11,5)
+fin  
