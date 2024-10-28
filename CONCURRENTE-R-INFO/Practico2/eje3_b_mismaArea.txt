@@ -35,10 +35,68 @@ robots
   comenzar
     papeles:=0
     derecha
-    repetir 2
-      recorrerCalleA(papeles)
-      Pos(PosAv+11,1)    
+    recorrerCalleA(papeles)
     EnviarMensaje(papeles,A2)
+    RecibirMensaje(papeles, A2)
+    Pos(PosAv+11,1)    
+    recorrerCalleA(papeles) 
+    EnviarMensaje(papeles,A2)
+  fin
+  robot tipo2
+  variables 
+    papeles:numero
+  comenzar
+    derecha
+    RecibirMensaje(papeles,A1)
+    recorrerCalleA(papeles)
+    EnviarMensaje(papeles, A1)
+    RecibirMensaje(papeles, A1)
+    Pos(PosAv+11,1)
+    recorrerCalleA(papeles)
+    Informar(papeles)
+  fin
+  robot tipo3
+  variables
+    flores:numero
+  comenzar
+    flores:=0
+    derecha
+    recorrerCalleB(flores)
+    EnviarMensaje(flores,B2)
+    RecibirMensaje(flores, B2)
+    Pos(PosAv+11,5)    
+    recorrerCalleB(flores) 
+    EnviarMensaje(flores,B2)
+  fin
+  robot tipo4
+  variables
+    flores:numero
+  comenzar
+    derecha
+    RecibirMensaje(flores,B1)
+    recorrerCalleB(flores)
+    EnviarMensaje(flores, B1)
+    RecibirMensaje(flores, B1)
+    Pos(PosAv+11,5) 
+    recorrerCalleB(flores)
+    Informar(flores)
+  fin
+
+variables
+  A1:tipo1
+  A2:tipo2
+  B1:tipo3
+  B2:tipo4
+comenzar
+  AsignarArea(A1,area1)
+  AsignarArea(A2,area1)
+  AsignarArea(B1,area1)
+  AsignarArea(B2,area1)
+  Iniciar(A1,1,1)
+  Iniciar(A2,11,1)
+  Iniciar(B1,1,5)
+  Iniciar(B2,11,5)   
+fin
   fin
   robot tipo2
   variables 
