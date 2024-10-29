@@ -1,0 +1,139 @@
+programa ejercicio2 
+procesos 
+  proceso juntarFlores(ES flores:numero) 
+  comenzar 
+    mientras HayFlorEnLaEsquina 
+      tomarFlor 
+      flores:=flores+1 
+  fin 
+  proceso juntarPapeles(ES papeles:numero) 
+  comenzar 
+    mientras HayPapelEnLaEsquina 
+      tomarPapel 
+      papeles:=papeles +1 
+  fin 
+  proceso escalones1(E alto:numero;E ancho:numero; ES flores:numero;ES id:numero ) 
+  comenzar 
+    repetir 4 
+      repetir alto  
+        mover 
+      juntarFlores(flores) 
+      derecha 
+      repetir ancho 
+        mover  
+      juntarFlores(flores) 
+      repetir 3 
+        derecha 
+      alto:=alto -1 
+      ancho:=ancho -1 
+    mover 
+    derecha 
+    BloquearEsquina(16,16) 
+    mover 
+    EnviarMensaje(id,robot3)   
+    repetir 2 
+      derecha  
+    mover 
+    LiberarEsquina(16,16)  
+    repetir 4 
+      repetir ancho 
+        mover   
+      juntarFlores(flores)  
+      derecha 
+      repetir alto 
+        mover 
+      juntarFlores(flores)  
+      repetir 3 
+        derecha   
+      ancho:=ancho +1 
+      alto:=alto +1            
+  fin
+  proceso escalones2(E alto:numero;E ancho:numero; ES papeles:numero;ES id:numero ) 
+  comenzar  
+    repetir 4   
+      repetir alto  
+        mover  
+      juntarPapeles(papeles)  
+      repetir 3 
+        derecha  
+      repetir ancho   
+        mover  
+      juntarPapeles(papeles)  
+      derecha 
+      alto:=alto -1 
+      ancho:=ancho -1    
+    mover 
+    repetir 3 
+      derecha  
+    BloquearEsquina(16,16)  
+    mover  
+    EnviarMensaje(id,robot3)  
+    repetir 2   
+      derecha  
+    mover   
+    LiberarEsquina(16,16)   
+    repetir 4  
+      repetir ancho  
+        mover   
+      juntarPapeles(papeles) 
+      repetir 3  
+        derecha  
+      repetir alto  
+        mover   
+      juntarPapeles(papeles)  
+      derecha  
+      alto:=alto +1 
+      ancho:=ancho+1             
+  fin
+  
+areas  
+  area1:AreaC(1,1,100,100)  
+robots
+  robot tipo1 
+  variables 
+    id,alto,ancho,flores:numero  
+  comenzar
+    alto:=5 
+    ancho:=5 
+    flores:=0  
+    RecibirMensaje(id,robot3) 
+    escalones1(alto,ancho,flores,id) 
+    Informar(flores) 
+  fin 
+  robot tipo2 
+  variables 
+    id,alto,ancho,papeles:numero 
+  comenzar 
+    alto:=5 
+    ancho:=5  
+    papeles:=0 
+    RecibirMensaje(id,robot3) 
+    escalones2(alto,ancho,papeles,id) 
+    Informar(papeles) 
+  fin
+  robot tipo3 
+  variables  
+    id:numero 
+  comenzar   
+    EnviarMensaje(1,robot1) 
+    EnviarMensaje(2,robot2) 
+    RecibirMensaje(id,*) 
+    si id=1 
+      Informar(id) 
+    sino 
+      Informar(id)  
+  fin
+ 
+variables
+  robot1: tipo1  
+  robot2: tipo2 
+  robot3: tipo3 
+
+comenzar
+  AsignarArea(robot1,area1) 
+  AsignarArea(robot2,area1)   
+  AsignarArea(robot3,area1) 
+  Iniciar(robot1,1,1) 
+  Iniciar(robot2,31,1) 
+  Iniciar(robot3,15,1) 
+fin
