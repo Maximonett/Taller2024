@@ -1,117 +1,121 @@
-programa ejercicio4 
-procesos    
-  proceso juntarFlores(ES flores:numero)   
-  comenzar   
-    mientras HayFlorEnLaEsquina   
-      tomarFlor  
-      flores:=flores +1  
-  fin 
-  proceso juntarPapeles(ES papeles:numero)  
-  comenzar  
-    mientras HayPapelEnLaEsquina  
-      tomarPapel   
-      papeles:=papeles + 1         
-  fin 
-  proceso maximo(E suma:numero; ES sumaMax:numero;E id:numero; ES idMax:numero) 
+programa eje4
+procesos
+  proceso juntarFlores(ES f:numero)
   comenzar
-    sumaMax:=-1    
-    si (suma > sumaMax)   
-      sumaMax:=suma   
-      idMax:=id  
-  fin   
-areas  
-  area1:AreaC(1,1,100,100)  
-robots 
-  robot limpiador  
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso juntarPapeles(ES p:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin
+  proceso sumaMax(E suma:numero;E id:numero; ES idMax:numero)  
   variables
-    Ai,Ci:numero  
-    papeles, flores:numero  
-    limpiar:numero  
-    A:numero  
-    C:numero    
-    id:numero  
-    suma:numero  
-    pos:numero  
+    sumaMax:numero
+  comenzar
+    sumaMax:=-1
+    si (suma>sumaMax)
+      sumaMax:=suma
+      idMax:=id
+  fin
+areas
+  AJ: AreaP(1,1,1,1) 
+  A1: AreaP(25, 1, 25, 1) 
+  A2: AreaP(30, 1, 30,1) 
+  A3: AreaP(35, 1, 35, 1) 
+  A4: AreaP(40, 1, 40, 1)  
+  AC: AreaPC(25, 25, 75, 75) 
+robots
+  robot Juntador  
+  variables 
+    ok, soyGanador: boolean  
+    cantidad, avenida, ave, cal, flores: numero 
   comenzar 
-    Ai:=PosAv 
-    Ci:=PosCa  
-    RecibirMensaje(id,robot5)    
-    RecibirMensaje(limpiar,robot5)  
-    Random(A,25,75)  
-    Random(C,25,75)  
-    si limpiar=1  
-      Pos(A,C)  
-      juntarPapeles(papeles)  
-      juntarFlores(flores)  
-      suma:=flores+papeles 
-      Pos(Ai,Ci)  
-    EnviarMensaje(id,robot5)   
-    EnviarMensaje(suma,robot5)  
-    RecibirMensaje(pos,robot5)  
-    si pos=1 
-      Pos(50,50) 
+    cantidad:= 0 
+    soyGanador:= F 
+    avenida:= PosAv  
+    RecibirMensaje(ok, jefe) 
+    mientras (ok = F)  
+      Random(ave, 25, 75) 
+      Random(cal,25, 75) 
+      Pos(ave , cal ) 
+      juntarFlores(cantidad) 
+      juntarPapeles(cantidad) 
+      Pos(avenida, 1) 
+      EnviarMensaje(cantidad,jefe) 
+      RecibirMensaje(ok, jefe) 
+    RecibirMensaje(soyGanador, jefe) 
+    si (soyGanador = V) 
+      Pos(50, 50)    
   fin
   robot jefe 
-  variables
-    id:numero 
-    suma:numero 
-    sumaMax:numero  
-    idMax:numero 
+  variables 
+    ok: boolean 
+    robotJuntador: numero 
+    mayorCantidad, cantidad: numero 
+    ganador: numero 
   comenzar 
-    EnviarMensaje(1,robot1)   
-    EnviarMensaje(2,robot2)   
-    EnviarMensaje(3,robot3)    
-    EnviarMensaje(4,robot4)       
-    repetir 10  
-      Random(id,1,5)  
-      si id=1        
-        EnviarMensaje(1,robot1)  
-      sino  
-        si id=2  
-          EnviarMensaje(1,robot2)  
-        sino  
-          si id=3  
-            EnviarMensaje(1,robot3)  
-          sino  
-            EnviarMensaje(1,robot4)  
-      RecibirMensaje(id,*)  
-      si id=1  
-        RecibirMensaje(suma,robot1)  
-      sino  
-        si id=2  
-          RecibirMensaje(suma,robot2)  
-        sino  
-          si id=3  
-            RecibirMensaje(suma,robot3)  
-          sino 
-            RecibirMensaje(suma,robot4) 
-      maximo(suma,sumaMax,id,idMax)              
-    si idMax=1 
-      EnviarMensaje(1,robot1)  
-    sino
-      si idMax=2
-        EnviarMensaje(1,robot2)
+    ok:= F 
+    repetir 10 
+      Random(robotJuntador, 1, 4) 
+      si (robotJuntador = 1) 
+        EnviarMensaje(ok, robot1) 
+        RecibirMensaje(cantidad, robot1) 
       sino 
-        si idMax=3 
-          EnviarMensaje(1,robot3)  
+        si (robotJuntador = 2) 
+          EnviarMensaje(ok, robot2) 
+          RecibirMensaje(cantidad, robot2) 
         sino 
-          EnviarMensaje(1,robot4)  
-  fin 
-variables 
-  robot1: limpiador 
-  robot2: limpiador 
-  robot3: limpiador 
-  robot4: limpiador 
-  robot5: jefe 
-comenzar
-  AsignarArea(robot1,area1) 
-  AsignarArea(robot2,area1) 
-  AsignarArea(robot3,area1) 
-  AsignarArea(robot4,area1) 
-  AsignarArea(robot5,area1) 
-  Iniciar(robot1,25,1) 
-  Iniciar(robot2,30,1) 
-  Iniciar(robot3,35,1) 
-  Iniciar(robot4,40,1) 
-  Iniciar(robot5,1,1) 
+          si (robotJuntador = 3) 
+            EnviarMensaje(ok, robot3) 
+            RecibirMensaje(cantidad, robot3) 
+          sino 
+            EnviarMensaje(ok, robot4) 
+            RecibirMensaje(cantidad, robot4) 
+      si (cantidad > mayorCantidad) 
+        mayorCantidad:= cantidad 
+        ganador:= robotJuntador 
+    ok:=V 
+    EnviarMensaje(ok, robot1) 
+    EnviarMensaje(ok, robot2) 
+    EnviarMensaje(ok, robot3) 
+    EnviarMensaje(ok, robot4) 
+    si (ganador =  1) 
+      EnviarMensaje(V, robot1) 
+    sino 
+      EnviarMensaje(F, robot1)     
+    si (ganador = 2) 
+      EnviarMensaje(V, robot2) 
+    sino 
+      EnviarMensaje(F, robot2) 
+    si (ganador = 3) 
+      EnviarMensaje(V, robot3) 
+    sino 
+      EnviarMensaje(F, robot3) 
+    si (ganador = 4) 
+      EnviarMensaje(V, robot4) 
+    sino 
+      EnviarMensaje(F, robot4)  
+  fin
+variables
+  robot1, robot2, robot3, robot4: Juntador 
+  jefe: jefe 
+comenzar 
+  AsignarArea(jefe, AJ) 
+  AsignarArea(robot1, A1) 
+  AsignarArea(robot2,A2) 
+  AsignarArea(robot3,A3) 
+  AsignarArea(robot4, A4) 
+  AsignarArea(robot1, AC) 
+  AsignarArea(robot2,AC) 
+  AsignarArea(robot3,AC) 
+  AsignarArea(robot4, AC) 
+  Iniciar(jefe, 1,1) 
+  Iniciar(robot1, 25,1) 
+  Iniciar(robot2, 30,1) 
+  Iniciar(robot3, 35,1) 
+  Iniciar(robot4, 40,1)   
 fin 

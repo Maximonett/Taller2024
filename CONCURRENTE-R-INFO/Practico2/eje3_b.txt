@@ -1,10 +1,10 @@
 programa eje3
-procesos
-  proceso juntarPapeles(ES p:numero)
-  comenzar
+procesos 
+  proceso juntarPapeles(ES p:numero) 
+  comenzar  
     mientras HayPapelEnLaEsquina
-      tomarPapel
-      p:=p+1
+      tomarPapel 
+      p:=p+1 
   fin
   proceso juntarFlores(ES f:numero)
   comenzar
@@ -27,46 +27,46 @@ procesos
     juntarFlores(f)
   fin
 areas
-  areaA1:AreaP(1,1,10,1)
-  areaA12:AreaP(21,1,30,1)
-  areaA2:AreaP(11,1,20,1)
-  areaA22:AreaP(31,1,40,1)
-  areaB1:AreaP(1,5,10,5)
-  areaB12:AreaP(21,5,30,5)
-  areaB2:AreaP(11,5,20,5)
-  areaB22:AreaP(31,5,40,5)
-robots
-  robot tipo1
-  variables
+  areaA1:AreaP(1,1,10,1) 
+  areaA12:AreaP(21,1,30,1) 
+  areaA2:AreaP(11,1,20,1) 
+  areaA22:AreaP(31,1,40,1) 
+  areaB1:AreaP(1,5,10,5) 
+  areaB12:AreaP(21,5,30,5) 
+  areaB2:AreaP(11,5,20,5) 
+  areaB22:AreaP(31,5,40,5) 
+robots 
+  robot tipo1 
+  variables 
+    p:numero 
+  comenzar 
+    derecha    
+    recorrerJuntandoPapeles(p) 
+    Pos(PosAv+11,PosCa)
+    recorrerJuntandoPapeles(p)   
+    EnviarMensaje(p,a2) 
+  fin 
+  robot tipo2 
+  variables  
     p:numero
-  comenzar
-    derecha
-    repetir 2  
-      recorrerJuntandoPapeles(p)
-      Pos(PosAv+11,PosCa) 
-    EnviarMensaje(p,a2)
-  fin
-  robot tipo2
-  variables
-    p:numero
-  comenzar
-    p:=0
-    derecha 
-    RecibirMensaje(p,a1) 
-    repetir 2 
-      recorrerJuntandoPapeles(p) 
-      Pos(PosAv+11,PosCa)  
-    Informar('CantidadDePapelesJuntados',p) 
+  comenzar  
+    p:=0 
+    derecha  
+    RecibirMensaje(p,a1)      
+    recorrerJuntandoPapeles(p) 
+    Pos(PosAv+11,PosCa)
+    recorrerJuntandoPapeles(p)  
+    Informar('CantidadDePapelesJuntados',p)  
   fin
   robot tipo3
   variables
     f:numero
   comenzar
-    derecha
-    repetir 2 
-      recorrerJuntandoFlores(f)
-      Pos(PosAv+11,PosCa)
-    EnviarMensaje(f,b2)
+    derecha   
+    recorrerJuntandoFlores(f)
+    Pos(PosAv+11,PosCa)
+    recorrerJuntandoFlores(f)
+    EnviarMensaje(f,b2) 
   fin
   robot tipo4
   variables
@@ -75,9 +75,9 @@ robots
     f:=0
     derecha
     RecibirMensaje(f,b1)
-    repetir 2
-      recorrerJuntandoFlores(f)
-      Pos(PosAv+11,PosCa)
+    recorrerJuntandoFlores(f)
+    Pos(PosAv+11,PosCa)
+    recorrerJuntandoFlores(f)
     Informar('CantidadDeFloresJuntadas',f)
   fin  
 variables
@@ -86,8 +86,8 @@ variables
   b1:tipo3
   b2:tipo4
 comenzar
-  AsignarArea(a1,areaA1)
-  AsignarArea(a1,areaA12)
+  AsignarArea(a1,areaA1) 
+  AsignarArea(a1,areaA12) 
   AsignarArea(a2,areaA2)
   AsignarArea(a2,areaA22)
   AsignarArea(b1,areaB1)
