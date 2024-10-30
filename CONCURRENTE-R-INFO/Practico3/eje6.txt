@@ -1,0 +1,90 @@
+programa eje6
+procesos
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:=flores+1
+  fin
+  proceso juntarPapeles(Es papeles:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles:=papeles +1
+  fin
+  proceso dejarFlor(ES flores:numero)
+  comenzar
+    si HayFlorEnLaBolsa
+      depositarFlor
+      flores:=flores-1
+  fin
+  proceso cuadranteF(E altura:numero;E ancho:numero;ES flores:numero)
+  comenzar
+    repetir 2
+      repetir altura
+        juntarFlores(flores)
+        mover
+      juntarFlores(flores)
+      derecha
+      repetir ancho
+        juntarFlores(flores)
+        mover
+      juntarFlores(flores)            
+  fin
+  proceso cuadranteP(E altura:numero;E ancho:numero;ES papeles:numero)
+  comenzar 
+    repetir 2 
+      repetir altura 
+        juntarPapeles(papeles) 
+        mover 
+      juntarPapeles(papeles) 
+      derecha 
+      repetir ancho 
+        juntarPapeles(papeles) 
+        mover 
+      juntarPapeles(papeles)             
+  fin 
+  proceso cuadranteFP(E altura:numero;E ancho:numero;ES flores:numero;ES papeles:numero)
+  comenzar  
+    repetir 2 
+      repetir altura
+        juntarFlores(flores)  
+        juntarPapeles(papeles) 
+        mover  
+      juntarFlores(flores)  
+      juntarPapeles(papeles)    
+      derecha
+      repetir ancho
+        juntarFlores(flores)  
+        juntarPapeles(papeles) 
+        mover  
+      juntarFlores(flores)  
+      juntarPapeles(papeles) 
+      derecha             
+  fin 
+areas
+  area1
+  area2
+  area3
+  area4
+robots
+  robot recolectorFlores
+  variables
+    altura,ancho,flores,papeles,id:numero
+    ca,c:numero
+  comenzar
+    RecibirMensaje(id,robot4)
+    altura:=6
+    ancho:=6
+    cuadrante(altura,ancho,flores,papeles)
+    EnviarMensaje(id,robot4)
+    RecibirMensaje(ca,robot4)
+    Pos(1,ca)
+    derecha
+    c:=0
+    mientra (flores<>0)&(c<=100)
+      dejarFlor(flores)
+      mover
+      c:=c+1 
+  fin 
+  
