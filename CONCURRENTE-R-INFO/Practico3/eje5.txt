@@ -1,0 +1,119 @@
+programa eje5
+procesos 
+  proceso juntarPapel(ES papel:numero;ES noHayMas:boolean)
+  comenzar
+    si HayPapelEnLaEsquina
+      tomarPapel
+      papel:=papel +1
+    sino 
+      noHayMas:=V
+  fin
+  proceso dejarPapel(ES papel:numero)
+  comenzar
+    si HayPapelEnLaBolsa
+      depositarPapel
+      papel:=papel-1
+  fin
+  proceso maximo(E c1:numero;E c2:numero;E c3:numero;E c4:numero;ES idMax:numero)
+  variables
+    cMax:numero
+  comenzar
+    cMax:=0
+    si (c1>cMax)
+      cMax:=c1
+      idMax:=1
+    si (c2>cMax)
+      cMax:=c2+
+      idMax:=2
+    si (c3>cMax)
+      cMax:=c3
+      idMax:=3
+    si (c4>cMax)
+      cMax:=c4
+      idMax:=4
+  fin 
+areas
+  areaC:AreaC(11,11,11,11)
+  area1:AreaP(4,1,4,100)
+  area2:AreaP(6,1,6,100)
+  area3:AreaP(8,1,8,100)
+  area4:AreaP(10,1,10,100)
+  area5:AreaP(1,1,1,1)
+  
+robots
+  robot juntador
+  variables
+    papeles,id,ai,ci:numero
+    c:numero
+    noHayMas:boolean
+  comenzar
+    noHayMas:=F
+    ai:=PosAv
+    ci:=PosCa
+    c:=0
+    RecibirMensaje(id,robot5)
+    mientras (noHayMas=F)&(c<=100)
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      juntarPapel(papeles,noHayMas)
+      Pos(ai,ci)
+      LiberarEsquina(11,11)
+      dejarPapel(papeles)
+      mover
+      c:=c+1
+      ci:=ci+1
+    EnviarMensaje(id,robot5)
+    EnviarMensaje(c,robot5)
+    
+  fin
+  robot coordinador
+  variables
+    id,papeles:numero
+    c1,c2,c3,c4,c,idMax:numero
+  comenzar
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    EnviarMensaje(4,robot4)
+    repetir 4
+      RecibirMensaje(id,*)
+      si id=1
+        RecibirMensaje(c,robot1)
+        c1:=c
+      sino
+        si id=2
+          RecibirMensaje(c,robot2)
+          c2:=c1
+        sino
+          si id=3
+            RecibirMensaje(c,robot3)
+            c3:=c
+          sino
+            si id=4
+              RecibirMensaje(c,robot4)
+              c4:=c
+    maximo(c1,c2,c3,c4,idMax)
+    Informar('ElQuemasLejosLlegoFueElRobot',idMax)  
+  fin
+variables
+  robot1:juntador
+  robot2:juntador
+  robot3:juntador
+  robot4:juntador
+  robot5:coordinador
+comenzar
+  AsignarArea(robot1,areaC)
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,areaC)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot3,areaC)
+  AsignarArea(robot3,area3)
+  AsignarArea(robot4,areaC)
+  AsignarArea(robot4,area4)
+  AsignarArea(robot5,area5)
+  Iniciar(robot1,4,1)
+  Iniciar(robot2,6,1)
+  Iniciar(robot3,8,1)
+  Iniciar(robot4,10,1)
+  Iniciar(robot5,1,1)
+fin
