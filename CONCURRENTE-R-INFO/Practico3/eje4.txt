@@ -1,0 +1,99 @@
+programa eje4
+procesos
+  proceso juntarFlor(ES flor:numero;ES noHayMas:boolean)
+  comenzar
+    si HayFlorEnLaEsquina
+      tomarFlor
+      flor:=flor+1
+    sino
+      noHayMas:=V
+  fin
+  proceso juntarFlores(ES flor:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flor:=flor+1
+  fin  
+  proceso dejarFlores(ES f:numero)
+  comenzar
+    si HayFlorEnLaBolsa
+      depositarFlor
+      f:=f-1
+  fin
+areas
+  area1:AreaPC(10,10,10,10)
+  area2:AreaC(11,11,11,11)
+  area3:AreaP(1,1,1,1)
+  area4:AreaP(9,9,9,9)
+  area5:AreaP(9,10,9,10)
+  area6:AreaP(9,11,9,11)
+  area7:AreaP(9,12,9,12)
+robots
+  robot coordinador
+  variables
+    cant,flores,id:numero
+  comenzar
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    EnviarMensaje(4,robot4)
+    cant:=4
+    mientras cant>0
+      RecibirMensaje(id,*)
+      cant:=cant-1
+      si cant=0
+        Informar('ElUltimoFueElRobot',id)
+    Pos(11,11)
+    juntarFlores(flores)
+    Pos(1,1)
+  fin
+  robot juntador
+  variables
+    id,ai,ci,flores:numero
+    noHayMas:boolean
+  comenzar
+    ai:=PosAv
+    ci:=PosCa
+    noHayMas:=F
+    flores:=0
+    RecibirMensaje(id,robot5)
+    mientras (noHayMas=F)
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      juntarFlor(flores,noHayMas)
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      LiberarEsquina(10,10)
+      dejarFlores(flores)
+      Pos(ai,ci)
+      LiberarEsquina(11,11)
+    EnviarMensaje(id,robot5)
+  fin
+variables
+  robot1:juntador
+  robot2:juntador
+  robot3:juntador
+  robot4:juntador
+  robot5:coordinador
+comenzar
+  AsignarArea(robot1,area4)
+  AsignarArea(robot1,area1)
+  AsignarArea(robot1,area2)
+  AsignarArea(robot2,area5)
+  AsignarArea(robot2,area1)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot3,area6)
+  AsignarArea(robot3,area1)
+  AsignarArea(robot3,area2)
+  AsignarArea(robot4,area7)
+  AsignarArea(robot4,area1)
+  AsignarArea(robot4,area2)
+  AsignarArea(robot5,area3)
+  AsignarArea(robot5,area2)
+  Iniciar(robot5,1,1)
+  Iniciar(robot1,9,9)
+  Iniciar(robot2,9,10)
+  Iniciar(robot3,9,11)
+  Iniciar(robot4,9,12)
+  
+fin
