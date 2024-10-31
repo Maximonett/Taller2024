@@ -1,0 +1,81 @@
+programa eje2
+procesos
+  proceso juntar5Papeles(ES papeles:numero; ES noHayMas:boolean)
+  variables
+    ai,ci:numero  
+  comenzar
+    ai:=PosAv
+    ci:=PosCa
+    mientras (papeles<=5)|(noHayMas=F)
+      si HayPapelEnLaEsquina
+        tomarPapel 
+        papeles:=papeles+1
+      sino
+        noHayMas:=V
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    dejarPapeles(papeles)
+    Pos(ai,ci)
+    LiberarEsquina(50,50)
+  fin
+  proceso juntarPapeles(ES papeles:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel 
+      papeles:=papeles+1
+  fin
+  proceso juntarNpapeles(ES n:numero)
+  comenzar
+    repetir n
+      si HayPapelEnLaEsquina
+        tomarPapel 
+  fin
+areas
+  area1:AreaC(1,1,100,100)
+robots
+  robot productor
+  variables
+    papeles:numero
+    noHayMas:boolean
+  comenzar
+    noHayMas:=F
+    repetir 99
+      juntar5Papeles(papeles,noHayMas)
+      mover
+    juntar5Papeles(papeles,noHayMas)
+  fin
+  robot consumidor
+  variables
+    r,ai,ci,int,papeles:numero
+  comenzar
+    ai:=PosAv
+    ci:=PosCa
+    Random(r,2,5)
+    int:=0
+    papeles:=0
+    mientras (int<=8)
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      juntarPapeles(papeles)
+      si (papeles>=r)
+        juntarNpapeles(r)
+        Pos(ai,ci)
+        LiberarEsquina(50,50)
+      sino
+        int:=int+1   
+  fin
+variables
+  robot1:productor
+  robot2:productor
+  robot3:consumidor
+  robot4:consumidor
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area1)
+  AsignarArea(robot3,area1)
+  AsignarArea(robot4,area1)
+  Iniciar(robot1,5,1)
+  Iniciar(robot2,10,1)
+  Iniciar(robot3,11,1)
+  Iniciar(robot4,12,1)
+fin
