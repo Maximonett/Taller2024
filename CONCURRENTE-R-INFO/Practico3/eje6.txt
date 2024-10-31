@@ -6,7 +6,7 @@ procesos
       tomarFlor
       flores:=flores+1
   fin
-  proceso juntarPapeles(Es papeles:numero)
+  proceso juntarPapeles(ES papeles:numero)
   comenzar
     mientras HayPapelEnLaEsquina
       tomarPapel
@@ -17,6 +17,12 @@ procesos
     si HayFlorEnLaBolsa
       depositarFlor
       flores:=flores-1
+  fin
+  proceso dejarPapel(ES papeles:numero)
+  comenzar
+    si HayPapelEnLaBolsa
+      depositarPapel
+      papeles:=papeles-1
   fin
   proceso cuadranteF(E altura:numero;E ancho:numero;ES flores:numero)
   comenzar
@@ -63,15 +69,13 @@ procesos
       derecha             
   fin 
 areas
-  area1
-  area2
-  area3
-  area4
+  area1:AreaC(2,2,16,16)
+  area5:AreaC(1,19,1,22)
 robots
   robot recolectorFlores
   variables
-    altura,ancho,flores,papeles,id:numero
-    ca,c:numero
+    altura,ancho,flores,id:numero
+    ca,c,cg:numero
   comenzar
     RecibirMensaje(id,robot4)
     altura:=6
@@ -82,9 +86,114 @@ robots
     Pos(1,ca)
     derecha
     c:=0
-    mientra (flores<>0)&(c<=100)
+    mientras (flores<>0)&(c<=100)
       dejarFlor(flores)
       mover
-      c:=c+1 
+      c:=c+1
+    EnviarMensaje(id,robot4)
+    RecibirMensaje(cg,robot4)
+    Pos(1,cg) 
+  fin
+  robot recolectorPapeles 
+  variables 
+    altura,ancho,papeles,id:numero 
+    ca,c,cg:numero 
+  comenzar
+    RecibirMensaje(id,robot4) 
+    altura:=7
+    ancho:=7
+    cuadranteP(altura,ancho,papeles) 
+    EnviarMensaje(id,robot4) 
+    RecibirMensaje(ca,robot4) 
+    Pos(1,ca) 
+    derecha 
+    c:=0
+    mientras (flores<>0)&(c<=100) 
+      dejarFlor(flores) 
+      mover 
+      c:=c+1
+    EnviarMensaje(id,robot4)
+    RecibirMensaje(cg,robot4)
+    Pos(1,cg)  
+  fin
+  robot recolectorPapelesFlores 
+  variables  
+    altura,ancho,papeles,flores,id:numero  
+    ca,c,cg:numero  
+  comenzar 
+    RecibirMensaje(id,robot4)  
+    altura:=10 
+    ancho:=10
+    cuadranteFP(altura,ancho,flores,papeles)  
+    EnviarMensaje(id,robot4)  
+    RecibirMensaje(ca,robot4)  
+    Pos(1,ca)  
+    derecha  
+    c:=0 
+    mientras (flores<>0)&(c<=100)  
+      dejarFlor(flores)
+      dejarPapeles(papeles)  
+      mover 
+      c:=c+1
+    EnviarMensaje(id,robot4)
+    RecibirMensaje(cg,robot4)
+    Pos(1,cg)   
   fin 
+  robot coordinador
+  variables
+    ca1,ca2,ca3,id:numero
+  comenzar
+    ca1:=20
+    ca2:=21
+    ca3:=22
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)        
+    RecibirMensaje(id,*)
+      si id=1
+        EnviarMensaje(ca1,robot1)
+      sino
+        si id=2
+          EnviarMensaje(ca1,robot2)
+        sino
+          si id=3
+            EnviarMensaje(ca1,robot3)
+    RecibirMensaje(id,*)
+      si id=1
+        EnviarMensaje(ca2,robot1)
+      sino
+        si id=2
+          EnviarMensaje(ca2,robot2)
+        sino
+          si id=3
+            EnviarMensaje(ca2,robot3)
+    RecibirMensaje(id,*)
+      si id=1
+        EnviarMensaje(ca3,robot1)
+      sino
+        si id=2
+          EnviarMensaje(ca3,robot2)
+        sino
+          si id=3
+            EnviarMensaje(ca3,robot3)   
+  fin
+variables
+  robot1: recolectorFlores
+  robot2: recolectorFloresPapeles
+  robot3: recolectorPapeles
+  robot4: coordinador
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot1,area5)
+  AsignarArea(robot2,area1)
+  AsignarArea(robot2,area5)
+  AsignarArea(robot3,area1)
+  AsignarArea(robot3,area5)
+  AsignarArea(robot4,area5)
+  Iniciar(robot1,2,2)
+  Iniciar(robot1,5,5)
+  Iniciar(robot1,9,9)
+  Iniciar(robot1,1,19)
+fin
+  
   
