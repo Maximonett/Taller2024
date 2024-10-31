@@ -1,0 +1,129 @@
+programa eje1
+procesos
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:=flores+1
+  fin
+  proceso dejarFlor(ES flores:numero;ES noHayMas:boolean)
+  comenzar
+    si HayFlorEnLaBolsa
+      depositarFlor
+    sino
+      noHayMas:=V
+  fin
+  proceso dejarNflores(ES nFlores:numero)
+  comenzar
+    mientras (nFlores>0)
+      depositarFlor
+      nFlores:=nFlores-1
+  fin
+areas
+  area1:AreaC(1,1,100,100)
+robots
+  robot servidor
+  variables
+    c,id,n,av,ca,f:numero
+    ok,terminar:boolean
+  comenzar
+    f:=0
+    juntarFlores(f)
+    c:=0
+    n:=0
+    ok:=V
+    terminar:=F
+    mientras (terminar=F)
+      RecibirMensaje(id,*)
+      si id=1
+        Informar('anda',1)
+        RecibirMensaje(n,robot1)
+        Informar('sorteo',n)
+        si (n<>0)
+          RecibirMensaje(av,robot1)
+          RecibirMensaje(ca,robot1)
+          BloquearEsquina(av,ca)
+          Pos(av,ca)
+          dejarNflores(n)
+          Pos(100,100)
+          LiberarEsquina(av,ca)
+          EnviarMensaje(ok,robot1)
+        sino 
+          c:=c+1
+      sino
+        si id=2
+          Informar('anda',2)
+          RecibirMensaje(n,robot2)
+          Informar('sorteo',n)
+          si (n<>0)
+            RecibirMensaje(av,robot2)
+            RecibirMensaje(ca,robot2)
+            BloquearEsquina(av,ca)
+            Pos(av,ca)
+            dejarNflores(n)
+            Pos(100,100)
+            LiberarEsquina(av,ca)
+            EnviarMensaje(ok,robot2)
+          sino
+            c:=c+1
+        sino    
+          si id=3
+            Informar('anda',3)
+            RecibirMensaje(n,robot3)
+            Informar('sorteo',n)
+            si (n<>0)
+              RecibirMensaje(av,robot3)
+              RecibirMensaje(ca,robot3)
+              BloquearEsquina(av,ca)
+              Pos(av,ca)
+              dejarNflores(n)
+              Pos(100,100)
+              LiberarEsquina(av,ca)
+              EnviarMensaje(ok,robot3)   
+            sino
+              c:=c+1
+          si (c=3)
+            teminar:=V                                
+  fin
+  robot cliente
+  variables
+    c,id,n,f:numero
+    ok,noHayMas:boolean
+  comenzar
+    c:=0
+    id:=PosAv
+    mientras (c<>100)
+      Random(n,1,4)
+      EnviarMensaje(id,serv)
+      EnviarMensaje(n,serv)
+      EnviarMensaje(PosAv,serv)
+      EnviarMensaje(2,serv)
+      RecibirMensaje(ok,serv)
+      BloquearEsquina(PosAv,2)
+      juntarFlores(f)
+      Pos(PosAv,1)
+      noHayMas:=F
+      repetir f
+        dejarFlor(f,noHayMas)
+        mover
+        c:=c+1
+      dejarFlor(f,noHayMas)
+      si (c=100)
+        EnviarMensaje(0,serv) 
+  fin
+variables
+  robot1:cliente
+  robot2:cliente
+  robot3:cliente
+  serv:servidor
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area1)
+  AsignarArea(robot3,area1)
+  AsignarArea(serv,area1)
+  Iniciar(robot1,1,1)
+  Iniciar(robot2,2,1)
+  Iniciar(robot3,3,1)
+  Iniciar(serv,100,100)
+fin
+  
