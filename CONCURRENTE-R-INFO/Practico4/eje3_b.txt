@@ -20,7 +20,7 @@ robots
   fin
   robot papelero
   variables
-    id,p,esquina:numero
+    id,p,esquina,cantP:numero
     termine:boolean
   comenzar
     RecibirMensaje(id,fiscalizador)
@@ -28,28 +28,39 @@ robots
     mientras PosCa<100
       juntarPapeles(p)
       mover
-      esquina:=esquina+1
-      si (esquina=5)
+      Random(cantP,1,5)
+      si (p=cantP)
         si (id=1)
           EnviarMensaje(termine,r2)
           EnviarMensaje(termine,r3)
-          esquina:=0
+          p:=0
           RecibirMensaje(termine,r2)
           RecibirMensaje(termine,r3)
         sino
           si (id=2)
             EnviarMensaje(termine,r1)
             EnviarMensaje(termine,r3)
-            esquina:=0
+            p:=0
             RecibirMensaje(termine,r1)
             RecibirMensaje(termine,r3)
           sino
             EnviarMensaje(termine,r1)
             EnviarMensaje(termine,r2)
-            esquina:=0
+            p:=0
             RecibirMensaje(termine,r1)
             RecibirMensaje(termine,r2)
-    juntarPapeles(p)        
+    juntarPapeles(p)
+    si (PosCa=100)
+      si (id=1)
+        EnviarMensaje(termine,r2)
+        EnviarMensaje(termine,r3)
+      sino
+        si (id=2)
+          EnviarMensaje(termine,r1)
+          EnviarMensaje(termine,r3)
+        sino
+          EnviarMensaje(termine,r1)
+          EnviarMensaje(termine,r2)        
   fin
 variables
   r1:papelero
