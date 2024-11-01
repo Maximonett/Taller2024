@@ -1,0 +1,89 @@
+programa eje4
+procesos
+  proceso juntarFlores
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+  fin
+  proceso juntarPapeles
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+  fin
+  proceso vaciarBolsa
+  comenzar
+    mientras HayFlorEnLaBolsa & HayPapelEnLaBolsa
+      depositarFlor
+      depositarPapel
+  fin
+areas
+  areaC:AreaC(2,2,100,100)
+  areaJ:AreaP(1,1,1,1)
+  areaT1:AreaP(2,1,2,1)
+  areaT2:AreaP(3,1,3,1)
+robots
+  robot trabajador
+  variables
+    ai,ci,tarea,av,ca,id:numero
+  comenzar
+    tarea:=0
+    ai:=PosAv
+    ci:=PosCa
+    RecibirMensaje(id,jefe)
+    mientras (tarea<>4)
+      RecibirMensaje(tarea,jefe)
+      Random(av,2,100)
+      Random(ca,2,100)
+      si (tarea=1)
+        BloquearEsquina(av,ca)
+        Pos(av,ca)
+        juntarFlores
+        Pos(ai,ci)
+        LiberarEsquina(av,ca)
+      sino
+        si (tarea=2)
+          BloquearEsquina(av,ca)
+          Pos(av,ca)
+          juntarPapeles
+          Pos(ai,ci)
+          LiberarEsquina(av,ca)
+        sino
+          si (tarea=3)
+            BloquearEsquina(av,ca)
+            Pos(av,ca)
+            juntarFlores
+            Pos(ai,ci)
+            LiberarEsquina(av,ca)
+          sino
+            Informar('Nº',tarea)
+  fin
+  robot jefe
+  variables
+    tarea,id:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    repetir 10
+      Random(tarea,1,4)
+      Random(id,1,2)
+      si (id=1)
+        EnviarMensaje(tarea,r1)
+      sino
+        EnviarMensaje(tarea,r2)    
+    EnviarMensaje(4,r1)
+    EnviarMensaje(4,r2)  
+  fin
+variables
+  r1:trabajador
+  r2:trabajador
+  jefe:jefe
+comenzar
+  AsignarArea(r1,areaT1)
+  AsignarArea(r1,areaC)
+  AsignarArea(r2,areaT2)
+  AsignarArea(r2,areaC)
+  AsignarArea(jefe,areaJ)
+  Iniciar(jefe,1,1)
+  Iniciar(r1,2,1)
+  Iniciar(r2,3,1)
+fin
