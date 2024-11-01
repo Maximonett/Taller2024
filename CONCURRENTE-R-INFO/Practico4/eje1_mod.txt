@@ -1,0 +1,90 @@
+programa e1p4
+procesos
+  proceso juntarFlores
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor 
+  fin
+areas
+  ave1: AreaPC (1,1,1,100)
+  ave2: AreaPC (2,1,2,100)
+  ave3: AreaPC (3,1,3,100)
+  a1: AreaP (100,100,100,100)
+robots
+  robot cliente
+  variables
+    cantFlores, id, calleSig: numero
+    ok: boolean
+  comenzar
+    RecibirMensaje (id,servidor)
+    mientras (PosCa<100)
+      Random (cantFlores,1,4)
+      EnviarMensaje (id, servidor)
+      EnviarMensaje (cantFlores,servidor)
+      calleSig:= PosCa+1
+      EnviarMensaje (calleSig, servidor)
+      RecibirMensaje (ok, servidor)
+      mover
+      repetir cantFlores-1
+        tomarFlor
+      si ((PosCa <100)&(HayFlorEnLaBolsa))
+        mover
+        depositarFlor
+    EnviarMensaje (id, servidor)
+    EnviarMensaje (100, servidor)
+    EnviarMensaje (calleSig, servidor)
+  fin
+  robot servidor
+  variables
+    flag, id, cantFlores, calle: numero
+  comenzar
+    juntarFlores
+    flag:= 0
+    EnviarMensaje (1, r1)
+    EnviarMensaje (2, r2)
+    EnviarMensaje (3, r3)
+    mientras (flag < 3)
+      RecibirMensaje (id, *)
+      si (id = 1)
+        RecibirMensaje (cantFlores, r1)
+        RecibirMensaje (calle, r1)
+      sino
+        si (id = 2)
+          RecibirMensaje (cantFlores,r2)
+          RecibirMensaje (calle, r2)
+        sino
+          RecibirMensaje (cantFlores,r3)
+          RecibirMensaje (calle, r3)
+      Pos (id, calle)
+      repetir cantFlores
+        depositarFlor
+      Pos (100,100)
+      si (id= 1)
+        EnviarMensaje (V, r1)
+      sino
+        si (id = 2)
+          EnviarMensaje (V,r2)
+        sino
+          EnviarMensaje (V, r3)
+      si (cantFlores= 100)
+        flag:= flag+1
+        Informar (flag)
+  fin
+variables
+  r1: cliente
+  r2: cliente
+  r3: cliente
+  servidor: servidor
+comenzar
+  AsignarArea(r1, ave1)
+  AsignarArea(r2, ave2)
+  AsignarArea(r3, ave3)
+  AsignarArea(servidor, ave1)
+  AsignarArea(servidor, ave2)
+  AsignarArea(servidor, ave3)
+  AsignarArea(servidor,a1)
+  Iniciar (r1,1,1)
+  Iniciar (r2,2,1)
+  Iniciar (r3,3,1)
+  Iniciar (servidor,100,100)
+fin

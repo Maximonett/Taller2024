@@ -1,0 +1,78 @@
+programa e2p4
+procesos
+  proceso juntarFlores (ES flores: numero)
+  comenzar
+    mientras (flores <5) & (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores+1
+  fin 
+areas
+  avenida5: AreaP (5,1,5,100)
+  avenida10: AreaP (10,1,10,100)
+  deposito: AreaC (50,50,50,50)
+  a1: AreaP (11,1,11,1)
+  a2: AreaP (12,1,12,1)
+robots
+  robot productor
+  variables
+    avAct, caAct, flores: numero
+  comenzar
+    flores:= 0
+    mientras (PosCa <100) 
+      avAct:= PosAv
+      caAct:= PosCa
+      juntarFlores (flores)
+      si (flores = 5)
+        flores:= 0
+        BloquearEsquina (50,50)
+        Pos (50,50)
+        repetir 5
+          depositarFlor
+        Pos (avAct, caAct)
+        LiberarEsquina (50,50)
+      sino
+        mover
+  fin
+  robot consumidor
+  variables
+    avOrig,caOrig,flag,cantFlores,cantFloresEsq: numero
+  comenzar
+    avOrig:= PosAv
+    caOrig:= PosCa
+    flag:= 0
+    mientras (flag < 8)
+      Random (cantFlores,2,5)
+      cantFloresEsq:= 0
+      BloquearEsquina (50,50)
+      Pos (50,50)
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+        cantFloresEsq:= cantFloresEsq+1
+      si (cantFloresEsq< cantFlores)
+        repetir cantFloresEsq
+          depositarFlor
+        flag:= flag+1
+      Pos (avOrig, caOrig)
+      LiberarEsquina (50,50)
+      mientras HayFlorEnLaBolsa
+        depositarFlor
+  fin
+variables
+  r1: productor
+  r2: productor
+  r3: consumidor
+  r4: consumidor
+comenzar
+  AsignarArea(r1, avenida5)
+  AsignarArea(r2, avenida10)
+  AsignarArea(r3, a1)
+  AsignarArea(r4, a2)
+  AsignarArea(r1, deposito)
+  AsignarArea(r2, deposito)
+  AsignarArea(r3, deposito)
+  AsignarArea(r4, deposito)
+  Iniciar (r1,5,1)
+  Iniciar (r2,10,1)
+  Iniciar (r3,11,1)
+  Iniciar (r4,12,1)
+fin

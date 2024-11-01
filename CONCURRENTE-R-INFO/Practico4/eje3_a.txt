@@ -1,0 +1,67 @@
+programa eje3
+procesos 
+  proceso juntarPapeles(ES p:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin
+areas
+  ave1:AreaP(1,1,1,100)
+  ave2:AreaP(2,1,2,100)
+  ave3:AreaP(3,1,3,100)
+  aF:AreaP(100,100,100,100)  
+robots
+  robot fiscalizador
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+  robot papelero
+  variables
+    id,p,esquina:numero
+    termine:boolean
+  comenzar
+    RecibirMensaje(id,fiscalizador)
+    termine:=V
+    mientras PosCa<100
+      juntarPapeles(p)
+      mover
+      esquina:=esquina+1
+      si (esquina=5)
+        si (id=1)
+          EnviarMensaje(termine,r2)
+          EnviarMensaje(termine,r3)
+          esquina:=0
+          RecibirMensaje(termine,r2)
+          RecibirMensaje(termine,r3)
+        sino
+          si (id=2)
+            EnviarMensaje(termine,r1)
+            EnviarMensaje(termine,r3)
+            esquina:=0
+            RecibirMensaje(termine,r1)
+            RecibirMensaje(termine,r3)
+          sino
+            EnviarMensaje(termine,r1)
+            EnviarMensaje(termine,r2)
+            esquina:=0
+            RecibirMensaje(termine,r1)
+            RecibirMensaje(termine,r2)
+  fin
+variables
+  r1:papelero
+  r2:papelero
+  r3:papelero
+  fiscalizador:fiscalizador
+comenzar
+  AsignarArea(r1,ave1)
+  AsignarArea(r2,ave2)
+  AsignarArea(r3,ave3)
+  AsignarArea(fiscalizador,aF) 
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,1) 
+  Iniciar(r3,3,1) 
+  Iniciar(fiscalizador,100,100)  
+fin
