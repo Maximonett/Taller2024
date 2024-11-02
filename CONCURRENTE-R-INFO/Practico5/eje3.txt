@@ -1,0 +1,50 @@
+programa eje3
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina & f<10
+      tomarFlor
+      f:=f+1
+  fin
+  proceso depositarFlores
+  comenzar
+    mientras  HayFlorEnLaBolsa
+      depositarFlor
+  fin
+areas
+  calle3:AreaP(1,3,100,3)
+  calle3:AreaP(1,4,100,4)
+  deposito:AreaC(10,10,10,10)
+  areaCos:AreaP(1,5,1,5)
+robots
+  robot recolectores
+  variables
+    ai,ci,f,esquina:numero
+  comenzar
+    derecha
+    mientras (PosAv<100)
+      esquina:=0
+      f:=0
+      mientras (f<10) & (esquina<5)
+        ai:=PosAv
+        ci:=PosCa
+        juntarFlores(f)
+        mover
+        esquina:=esquina+1
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarFlores
+      Pos(ai + esquina,ci + esquina)
+      EnviarMensaje(1,cosechador)
+    EnviarMensaje(0,cosechador)    
+  fin
+  robot cosechador
+  variables
+    
+  comenzar
+    mientras c<2
+    
+    
+      
+  fin
+  
