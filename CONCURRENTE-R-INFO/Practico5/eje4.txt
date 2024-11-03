@@ -1,0 +1,97 @@
+programa eje4
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+   
+areas
+  cuadrante:AreaPC(40,40,60,60)
+  es1:AreaP(1,1,1,1)
+  es2:AreaP(2,1,2,1)
+  es3:AreaP(3,1,3,1)
+  esJ:AreaP(4,1,4,1)
+robots
+  robot jefe
+  variables
+    id,ca,av,c,cantFlores,floresTotales:numero
+  comenzar
+    floresTotales:=0
+    c:=0
+    repetir 8
+      Random(id,1,3)
+      Random(av,40,60)
+      Random(ca,40,60)
+      si id=1
+        EnviarMensaje(av,r1)
+        EnviarMensaje(ca,r1)
+        RecibirMensaje(cantFlores,r1)
+        floresTotales:=floresTotales+cantFlores
+        c:=c+1
+        si c<8
+          EnviarMensaje(F,r1)
+        sino
+          si c=8
+            EnviarMensaje(V,r1)
+      sino
+        si id=2
+          EnviarMensaje(av,r2)
+          EnviarMensaje(ca,r2)
+          RecibirMensaje(cantFlores,r2)
+          floresTotales:=floresTotales+cantFlores
+          c:=c+1
+          si c<8
+            EnviarMensaje(F,r2)
+          sino
+            EnviarMensaje(V,r2)
+        sino
+          EnviarMensaje(av,r3)
+          EnviarMensaje(ca,r3)
+          RecibirMensaje(cantFlores,r3)
+          floresTotales:=floresTotales+cantFlores
+          si c<8
+            EnviarMensaje(F,r3)
+          sino
+            si c=8
+              EnviarMensaje(V,r3)
+    Informar('ElTotalDelFloresEs',floresTotales)
+  fin
+  robot florero
+  variables
+    ai,ci,av,ca,f:numero
+    ok:boolean
+  comenzar
+    ai:=PosAv
+    ci:=PosCa
+    ok:=F
+    mientras ok=F
+      RecibirMensaje(av,jefe)
+      RecibirMensaje(ca,jefe)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      juntarFlores(f)
+      Pos(ai,ci)
+      LiberarEsquina(av,ca)
+      EnviarMensaje(f,jefe)
+      RecibirMensaje(ok,jefe)
+  fin
+variables
+  r1:florero
+  r2:florero
+  r3:florero
+  jefe:jefe
+comenzar
+  AsignarArea(r1,es1)
+  AsignarArea(r1,cuadrante)
+  AsignarArea(r2,es2)
+  AsignarArea(r2,cuadrante)
+  AsignarArea(r3,es3)
+  AsignarArea(r3,cuadrante)
+  AsignarArea(jefe,esJ)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,1)
+  Iniciar(r3,3,1)
+  Iniciar(jefe,4,1)
+fin
