@@ -22,29 +22,44 @@ robots
     ai,ci,f,esquina:numero
   comenzar
     derecha
+    esquina:=0
+    f:=0
     mientras (PosAv<100)
-      esquina:=0
-      f:=0
-      mientras (f<10) & (esquina<5)
-        ai:=PosAv
-        ci:=PosCa
+      mientras (PosAv<100) & (f<10) & (esquina<5)
         juntarFlores(f)
         mover
         esquina:=esquina+1
+      ai:=PosAv
+      ci:=PosCa
       BloquearEsquina(10,10)
       Pos(10,10)
       depositarFlores
-      Pos(ai + esquina,ci + esquina)
-      EnviarMensaje(1,cosechador)
-    EnviarMensaje(0,cosechador)    
+      si (esquinas=5)
+        esquina:=0
+      sino
+        si (f=10)
+          f:=0
+      Pos(ai + 1,ci)
+      EnviarMensaje(V,cosechador)
+    EnviarMensaje(F,cosechador)    
   fin
   robot cosechador
   variables
-    
+    ahora,ok:boolean
+    f:numero
   comenzar
-    mientras c<2
-    
-    
-      
+    ok:=V
+    f:=0
+    mientras (ok=V)
+      RecibirMensaje(ahora,*)
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+        f:=f+1
+      Pos(1,5)
+      LiberarEsquina(10,10)
+      RecibirMensaje(ahora,*)
+    Informar('LaCantidadDeFloresEs',f)                        
   fin
   
