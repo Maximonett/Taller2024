@@ -1,0 +1,99 @@
+programa parcialEscalones
+procesos
+  proceso izquierda
+  comenzar
+    repetir 3 
+      derecha
+  fin
+  proceso juntarPapeles(ES p:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin
+  proceso depositarPapeles
+  comenzar
+    mientras HayPapelEnLaBolsa
+      depositarPapel
+  fin
+areas
+  areaF:AreaP(1,1,1,1)
+  area1:AreaP(2,1,18,16)
+  area2:AreaP(32,1,48,16)
+  area3:AreaP(62,1,78,16)
+  compartida:AreaC(99,99,99,99)
+robots
+  robot fiscalizador
+  variables
+    esquinas,esqT,p:numero
+  comenzar
+    repetir 4
+      EnviarMensaje(V,r1)
+      EnviarMensaje(V,r2)
+      EnviarMensaje(V,r3)
+      repetir 3
+        RecibirMensaje(esquinas,*)
+        esqT:=esqT+esquinas
+      BloquearEsquina(99,99)  
+      Pos(99,99)
+      juntarPapeles(p)
+      Pos(1,1)
+      LiberarEsquina(99,99)
+    Informar('CantidadDeEsquinasLimpiadas',esqT)      
+  fin
+  robot papelero
+  variables
+    p,alto,ancho,esquinas,ai,ci:numero
+    ok:boolean
+  comenzar
+    esquinas:=0
+    Random(alto,1,3)
+    Random(ancho,2,4)
+    repetir 4
+      p:=0
+      RecibirMensaje(ok,fi)
+      repetir alto
+        juntarPapeles(p)
+        mover
+      ai:=PosAv
+      ci:=PosCa
+      BloquearEsquina(99,99)
+      Pos(99,99)
+      depositarPapeles
+      Pos(ai,ci)
+      LiberarEsquina(99,99)
+      derecha
+      repetir ancho
+        juntarPapeles(p)
+        mover
+      ai:=PosAv
+      ci:=PosCa
+      BloquearEsquina(99,99)
+      Pos(99,99)
+      depositarPapeles
+      Pos(ai,ci)
+      LiberarEsquina(99,99)
+      izquierda
+      si (p>0)
+        esquinas:=esquinas+1
+      EnviarMensaje(esquinas,fi)                                      
+  fin
+variables
+  r1:papelero
+  r2:papelero
+  r3:papelero
+  fi:fiscalizador 
+comenzar
+  AsignarArea(fi,areaF)
+  AsignarArea(fi,compartida) 
+  AsignarArea(r1,area1)
+  AsignarArea(r1,compartida)
+  AsignarArea(r2,area2)
+  AsignarArea(r2,compartida)
+  AsignarArea(r3,area3)
+  AsignarArea(r3,compartida)
+  Iniciar(r1,2,1)
+  Iniciar(r2,32,1)
+  Iniciar(r3,62,1)
+  Iniciar(fi,1,1)
+fin
