@@ -3,8 +3,8 @@ procesos
   proceso juntarFlores(ES f:numero)
   comenzar
     mientras HayFlorEnLaEsquina
-      tomarFlor 
-      f:=f+1
+      tomarFlor
+      f:=f+1 
   fin
   proceso cuadrado(E lado:numero;ES f:numero)
   comenzar
@@ -39,9 +39,11 @@ robots
     repetir 9
       RecibirMensaje(id,*)
       si (id=1)
+        RecibirMensaje(f1,r1)
         BloquearEsquina(50,50)
         Pos(50,50)
-        juntarFlores(f1)
+        si HayFlorEnLaEsquina
+          tomarFlor
         Pos(100,100)
         LiberarEsquina(50,50)
         si (f1>fmax)
@@ -49,18 +51,22 @@ robots
           idmax:=id
       sino 
         si (id=2)
+          RecibirMensaje(f2,r2)
           BloquearEsquina(50,50)
-          Pos(50,50)
-          juntarFlores(f2)
+          Pos(50,50)          
+          si HayFlorEnLaEsquina
+            tomarFlor
           Pos(100,100)
           LiberarEsquina(50,50)
           si (f2>fmax)
             fmax:=f2
             idmax:=id      
         sino
+          RecibirMensaje(f3,r3)
           BloquearEsquina(50,50)
           Pos(50,50)
-          juntarFlores(f3)
+          si HayFlorEnLaEsquina
+            tomarFlor
           Pos(100,100)
           LiberarEsquina(50,50)
           si (f3>fmax)
@@ -86,6 +92,7 @@ robots
         Pos(ai,ci)
         LiberarEsquina(50,50)
       EnviarMensaje(id,coordinador)
+      EnviarMensaje(f,coordinador)
       Pos(ai,ci+lado+1)     
   fin  
 variables
