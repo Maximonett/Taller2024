@@ -13,7 +13,7 @@ procesos
   fin
 areas
   calle3:AreaP(1,3,100,3)
-  calle3:AreaP(1,4,100,4)
+  calle4:AreaP(1,4,100,4)
   deposito:AreaC(10,10,10,10)
   areaCos:AreaP(1,5,1,5)
 robots
@@ -36,11 +36,12 @@ robots
       depositarFlores
       si (esquinas=5)
         esquina:=0
+        EnviarMensaje(V,cosechador)
       sino
         si (f=10)
           f:=0
+          EnviarMensaje(V,cosechador)
       Pos(ai + 1,ci)
-      EnviarMensaje(V,cosechador)
     EnviarMensaje(F,cosechador)    
   fin
   robot cosechador
@@ -59,7 +60,21 @@ robots
         f:=f+1
       Pos(1,5)
       LiberarEsquina(10,10)
-      RecibirMensaje(ahora,*)
+      RecibirMensaje(ok,*)
     Informar('LaCantidadDeFloresEs',f)                        
   fin
-  
+variables
+  r1:recolectores
+  r2:recolectores
+  cose:cosechador
+comenzar
+  AsignarArea(r1,calle3)
+  AsignarArea(r1,deposito)
+  AsignarArea(r2,calle4)
+  AsignarArea(r2,deposito)
+  AsignarArea(cose,areaCos)
+  AsignarArea(cose,deposito)
+  Iniciar(r1,1,3)
+  Iniciar(r2,1,4)
+  Iniciar(cose,1,5)
+fin
