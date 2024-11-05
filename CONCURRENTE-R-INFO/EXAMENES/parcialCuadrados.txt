@@ -1,0 +1,109 @@
+programa parcialCuadrados
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor 
+      f:=f+1
+  fin
+  proceso cuadrado(E lado:numero;ES f:numero)
+  comenzar
+    repetir 4
+      repetir lado
+        juntarFlores(f)
+        mover
+      derecha
+  fin
+areas
+  area1:AreaP(1,1,7,22)
+  area2:AreaP(10,1,16,22)
+  area3:AreaP(20,1,26,22)
+  areaCor:AreaP(100,100,100,100)
+  compartida:AreaC(50,50,50,50)
+robots
+  robot coordinador
+  variables
+    f3,f2,f1,id,f,fmax,idmax,lado:numero
+  comenzar
+    fmax:=-1
+    idmax:=0
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    Random(lado,1,6)
+    EnviarMensaje(lado,r1)
+    Random(lado,1,6)
+    EnviarMensaje(lado,r2)
+    Random(lado,1,6)
+    EnviarMensaje(lado,r3)
+    repetir 9
+      RecibirMensaje(id,*)
+      si (id=1)
+        BloquearEsquina(50,50)
+        Pos(50,50)
+        juntarFlores(f1)
+        Pos(100,100)
+        LiberarEsquina(50,50)
+        si (f1>fmax)
+          fmax:=f1
+          idmax:=id
+      sino 
+        si (id=2)
+          BloquearEsquina(50,50)
+          Pos(50,50)
+          juntarFlores(f2)
+          Pos(100,100)
+          LiberarEsquina(50,50)
+          si (f2>fmax)
+            fmax:=f2
+            idmax:=id      
+        sino
+          BloquearEsquina(50,50)
+          Pos(50,50)
+          juntarFlores(f3)
+          Pos(100,100)
+          LiberarEsquina(50,50)
+          si (f3>fmax)
+            fmax:=f3
+            idmax:=id  
+    Informar('ElQueJuntoMasFloresFueElRobot',idmax) 
+  fin
+  robot recolector
+  variables
+    ai,ci,id,lado,f:numero
+  comenzar
+    RecibirMensaje(id,coordinador)
+    RecibirMensaje(lado,coordinador)
+    repetir 3
+      cuadrado(lado,f)
+      ai:=PosAv
+      ci:=PosCa
+      repetir f
+        BloquearEsquina(50,50)
+        Pos(50,50)
+        si HayFlorEnLaBolsa
+          depositarFlor
+        Pos(ai,ci)
+        LiberarEsquina(50,50)
+      EnviarMensaje(id,coordinador)
+      Pos(ai,ci+lado+1)     
+  fin  
+variables
+  r1:recolector
+  r2:recolector
+  r3:recolector
+  coordinador:coordinador
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r1,compartida)
+  AsignarArea(r2,area2)
+  AsignarArea(r2,compartida)
+  AsignarArea(r3,area3)
+  AsignarArea(r3,compartida)
+  AsignarArea(coordinador,areaCor)
+  AsignarArea(coordinador,compartida)
+  Iniciar(r1,1,1)
+  Iniciar(r2,10,1)
+  Iniciar(r3,20,1)
+  Iniciar(coordinador,100,100)
+fin
