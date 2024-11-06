@@ -1,0 +1,102 @@
+programa parcialTCT2
+procesos
+  proceso juntarFlores(E ai:numero; E ci:numero;E av:numero;E ca:numero;ES terminar:boolean;ES f:numero)
+  variables
+    ai,ci:numero
+  comenzar
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    si (HayFlorEnLaEsquina)
+      tomarFlor
+      f:=f+1
+    sino
+      terminar:=V
+    Pos(ai,ci)
+    LiberarEsquina(av,ca)
+  fin
+  
+  
+areas  
+  area1:AreaP(1,1,1,1)
+  area2:AreaP(2,1,2,1)
+  area3:AreaP(3,1,3,1)
+  areaJ:AreaP(4,1,4,1)
+  compartida:AreaPC(10,10,10,10)
+  cuadrante:AreaPC(40,40,60,60)
+
+robots
+  robot floreros
+  variables
+    f,ft:numero
+    finalizar:boolean
+    ai,ci,av,ca:numero
+  comenzar
+    ai:=PosAv
+    ci:=PosCa
+    ft:=0 
+    finalizar:=F
+    mientras (finalizar=F)
+      RecibirMensaje(finalizar,rj)
+      RecibirMensaje(av,rj)
+      RecibirMensaje(ca,rj)
+      juntarFlores(ai,ci,av,ca,finalizar,f)
+      ft:=ft+f
+      repetir f  
+        BloquearEsquina(10,10)
+        Pos(10,10)
+        depositarFlor
+        Pos(ai,ci)
+        LiberarEsquina(10,10)
+      f:=0
+      EnviarMensaje(ft,rj)            
+  fin
+  robot jefe
+  variables
+    total,c,av,ca,id,f:numero      
+  comenzar
+    total:=0
+    c:=0
+    repetir 8
+      Random(av,40,60)
+      Random(ca,40,60)
+      Random(id,1,3)
+      si (id=1)
+        EnviarMensaje(F,r1)
+        EnviarMensaje(av,r1)
+        EnviarMensaje(ca,r1)
+      sino
+        si (id=2)
+          EnviarMensaje(F,r2)
+          EnviarMensaje(av,r2)
+          EnviarMensaje(ca,r2)         
+        sino
+          EnviarMensaje(F,r3)
+          EnviarMensaje(av,r3)
+          EnviarMensaje(ca,r3)                      
+    EnviarMensaje(V,r1)       
+    EnviarMensaje(V,r1)
+    EnviarMensaje(V,r1)
+    repetir 3
+      RecibirMensaje(f,*)
+      total:=total+f
+    Informar('ElTotalDeFloresEs',total) 
+  fin
+variables
+  r1,r2,r3:floreros
+  rj:jefe
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r1,compartida)
+  AsignarArea(r1,cuadrante)
+  AsignarArea(r2,area2)
+  AsignarArea(r2,compartida)
+  AsignarArea(r2,cuadrante)
+  AsignarArea(r3,area3)
+  AsignarArea(r3,compartida)
+  AsignarArea(r3,cuadrante)
+  AsignarArea(rj,areaJ)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,1)
+  Iniciar(r3,3,1)
+  Iniciar(rj,4,1)
+fin
