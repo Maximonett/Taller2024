@@ -7,7 +7,7 @@ procesos
       f:=f+1
   fin
 areas
-  area1:AreaP(1,1,100,100)
+  area1:AreaC(1,1,100,100)
 robots
   robot f1
   variables
