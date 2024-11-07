@@ -1,0 +1,117 @@
+programa ejemplo
+procesos
+  proceso fiin 
+  comenzar 
+    BloquearEsquina (5,5)
+    Pos(5,5)
+    juntar
+    Pos (5,1)
+    LiberarEsquina (5,5)
+  fin
+  proceso juntar 
+  comenzar 
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso hacerlacabida (E avoy : numero E cavoy : numero)
+  variables
+    avin, cavin : numero
+  comenzar
+    avin := PosAv
+    cavin := PosCa 
+    BloquearEsquina (avoy, cavoy) 
+    Pos (avoy, cavoy)
+    juntar
+    BloquearEsquina (5,5)
+    Pos (5,5)
+    LiberarEsquina (avoy, cavoy)
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor 
+    Pos (avin, cavin)
+    LiberarEsquina (5,5)
+  fin
+areas
+  ciudad: AreaPC (10,10,30,30)
+  area : AreaC (1,1,7,7)
+robots
+  robot robotjuntador
+  variables
+    avin : numero
+    av, ca, n : numero
+    ok : boolean
+  comenzar  
+    avin := PosAv
+    Random (n, 2,5)
+    ok:= F
+    repetir n 
+      EnviarMensaje (avin, Robotj)
+      EnviarMensaje (ok, Robotj)
+      RecibirMensaje (av, Robotj)
+      RecibirMensaje (ca, Robotj)
+      hacerlacabida (av, ca)
+    ok := V
+    EnviarMensaje (avin, Robotj)
+    EnviarMensaje (ok, Robotj)      
+  fin
+  robot jefe
+  variables
+    ok: boolean
+    quien: numero 
+    av, ca: numero
+    cuan: numero
+    can : numero
+  comenzar
+    ok:= F
+    cuan:= 0
+    can:=0
+    mientras (can<3)
+      Random (av, 10,30)
+      Random (ca, 10,30)
+      RecibirMensaje (quien, *)
+      si (quien=1)
+        RecibirMensaje (ok, Robot1)
+        si (ok= F)
+          EnviarMensaje (av, Robot1)
+          EnviarMensaje (ca, Robot1)
+          cuan:= cuan+1
+        si (ok=V)
+          can:= can+1
+          fiin 
+      si (quien=2)
+        RecibirMensaje (ok, Robot2)
+        si (ok= F)
+          EnviarMensaje (av, Robot2)
+          EnviarMensaje (ca, Robot2)
+          cuan:= cuan+1
+        si (ok=V)
+          can:= can+1
+          fiin 
+      si (quien=3)
+        RecibirMensaje (ok, Robot3)
+        si (ok= F)
+          EnviarMensaje (av, Robot3)
+          EnviarMensaje (ca, Robot3)
+          cuan:= cuan + 1
+        si (ok=V)
+          can:= can+1
+          fiin 
+    Informar (cuan)  
+  fin      
+variables
+  Robot1: robotjuntador
+  Robot2: robotjuntador
+  Robot3: robotjuntador
+  Robotj : jefe
+comenzar
+  AsignarArea(Robot1, ciudad)
+  AsignarArea(Robot2, ciudad)
+  AsignarArea(Robot3, ciudad)
+  AsignarArea(Robotj, area)
+  AsignarArea(Robot1, area)
+  AsignarArea(Robot2, area)
+  AsignarArea(Robot3, area)
+  Iniciar(Robot1, 1,1)
+  Iniciar(Robot2, 2,1)
+  Iniciar (Robot3, 3,1)
+  Iniciar (Robotj, 5,1)
+fin

@@ -1,0 +1,274 @@
+programa parcial2305232PF
+procesos
+  proceso atras
+  comenzar
+    repetir 2
+      derecha
+  fin
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso juntarFloresLateralArribaA(ES f:numero)  
+  comenzar
+    repetir 8
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+        f:=f+1
+      derecha
+      BloquearEsquina(PosAv,PosCa-1)
+      mover
+      repetir f
+        depositarFlor
+      atras
+      mover
+      LiberarEsquina(PosAv,PosCa-1)
+      derecha
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+    derecha
+    BloquearEsquina(PosAv,PosCa-1)
+    mover
+    repetir f
+      depositarFlor
+    atras
+    mover
+    LiberarEsquina(PosAv,PosCa-1)  
+  fin
+  proceso juntarFloresLateralArribaV(ES f:numero)   
+  comenzar 
+    repetir 8 
+      mientras HayFlorEnLaEsquina 
+        tomarFlor 
+        f:=f+1 
+      izquierda 
+      BloquearEsquina(PosAv,PosCa-1) 
+      mover 
+      repetir f 
+        depositarFlor 
+      atras 
+      mover 
+      LiberarEsquina(PosAv,PosCa-1) 
+      izquierda
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+    izquierda
+    BloquearEsquina(PosAv,PosCa-1)
+    mover
+    repetir f
+      depositarFlor
+    atras
+    mover
+    LiberarEsquina(PosAv,PosCa-1)  
+  fin
+  proceso juntarFloresLateralAbajoV(ES f:numero)  
+  comenzar
+    repetir 8
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+        f:=f+1
+      derecha
+      BloquearEsquina(PosAv,PosCa+1) 
+      mover
+      repetir f
+        depositarFlor
+      atras
+      mover
+      LiberarEsquina(PosAv,PosCa+1)
+      derecha
+    mientras HayFlorEnLaEsquina 
+      tomarFlor 
+      f:=f+1
+    derecha
+    BloquearEsquina(PosAv,PosCa+1) 
+    mover 
+    repetir f 
+      depositarFlor 
+    atras 
+    mover
+    LiberarEsquina(PosAv,PosCa+1)   
+  fin
+  proceso juntarFloresLateralAbajoA(ES f:numero)    
+  comenzar  
+    repetir 8  
+      mientras HayFlorEnLaEsquina  
+        tomarFlor  
+        f:=f+1  
+      izquierda  
+      BloquearEsquina(PosAv,PosCa+1)  
+      mover  
+      repetir f  
+        depositarFlor  
+      atras  
+      mover  
+      LiberarEsquina(PosAv,PosCa+1)  
+      izquierda 
+    mientras HayFlorEnLaEsquina 
+      tomarFlor 
+      f:=f+1 
+    izquierda 
+    BloquearEsquina(PosAv,PosCa+1)
+    mover  
+    repetir f  
+      depositarFlor  
+    atras  
+    mover  
+    LiberarEsquina(PosAv,PosCa+1)   
+  fin 
+areas
+  ciudad:AreaC(1,1,100,100)
+robots
+  robot fiscalizador
+  variables
+    equipo,equipoA,equipoV,fEA,fEV,equipoMax,fMax:numero
+  comenzar
+    fMax:=-1
+    RecibirMensaje(equipo,*)
+    si (equipo=1)
+      equipoA:=equipo
+      ganador:=equipo
+      RecibirMensaje(fEA,rCA)  
+    sino
+      equipoV:=equipo
+      ganador:=equipo
+      RecibirMensaje(fEV,rCV)
+    RecibirMensaje(equipo,*)
+    si (equipo=1)
+      equipoA:=equipo
+      perdedor:=equipo
+      RecibirMensaje(fEA,rCA)  
+    sino
+      equipoV:=equipo
+      perdedor:=equipo
+      RecibirMensaje(fEV,rCV)  
+    si (fEA>fmax)
+      fMax:=fEA
+      equipoMax:=equipoA
+    si(fEV>fmax)
+      fMax:=fEV
+      equipoMax:=equipoB
+    si equipoMax=1  
+      Informar('ElEquipoGanadorEsELAzul',ganador)
+      Informar('ElEquipoQueJuntoMasFlores',equipoMax)
+    sino
+      Informar('ElEquipoGanadorEsELVerde',ganador)
+      Informar('ElEquipoQueJuntoMasFlores',equipoMax) 
+  fin
+  robot lateralArribaA
+  variables
+    f:numero
+    termine:boolean
+  comenzar
+    derecha
+    termine:=V
+    juntarFloresLateralArribaA(f)
+    EnviarMensaje(termine,rCA)
+  fin
+  robot lateralArribaV 
+  variables 
+    f:numero
+    termine:boolean 
+  comenzar
+    izquierda
+    temine:=V 
+    juntarFloresLateralArribaV(f) 
+    EnviarMensaje(termine,rCV) 
+  fin
+  robot lateralAbajoV  
+  variables  
+    f:numero
+    termine:boolean  
+  comenzar
+    izquierda
+    termine:=V   
+    juntarFloresLateralAbajoV(f)   
+    EnviarMensaje(termine,rCV)   
+  fin
+  robot lateralAbajoA
+  variables
+    f:numero
+    termine:boolean
+  comenzar
+    derecha
+    termine:=V
+    juntarFloresLateralAbajoA(f)
+    EnviarMensaje(termine,rCA)
+  fin
+  robot robotCentralA 
+  variables 
+    fA:numero
+    equipo:numero
+    ahora:boolean         
+  comenzar 
+    derecha 
+    repetir 2 
+      RecibirMensaje(ahora,*) 
+    repetir 8 
+      mientras HayFlorEnLaEsquina 
+        tomarFlor 
+        fA:=fA+1 
+      mover 
+    mientras HayFlorEnLaEsquina 
+      tomarFlor
+    repetir fA
+      BloqueraEsquina(20,20)
+      Pos(20,20)
+      si HayFlorEnLaBolsa
+        depositarFlor
+      Pos(20,19)
+      LiberarEsquina(20,20)
+    EnviarMensaje(equipo,fiscalizador)
+    EnviarMensaje(fA,fiscalizador)  
+  fin 
+  robot robotCentralV  
+  variables  
+    fV,equipo:numero
+    ahora:boolean          
+  comenzar  
+    izquierda  
+    repetir 2  
+      RecibirMensaje(ahora,*)  
+    repetir 8  
+      mientras HayFlorEnLaEsquina  
+        tomarFlor  
+        fV:=fV+1  
+      mover  
+    mientras HayFlorEnLaEsquina  
+      tomarFlor
+    repetir fV 
+      BloqueraEsquina(20,20) 
+      Pos(20,20) 
+      si HayFlorEnLaBolsa 
+        depositarFlor 
+      Pos(20,19) 
+      LiberarEsquina(20,20) 
+    EnviarMensaje(equipo,fiscalizador) 
+    EnviarMensaje(fA,fiscalizador)                     
+  fin    
+variables
+  rCA:robotCentralA
+  rCV:robotCentralV
+  fiscalizador:fiscalizador
+  lateralArribaA:lateralArribaA
+  lateralArribaV:lateralArribaV
+  lateralAbajoA:lateralAbajoA
+  lateralAbajoV:lateralAbajoV
+comenzar
+  AsignarArea(lateralAbajoA,ciudad)
+  AsignarArea(lateralAbajoV,ciudad)
+  AsignarArea(lateralArribaV,ciudad)
+  AsignarArea(lateralArribaA,ciudad)
+  AsignarArea(rCV,ciudad)
+  AsignarArea(rCA,ciudad)
+  AsignarArea(fiscalizador,ciudad) 
+  Iniciar(lateralAbajoA,9,19)
+  Iniciar(lateralAbajoV,31,19)
+  Iniciar(lateralArribaA,9,21)
+  Iniciar(lateralArribaV,31,21)
+  Iniciar(rCA,9,20)
+  Iniciar(rCV,31,20)
+  Iniciar(fiscalizador,20,18)
+fin

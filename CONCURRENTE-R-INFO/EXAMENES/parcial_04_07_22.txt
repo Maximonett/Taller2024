@@ -1,0 +1,114 @@
+programa parcial040722
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+
+areas
+  area1:AreaP(1,1,6,6)
+  area2:AreaP(7,1,12,6)
+  area3:AreaP(13,1,18,6)
+  areaCoord:AreaP(20,1,20,1)
+  areaComp:AreaPC(10,10,10,10)
+robots
+  robot trabajador
+  variables
+    id,f,ai,ci:numero
+    ahora,ok,quePaso:boolean   
+  comenzar
+    ai:=PosAv
+    ci:=PosCa
+    ok:=V
+    f:=0
+    RecibirMensaje(id,coordinador) 
+    repetir 4 
+      repetir 5 
+        juntarFlores(f)
+        mover
+      EnviarMensaje(ok,coordinador)
+      RecibirMensaje(ahora,coordinador)
+      derecha
+    EnviarMensaje(id,coordinador)
+    EnviarMensaje(f,coordinador)
+    RecibirMensaje(quePaso,coordinador)
+    si (quePaso=F)
+      repetir f
+        BloquearEsquina(10,10)
+        Pos(10,10)
+        si HayFlorEnLaEsquina
+          depositarFlor
+        Pos(ai,ci)
+        LiberarEsquina(10,10)
+    sino
+      Pos(ai,ci)  
+  fin
+  robot coordinador
+  variables
+    id,f1,f2,f3,fmax,idMax:numero
+    ok,ganaste,perdiste:boolean
+  comenzar
+    ganaste:=V
+    perdiste:=F
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    repetir 4
+      repetir 3
+        RecibirMensaje(ok,*)
+      EnviarMensaje(V,r1)
+      EnviarMensaje(V,r2)
+      EnviarMensaje(V,r3)
+    repetir 3
+      RecibirMensaje(id,*)
+      si id=1
+        RecibirMensaje(f1,r1)
+        si (f1>fmax)
+          fmax:=f1
+          idMax:=id
+      sino
+        si id=2
+          RecibirMensaje(f2,r2)
+          si (f2>fmax)
+            fmax:=f2
+            idMax:=id
+        sino
+          RecibirMensaje(f3,r3)
+          si (f3>fmax)
+            fmax:=f3
+            idMax:=id
+    Informar('ElGanadorEs',idMax)
+    si (idMax=1)
+      EnviarMensaje(ganaste,r1)
+      EnviarMensaje(perdiste,r2)
+      EnviarMensaje(perdiste,r3)
+    sino
+      si (idMax=2)
+        EnviarMensaje(ganaste,r2)
+        EnviarMensaje(perdiste,r1)
+        EnviarMensaje(perdiste,r3)
+      sino
+        EnviarMensaje(ganaste,r3)
+        EnviarMensaje(perdiste,r1)
+        EnviarMensaje(perdiste,r2)             
+  fin
+variables
+  r1:trabajador
+  r2:trabajador
+  r3:trabajador
+  coordinador:coordinador
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r1,areaComp)
+  AsignarArea(r2,area2)
+  AsignarArea(r2,areaComp)
+  AsignarArea(r3,area3)
+  AsignarArea(r3,areaComp)
+  AsignarArea(coordinador,areaCoord)
+  Iniciar(r1,1,1)
+  Iniciar(r2,7,1)
+  Iniciar(r3,13,1)
+  Iniciar(coordinador,20,1)    
+fin
