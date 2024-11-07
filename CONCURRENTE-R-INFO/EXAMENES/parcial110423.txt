@@ -1,0 +1,121 @@
+programa parcial110423
+procesos 
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  
+areas
+  area1:AreaP(1,1,6,11)
+  area2:AreaP(7,1,12,11)
+  area3:AreaP(13,1,18,11)
+  areaCoord:AreaP(24,24,24,24)
+  areaComp:AreaC(25,25,25,25)  
+robots
+  robot recolector
+  variables
+    id,f,alto,ancho,fT:numero
+    ai,ci:numero
+  comenzar
+    RecibirMensaje(id,coordinador)
+    RecibirMensaje(alto,coordinador)
+    RecibirMensaje(ancho,coordinador)
+    Informar(alto)
+    Informar(ancho)
+    fT:=0
+    repetir 2
+      repetir alto
+        juntarFlores(f)
+        mover
+      ai:=PosAv
+      ci:=PosCa
+      derecha
+      fT:=fT+f
+      repetir f
+        BloquearEsquina(25,25)
+        Pos(25,25)
+        si HayFlorEnLaBolsa
+          depositarFlor
+        Pos(ai,ci)
+        LiberarEsquina(25,25)
+      f:=0
+      repetir ancho
+        juntarFlores(f)
+        mover
+      ai:=PosAv
+      ci:=PosCa
+      derecha
+      fT:=fT+f 
+      repetir f
+        BloquearEsquina(25,25) 
+        Pos(25,25) 
+        si HayFlorEnLaBolsa 
+          depositarFlor 
+        Pos(ai,ci) 
+        LiberarEsquina(25,25) 
+      f:=0
+    EnviarMensaje(id,coordinador)  
+    EnviarMensaje(fT,coordinador)  
+  fin
+  robot coordinador
+  variables
+    id,f1,f2,f3,fmax,idMax:numero
+    alto,ancho:numero
+  comenzar
+    fmax:=-1
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    Random(alto,1,5)
+    Random(ancho,1,10)
+    EnviarMensaje(ancho,r1)
+    EnviarMensaje(alto,r1)
+    Random(alto,1,5)
+    Random(ancho,1,10)
+    EnviarMensaje(ancho,r2)
+    EnviarMensaje(alto,r2)
+    Random(alto,1,5)
+    Random(ancho,1,10)
+    EnviarMensaje(ancho,r3)
+    EnviarMensaje(alto,r3)
+    repetir 3
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(f1,r1)
+        si (f1>fmax)
+          fmax:=f1
+          idMax:=id
+      sino
+        si (id=2)
+          RecibirMensaje(f2,r2)
+          si (f2>fmax)
+            fmax:=f2
+            idMax:=id
+        sino
+          RecibirMensaje(f3,r3)
+          si (f3>fmax)
+            fmax:=f3
+            idMax:=id    
+    Informar('ElRobotQueMasFloresrecolectoFeu',idMax)  
+  fin
+variables
+  r1:recolector
+  r2:recolector
+  r3:recolector
+  coordinador:coordinador
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r1,areaComp)
+  AsignarArea(r2,area2)
+  AsignarArea(r2,areaComp)
+  AsignarArea(r3,area3)
+  AsignarArea(r3,areaComp)
+  AsignarArea(coordinador,areaCoord)
+  Iniciar(r1,1,1)
+  Iniciar(r2,7,1)
+  Iniciar(r3,13,1)
+  Iniciar(coordinador,24,24)
+  
+fin
