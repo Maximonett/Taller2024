@@ -38,7 +38,7 @@ robots
       repetir f
         BloquearEsquina(10,10)
         Pos(10,10)
-        si HayFlorEnLaEsquina
+        si HayFlorEnLaBolsa
           depositarFlor
         Pos(ai,ci)
         LiberarEsquina(10,10)
