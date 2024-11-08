@@ -1,0 +1,83 @@
+programa parcialTurnoC
+procesos
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:=flores+1
+  fin
+areas
+  area1:AreaP(1,1,7,100)
+  area2:AreaP(8,1,14,100)
+  area3:AreaP(15,1,21,100)
+  area4:AreaP(51,1,51,5)
+  area5:AreaPC(50,50,50,50) 
+  
+robots
+  robot tipo1
+  comenzar
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+  fin
+  
+  robot tipo2
+  variables
+    id,flores,empeza,termine:numero
+    lado:numero
+    ai,ci:numero
+  comenzar
+    flores:=0
+    RecibirMensaje(id,robot4)
+    repetir 5
+      Random(lado,1,5)
+      repetir 2
+        repetir lado
+          juntarFlores(flores)
+          mover
+        derecha
+        repetir lado
+          juntarFlores(flores)
+          mover
+        derecha
+      si id=1  
+        EnviarMensaje(termine,robot2)
+        EnviarMensaje(termine,robot3)
+      sino
+        si id=2
+          EnviarMensaje(termine,robot1)
+          EnviarMensaje(termine,robot3)
+        sino
+          EnviarMensaje(termine,robot2) 
+          EnviarMensaje(termine,robot1)
+      repetir 2
+        RecibirMensaje(empeza,*)
+      Pos(PosAv,PosCa+lado+1)
+    ai:=PosAv
+    ci:=PosCa
+    repetir flores
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      depositarFlor
+      Pos(ai,ci)
+      LiberarEsquina(50,50)         
+  fin
+  
+variables
+  robot1:tipo2
+  robot2:tipo2
+  robot3:tipo2
+  robot4:tipo1
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot1,area5)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot2,area5)
+  AsignarArea(robot3,area3)
+  AsignarArea(robot3,area5)
+  AsignarArea(robot4,area4)
+  Iniciar(robot1,1,1)
+  Iniciar(robot2,8,1)
+  Iniciar(robot3,15,1)
+  Iniciar(robot4,51,1)
+fin

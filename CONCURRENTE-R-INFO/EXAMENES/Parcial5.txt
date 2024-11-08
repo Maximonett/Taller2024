@@ -1,0 +1,139 @@
+programa parcial5
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso juntarPapeles(ES p:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin  
+areas
+  area1:AreaP(1,1,20,20)
+  area2:AreaP(21,1,40,20)
+  areaCF:AreaPC(21,21,21,21)
+  areaCP:AreaPC(22,22,22,22)
+  areaCoord:AreaP(23,23,23,23)
+
+robots
+  robot trabajador
+  variables
+    id,alto,ancho:numero
+    f,p:numero
+    ai,ci:numero
+  comenzar
+    RecibirMensaje(id,coordinador)
+    RecibirMensaje(alto,coordinador)
+    RecibirMensaje(ancho,coordinador)
+    repetir 2 
+      repetir alto
+        juntarFlores(f)
+        juntarPapeles(p)
+        mover
+      EnviarMensaje(id,coordinador)
+      EnviarMensaje(f,coordinador)
+      EnviarMensaje(p,coordinador)
+      ai:=PosAv
+      ci:=PosCa
+      repetir f
+        BloquearEsquina(21,21)
+        Pos(21,21)
+        si HayFlorEnLaBolsa
+          depositarFlor
+        Pos(ai,ci)
+        LiberarEsquina(21,21)
+      repetir p
+        BloquearEsquina(22,22)
+        Pos(22,22)
+        si HayPapelEnLaBolsa
+          depositarPapel
+        Pos(ai,ci)
+        LiberarEsquina(22,22)
+      derecha
+      repetir ancho
+        juntarFlores(f) 
+        juntarPapeles(p) 
+        mover 
+      EnviarMensaje(id,coordinador) 
+      EnviarMensaje(f,coordinador) 
+      EnviarMensaje(p,coordinador) 
+      ai:=PosAv 
+      ci:=PosCa 
+      repetir f 
+        BloquearEsquina(21,21) 
+        Pos(21,21)
+        si HayFlorEnLaBolsa 
+          depositarFlor 
+        Pos(ai,ci) 
+        LiberarEsquina(21,21) 
+      repetir p 
+        BloquearEsquina(22,22) 
+        Pos(22,22)
+        si HayPapelEnLaBolsa 
+          depositarPapel
+        Pos(ai,ci) 
+        LiberarEsquina(22,22) 
+      derecha   
+  fin
+  robot coordinador
+  variables
+    id,f,p:numero
+    alto,ancho:numero
+    f1,f2,p1,p2:numero
+    ot1,ot2:numero
+  comenzar
+    ot1:=0
+    ot2:=0
+    f1:=0
+    f2:=0
+    p1:=0
+    p2:=0
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    Random(alto,1,19)
+    Random(ancho,1,19)
+    EnviarMensaje(alto,r1)
+    EnviarMensaje(ancho,r1)
+    Random(alto,1,19)
+    Random(ancho,1,19)
+    EnviarMensaje(alto,r2)
+    EnviarMensaje(ancho,r2)
+    repetir 8
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(f,r1)
+        f1:=f1+f
+        RecibirMensaje(p,r1)
+        p1:=p1+p
+      sino
+        RecibirMensaje(f,r2)
+        f2:=f2+f
+        RecibirMensaje(p,r2)
+        p2:=p2+p
+    Informar(1)
+    ot1:=p1+f1
+    ot2:=p2+f2
+    si (ot1>ot2)
+      Informar('RecolectoMasObjetosElRobot',1)
+    sino 
+      Informar('RecolectoMasObjetosElRobot',2)
+  fin
+variables
+  r1,r2:trabajador
+  coordinador:coordinador
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r1,areaCF)
+  AsignarArea(r1,areaCP)
+  AsignarArea(r2,area2)
+  AsignarArea(r2,areaCF)
+  AsignarArea(r2,areaCP)
+  AsignarArea(coordinador,areaCoord)
+  Iniciar(r1,1,1)
+  Iniciar(r2,21,1)
+  Iniciar(coordinador,23,23)
+fin
