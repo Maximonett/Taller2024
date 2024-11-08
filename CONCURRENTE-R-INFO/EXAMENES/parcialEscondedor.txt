@@ -1,0 +1,128 @@
+programa parcialTema103062024
+procesos
+  proceso esconder(E av: numero; E ca: numero)
+  variables
+    avIni, caIni: numero
+  comenzar
+    avIni:= PosAv
+    caIni:= PosCa
+    BloquearEsquina(av, ca)
+    Pos(av, ca)
+    depositarFlor
+    Pos(avIni, caIni)
+    LiberarEsquina(av, ca)
+  fin
+  proceso buscar(E av: numero; E ca: numero; ES ok: boolean)
+  variables
+    avIni, caIni: numero
+  comenzar
+    avIni:= PosAv
+    caIni:= PosCa
+    BloquearEsquina(av, ca)
+    Pos(av, ca)
+    si (HayFlorEnLaEsquina)
+      tomarFlor
+      ok:= F
+    Pos(avIni, caIni)
+    LiberarEsquina(av, ca)
+  fin
+areas
+  areaE: AreaC(10,10,13,13)
+  area1: AreaP(1,1,1,1)
+  area2: AreaP(2,2,2,2)
+  area3: AreaP(3,3,3,3)
+  area4: AreaP(4,4,4,4)
+robots
+  robot escondedor
+  variables
+    av, ca, id: numero
+  comenzar
+    Random(av, 10, 13)
+    Random(ca, 10, 13)
+    esconder(av, ca)
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    RecibirMensaje(id, *)
+    si (id = 1)
+      Informar("gana ", 1)
+    si (id = 2)
+      Informar("gana ", 2)
+    si (id = 3)
+      Informar("gana ", 3)
+  fin
+  robot buscador
+  variables
+    id, av, ca: numero
+    ok, gane, seguir: boolean
+  comenzar
+    ok:= V
+    seguir:= V
+    gane:= F
+    RecibirMensaje(id, r4)
+    mientras (seguir)
+      Random(av, 10, 13)
+      Random(ca, 10, 13)
+      buscar(av, ca, ok)
+      si (ok = F)
+        gane:= V
+        seguir:= F
+      si (id = 1)
+        si (ok = F)
+          EnviarMensaje(F, r2)
+          EnviarMensaje(F, r3)
+        sino
+          EnviarMensaje(V, r2)
+          EnviarMensaje(V, r3)
+        RecibirMensaje(ok, r2)
+        si (ok = F)
+          seguir:= F
+        RecibirMensaje(ok, r3)
+        si (ok = F)
+          seguir:= F
+      si (id = 2)
+        si (ok = F)
+          EnviarMensaje(F, r1)
+          EnviarMensaje(F, r3)
+        sino
+          EnviarMensaje(V, r1)
+          EnviarMensaje(V, r3)
+        RecibirMensaje(ok, r1)
+        si (ok = F)
+          seguir:= F
+        RecibirMensaje(ok, r3)
+        si (ok = F)
+          seguir:= F
+      si (id = 3)
+        si (ok = F)
+          EnviarMensaje(F, r2)
+          EnviarMensaje(F, r3)
+        sino
+          EnviarMensaje(V, r1)
+          EnviarMensaje(V, r2)
+        RecibirMensaje(ok, r1)
+        si (ok = F)
+          seguir:= F
+        RecibirMensaje(ok, r2)
+        si (ok = F)
+          seguir:= F
+    si (gane)
+      EnviarMensaje(id, r4)
+  fin
+variables
+  r1, r2, r3: buscador
+  r4: escondedor
+comenzar
+  AsignarArea(r1, areaE)
+  AsignarArea(r2, areaE)
+  AsignarArea(r3, areaE)
+  AsignarArea(r4, areaE)
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area2)
+  AsignarArea(r3, area3)
+  AsignarArea(r4, area4)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 2,2)
+  Iniciar(r3, 3,3)
+  Iniciar(r4, 4,4)
+fin

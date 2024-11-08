@@ -1,0 +1,92 @@
+programa parcial03062024
+areas 
+  area1:AreaP(1,1,1,1)
+  area2:AreaP(2,2,2,2)
+  area3:AreaP(3,3,3,3)
+  area4:AreaP(4,4,4,4)
+  areaC:AreaPC(10,10,13,13)
+robots
+  robot escondedor
+  variables
+    av,ca,id:numero
+    ok:boolean
+    perdio,encontre:boolean
+  comenzar
+    si HayFlorEnLaEsquina
+      tomarFlor
+    ok:=V
+    perdio:=V
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    Random(av,10,13)
+    Random(ca,10,13)
+    Pos(av,ca)
+    si HayFlorEnLaBolsa 
+      depositarFlor
+    Pos(4,4)
+    EnviarMensaje(ok,r1)
+    EnviarMensaje(ok,r2)
+    EnviarMensaje(ok,r3)
+    RecibirMensaje(encontre,*)
+    RecibirMensaje(id,*)
+    Informar(id)
+    si id=1 
+      EnviarMensaje(perdio,r2)
+      EnviarMensaje(perdio,r3)   
+    sino
+      si id=2
+        EnviarMensaje(perdio,r1)
+        EnviarMensaje(perdio,r3)
+      sino 
+        EnviarMensaje(perdio,r2)
+        EnviarMensaje(perdio,r1)
+  fin
+  robot buscador
+  variables
+    av,ca,id:numero
+    ai,ci:numero
+    gane:boolean
+    encontre:boolean
+  comenzar
+    ai:=PosAv
+    ci:=PosCa
+    RecibirMensaje(id,escondedor)
+    encontre:=V
+    gane:=F 
+    mientras (gane=F) 
+      Random(av,10,13)
+      Random(ca,10,13)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      si HayFlorEnLaEsquina
+        tomarFlor
+        Pos(ai,ci)
+        LiberarEsquina(av,ca)      
+        EnviarMensaje(encontre,escondedor)
+        EnviarMensaje(id,escondedor)
+        gane:=V
+        Informar('GANE',id)
+      sino
+        Pos(ai,ci)
+        LiberarEsquina(av,ca)  
+  fin
+variables
+  escondedor:escondedor
+  r1:buscador
+  r2:buscador
+  r3:buscador
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r1,areaC)
+  AsignarArea(r2,area2)
+  AsignarArea(r2,areaC)
+  AsignarArea(r3,area3)
+  AsignarArea(r3,areaC)
+  AsignarArea(escondedor,areaC)
+  AsignarArea(escondedor,area4)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,2)
+  Iniciar(r3,3,3)
+  Iniciar(escondedor,4,4)
+fin

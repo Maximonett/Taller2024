@@ -1,0 +1,95 @@
+programa cuadradosDistntos
+procesos
+  proceso cuadrado(E lado:numero; ES f:numero; ES esquinas:numero)
+  comenzar
+    repetir 4
+      repetir lado
+        mientras HayFlorEnLaEsquina
+          tomarFlor
+          f:=f+1
+        esquinas:=esquinas+1
+        mover
+      derecha
+  fin
+areas
+  area1:AreaP(1,1,6,16)
+  area2:AreaP(7,1,12,16)
+  area3:AreaP(14,1,19,16)
+  area4:AreaP(51,51,51,51)
+  areaC:AreaC(50,50,50,50)
+robots
+  robot juntadores
+  variables
+    lado,f,esquinas:numero
+    ai,ci,id:numero
+  comenzar
+    RecibirMensaje(id,coordinador)
+    esquinas:=0
+    repetir 3
+      f:=0
+      Random(lado,1,4)
+      cuadrado(lado,f,esquinas)
+      ai:=PosAv
+      ci:=PosCa
+      repetir f
+        BloquearEsquina(50,50)
+        Pos(50,50)
+        si HayFlorEnLaBolsa
+          depositarFlor
+        Pos(ai,ci)
+        LiberarEsquina(50,50)
+      Pos(ai,ci+(lado+1))
+    EnviarMensaje(id,coordinador)    
+    EnviarMensaje(esquinas,coordinador)      
+  fin
+  robot coordinador
+  variables
+    id,idMax,esquinas1,esquinas2,esquinas3,esqMax:numero
+  comenzar
+    esqMax:=-1
+    idMax:=-1
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    repetir 3
+      RecibirMensaje(id,*)
+      si id=1
+        RecibirMensaje(esquinas1,r1)
+        Informar(esquinas1)
+        si (esquinas1>esqMax)
+          esqMax:=esquinas1
+          idMax:=id
+        sino
+          si id=2
+            RecibirMensaje(esquinas2,r2)
+            Informar(esquinas2)
+            si (esquinas2>esqMax)
+              esqMax:=esquinas2
+              idMax:=id
+            sino
+              RecibirMensaje(esquinas3,r3)
+              Informar(esquinas3)
+              si (esquinas3>esqMax)
+                esqMax:=esquinas3
+                idMax:=id
+    Informar('elRobotConMasEsquinas',idMax)  
+  fin
+
+variables
+  r1:juntadores
+  r2:juntadores
+  r3:juntadores
+  coordinador:coordinador
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r1,areaC)
+  AsignarArea(r2,area2)
+  AsignarArea(r2,areaC)
+  AsignarArea(r3,area3)
+  AsignarArea(r3,areaC)
+  AsignarArea(coordinador,area4)
+  Iniciar(r1,1,1)
+  Iniciar(r2,7,1)
+  Iniciar(r3,14,1)
+  Iniciar(coordinador,51,51)
+fin
