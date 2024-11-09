@@ -1,0 +1,96 @@
+programa parcialTurnoK
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso cuadrado(E lado:numero;ES f:numero)
+  comenzar
+    repetir 4
+      repetir lado
+        juntarFlores(f)
+        mover
+      derecha
+  fin
+  
+areas
+  area1:AreaP(1,1,6,18)
+  area2:AreaP(8,1,13,18)
+  area3:AreaP(15,1,20,18)
+  areaC:AreaC(50,50,50,50)
+  areaS:AreaP(22,1,22,1)
+robots
+  robot servidor
+  variables
+    solicitud,termine:boolean
+    lado,id,f:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    repetir 9
+      RecibirMensaje(solicitud,*)
+      RecibirMensaje(id,*)
+      si id=1
+        Random(lado,1,5)
+        EnviarMensaje(lado,r1)
+      sino 
+        si id=2
+          Random(lado,1,5)
+          EnviarMensaje(lado,r2)
+        sino 
+          Random(lado,1,5)
+          EnviarMensaje(lado,r3)
+    RecibirMensaje(termine,r1)
+    RecibirMensaje(termine,r2)
+    RecibirMensaje(termine,r3)
+    Pos(50,50)
+    juntarFlores(f)
+    Informar('CantidadDeFlores',f)    
+  fin
+  
+  robot cliente
+  variables
+    id,lado,f,ai,ci:numero
+    solicitud:boolean
+    
+  comenzar
+    RecibirMensaje(id,servidor)
+    solicitud:=V
+    repetir 3
+      ai:=PosAv
+      ci:=PosCa
+      EnviarMensaje(solicitud,servidor)
+      EnviarMensaje(id,servidor)
+      RecibirMensaje(lado,servidor)
+      cuadrado(lado,f)
+      Pos(ai,ci+(lado+1))
+    repetir f
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      si HayFlorEnLaBolsa
+        depositarFlor
+      Pos(ai,ci)
+      LiberarEsquina(50,50)
+    EnviarMensaje(V,servidor)   
+  fin
+  
+variables
+  r1,r2,r3:cliente
+  servidor:servidor
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r1,areaC)
+  AsignarArea(r2,area2)
+  AsignarArea(r2,areaC)
+  AsignarArea(r3,area3)
+  AsignarArea(r3,areaC)
+  AsignarArea(servidor,areaS)
+  AsignarArea(servidor,areaC)
+  Iniciar(r1,1,1)
+  Iniciar(r2,8,1)
+  Iniciar(r3,15,1)
+  Iniciar(servidor,22,1)
+fin
