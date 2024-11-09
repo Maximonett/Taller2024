@@ -28,18 +28,34 @@ robots
     EnviarMensaje(ok,r1)
     EnviarMensaje(ok,r2)
     EnviarMensaje(ok,r3)
-    RecibirMensaje(encontre,*)
-    RecibirMensaje(id,*)
-    si id=1 
-      EnviarMensaje(perdio,r2)
-      EnviarMensaje(perdio,r3)   
-    sino
-      si id=2
-        EnviarMensaje(perdio,r1)
-        EnviarMensaje(perdio,r3)
-      sino 
-        EnviarMensaje(perdio,r2)
-        EnviarMensaje(perdio,r1)
+    mientras (encontre=F)
+      RecibirMensaje(encontre,*)
+      si (encontre=V)
+        perdio:=V
+        RecibirMensaje(id,*)
+        si id=1 
+          EnviarMensaje(perdio,r2)
+          EnviarMensaje(perdio,r3)   
+        sino
+          si id=2
+            EnviarMensaje(perdio,r1)
+            EnviarMensaje(perdio,r3)
+          sino 
+            EnviarMensaje(perdio,r2)
+            EnviarMensaje(perdio,r1)
+      sino
+        RecibirMensaje(id,*)
+        perdio:=F
+        si id=1 
+          EnviarMensaje(perdio,r2)
+          EnviarMensaje(perdio,r3)   
+        sino
+          si id=2
+            EnviarMensaje(perdio,r1)
+            EnviarMensaje(perdio,r3)
+          sino 
+            EnviarMensaje(perdio,r2)
+            EnviarMensaje(perdio,r1)    
    
   fin
   robot buscador
@@ -48,12 +64,16 @@ robots
     ai,ci:numero
     gane:boolean
     encontre:boolean
+    ok:boolean
+    perdio:boolean
   comenzar
     ai:=PosAv
     ci:=PosCa
     RecibirMensaje(id,escondedor)
-    encontre:=V
+    RecibirMensaje(ok,escondedor)
+    encontre:=F
     gane:=F 
+    perdio:=F
     mientras (gane=F) 
       Random(av,10,13)
       Random(ca,10,13)
@@ -61,15 +81,25 @@ robots
       Pos(av,ca)
       si HayFlorEnLaEsquina
         tomarFlor
+        gane:=V
         Pos(ai,ci)
-        LiberarEsquina(av,ca)      
+        LiberarEsquina(av,ca)
+        encontre:=V      
         EnviarMensaje(encontre,escondedor)
         EnviarMensaje(id,escondedor)
-        gane:=V
         Informar('GANE',id)
       sino
         Pos(ai,ci)
         LiberarEsquina(av,ca)
+        encontre:=F
+        EnviarMensaje(encontre,escondedor)
+        EnviarMensaje(id,escondedor)
+        RecibirMensaje(perdio,escondedor)
+        si (perdio=V)
+          gane:=V
+        sino
+          gane:=F
+        
         
   fin
 variables
