@@ -1,0 +1,167 @@
+programa parcialTurnoFT1
+procesos
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1      
+  fin
+  proceso juntarLado1(ES f:numero)
+  comenzar
+    repetir 10
+      juntarFlores(f)
+      mover
+    juntarFlores(f)
+  fin
+  proceso juntarLado2(ES f:numero)
+  comenzar
+    repetir 8
+      juntarFlores(f)
+      mover
+    juntarFlores(f)
+  fin
+areas
+  area1:AreaP(1,1,11,10)
+  area2:AreaP(13,1,23,10)
+  areaF:AreaP(30,1,30,1)
+  areaC:AreaPC(20,20,20,20)
+robots
+  robot fiscalizador
+  variables
+    id,fA,fB:numero
+  comenzar
+    EnviarMensaje(1,r2)
+    EnviarMensaje(3,r4)
+    repetir 2
+      RecibirMensaje(id,*)
+      si id=1
+        RecibirMensaje(fA,r2)
+      sino
+        si id=3
+          RecibirMensaje(fB,r4)
+    si(fA>fB)
+      Informar('ElquipoQueJuntoMasFloresFueElA',0)
+      Informar('Junto',fA)
+    sino
+      Informar('ElquipoQueJuntoMasFloresFueElB',0)
+      Informar('Junto',fB)
+  fin
+  
+  robot juntadorA1
+  variables
+    f,id,ai,ci:numero
+  comenzar
+    derecha
+    f:=0
+    juntarLado1(f)
+    izquierda
+    juntarLado2(f)
+    EnviarMensaje(f,r2)
+    ai:=PosAv
+    ci:=PosCa
+    repetir f
+      BloquearEsquina(20,20)
+      Pos(20,20)
+      si HayFlorEnLaBolsa
+        depositarFlor
+      Pos(ai,ci)
+      LiberarEsquina(20,20)
+  fin
+  robot juntadorA2
+  variables
+    id,f,ft,ai,ci:numero
+  comenzar
+    RecibirMensaje(id,fiscal)
+    RecibirMensaje(f,r1)
+    ft:=ft+f
+    f:=0
+    izquierda
+    juntarLado1(f)
+    izquierda
+    juntarLado2(f)
+    ft:=ft+f
+    EnviarMensaje(id,fiscal)
+    EnviarMensaje(ft,fiscal)
+    ai:=PosAv
+    ci:=PosCa 
+    repetir f  
+      BloquearEsquina(20,20) 
+      Pos(20,20)
+      si HayFlorEnLaBolsa
+        depositarFlor
+      Pos(ai,ci) 
+      LiberarEsquina(20,20)   
+  fin
+  robot juntadorB1
+  variables 
+    f,id,ai,ci:numero 
+  comenzar 
+    derecha 
+    f:=0 
+    juntarLado1(f) 
+    izquierda 
+    juntarLado2(f) 
+    EnviarMensaje(f,r4) 
+    ai:=PosAv 
+    ci:=PosCa 
+    repetir f 
+      BloquearEsquina(20,20) 
+      Pos(20,20) 
+      si HayFlorEnLaBolsa 
+        depositarFlor 
+      Pos(ai,ci) 
+      LiberarEsquina(20,20) 
+  fin 
+  robot juntadorB2 
+  variables 
+    id,f,ft,ai,ci:numero 
+  comenzar 
+    RecibirMensaje(id,fiscal) 
+    RecibirMensaje(f,r3)
+    ft:=ft+f 
+    f:=0 
+    izquierda 
+    juntarLado1(f) 
+    izquierda 
+    juntarLado2(f) 
+    ft:=ft+f 
+    EnviarMensaje(id,fiscal) 
+    EnviarMensaje(ft,fiscal) 
+    ai:=PosAv 
+    ci:=PosCa  
+    repetir f   
+      BloquearEsquina(20,20)  
+      Pos(20,20) 
+      si HayFlorEnLaBolsa 
+        depositarFlor 
+      Pos(ai,ci)  
+      LiberarEsquina(20,20)    
+  fin 
+variables 
+  r1:juntadorA1
+  r2:juntadorA2
+  r3:juntadorB1
+  r4:juntadorB2
+  fiscal:fiscalizador
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r1,areaC)
+  AsignarArea(r2,area1)
+  AsignarArea(r2,areaC)
+  AsignarArea(r3,area2)
+  AsignarArea(r3,areaC)
+  AsignarArea(r4,area2)
+  AsignarArea(r4,areaC)
+  AsignarArea(fiscal,areaF)
+  Iniciar(r1,1,1)
+  Iniciar(r2,11,10)
+  Iniciar(r3,13,1)
+  Iniciar(r4,23,10)
+  Iniciar(fiscal,30,1)   
+fin
+
