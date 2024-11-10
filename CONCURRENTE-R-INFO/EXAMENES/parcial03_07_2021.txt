@@ -1,0 +1,142 @@
+programa parcial03072021
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso juntarPapeles(ES p:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin
+  proceso atras
+  comenzar
+    repetir 2
+      derecha
+  fin
+areas
+  area1:AreaP(5,1,5,10)
+  area2:AreaP(6,1,6,10)
+  area3:AreaP(7,1,7,10)
+  areaF:AreaP(1,1,1,1)
+robots
+  robot fiscalizador
+  variables
+    id,f1,f2,f3:numero
+    fmax1,fmax2,idMax1,idMax2:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    fmax1:=-1
+    fmax2:=-1
+    idMax1:=-1
+    idMax2:=-1
+    repetir 3
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(f1,r1)
+        si (f1>fmax1)
+          fmax2:=fmax1
+          idMax2:=idMax1
+          fmax1:=f1
+          idMax1:=1
+        sino
+          si (f1>fmax2)
+            fmax2:=f1
+            idMax2:=1
+      sino
+        si (id=2)
+          RecibirMensaje(f2,r2)
+          si (f2>fmax1)
+            fmax2:=fmax1
+            idMax2:=idMax1
+            fmax1:=f2
+            idMax1:=2
+          sino
+            si(f2>fmax2)
+              fmax2:=f2
+              idMax2:=2
+        sino
+          si (id=3)
+            RecibirMensaje(f3,r3)
+            si (f3>fmax1)
+              fmax2:=fmax1
+              idMax2:=idMax1
+              fmax1:=f3
+              idMax1:=3
+            sino
+              si(f3>fmax2)
+                fmax2:=f3
+                idMax2:=3
+    Informar(idMax1)
+    Informar(idMax2)
+    si (idMax1=1)&(idMax2=2)
+      EnviarMensaje(V,r1)
+      EnviarMensaje(V,r2)
+      EnviarMensaje(F,r3)
+    sino
+      si (idMax1=2)&(idMax2=1)
+        EnviarMensaje(V,r1)
+        EnviarMensaje(V,r2)
+        EnviarMensaje(F,r3)
+      sino
+        si (idMax1=1)&(idMax2=3)
+          EnviarMensaje(V,r1)
+          EnviarMensaje(V,r3)
+          EnviarMensaje(F,r2)
+        sino
+          si (idMax1=3)&(idMax2=1)
+            EnviarMensaje(V,r1)
+            EnviarMensaje(V,r3)
+            EnviarMensaje(F,r2)
+          sino
+            si (idMax1=2)&(idMax2=3)
+              EnviarMensaje(V,r3)
+              EnviarMensaje(V,r2)
+              EnviarMensaje(F,r1)
+            sino
+              si (idMax1=3)&(idMax2=2)
+                EnviarMensaje(V,r3)
+                EnviarMensaje(V,r2)
+                EnviarMensaje(F,r1)
+    RecibirMensaje(id,*)
+    Informar('ElRobotQueLlegoPrimeroEs',id)            
+  fin
+  robot recolector
+  variables
+    id,f,p:numero
+    seguir:boolean
+  comenzar
+    RecibirMensaje(id,fiscal)
+    mientras PosCa<10
+      juntarFlores(f)
+      mover
+    juntarFlores(f)
+    atras
+    EnviarMensaje(id,fiscal)
+    EnviarMensaje(f,fiscal)
+    RecibirMensaje(seguir,fiscal)
+    si (seguir=V)
+      mientras PosCa>1
+        juntarPapeles(p)
+        mover
+      juntarPapeles(p)
+      EnviarMensaje(id,fiscal)
+  fin
+variables
+  r1,r2,r3:recolector
+  fiscal:fiscalizador
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r2,area2)
+  AsignarArea(r3,area3)
+  AsignarArea(fiscal,areaF)
+  Iniciar(fiscal,1,1)
+  Iniciar(r1,5,1)
+  Iniciar(r2,6,1)
+  Iniciar(r3,7,1)
+fin
