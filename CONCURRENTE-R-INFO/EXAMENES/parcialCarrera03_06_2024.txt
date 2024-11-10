@@ -25,7 +25,7 @@ procesos
     repetir 2
       derecha
   fin
-  proceso juntarUnPapel(ES p:numero;ES noHyaMas:boolean)
+  proceso juntarUnPapel(ES p:numero;ES noHayMas:boolean)
   comenzar
     si HayPapelEnLaEsquina
       tomarPapel
@@ -51,6 +51,7 @@ robots
     repetir 4
       juntarFlores(f)
       mover
+    juntarFlores(f)
     noHayMas:=F  
     mientras (noHayMas=F)
       BloquearEsquina(6,6)
@@ -62,14 +63,16 @@ robots
     repetir 4
       juntarFlores(f)
       mover
+    juntarFlores(f)
     atras
     EnviarMensaje(id,fiscal)
     EnviarMensaje(f,fiscal)
     repetir 4
       juntarPapeles(p)
       mover
+    juntarPapeles(p)
     noHayMas:=F
-    mientras(noHayMas)
+    mientras(noHayMas=F)
       BloquearEsquina(6,6)
       Pos(6,6)
       juntarUnPapel(p,noHayMas)
@@ -79,6 +82,7 @@ robots
     repetir 4
       juntarPapeles(p)
       mover
+    juntarPapeles(p)
     EnviarMensaje(id,fiscal)
     EnviarMensaje(p,fiscal)
   fin
@@ -91,7 +95,8 @@ robots
     derecha 
     repetir 4 
       juntarFlores(f) 
-      mover 
+      mover
+    juntarFlores(f) 
     noHayMas:=F   
     mientras (noHayMas=F) 
       BloquearEsquina(6,6) 
@@ -102,15 +107,17 @@ robots
     Pos(7,7) 
     repetir 4 
       juntarFlores(f) 
-      mover 
+      mover
+    juntarFlores(f) 
     atras 
     EnviarMensaje(id,fiscal)  
     EnviarMensaje(f,fiscal) 
     repetir 4 
       juntarPapeles(p) 
-      mover 
+      mover
+    juntarPapeles(p) 
     noHayMas:=F 
-    mientras(noHayMas) 
+    mientras(noHayMas=F) 
       BloquearEsquina(6,6) 
       Pos(6,6) 
       juntarUnPapel(p,noHayMas) 
@@ -119,7 +126,8 @@ robots
     Pos(5,5)
     repetir 4
       juntarPapeles(p) 
-      mover 
+      mover
+    juntarPapeles(p) 
     EnviarMensaje(id,fiscal) 
     EnviarMensaje(p,fiscal) 
   fin
