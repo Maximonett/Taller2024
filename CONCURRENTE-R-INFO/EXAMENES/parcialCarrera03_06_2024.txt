@@ -1,0 +1,168 @@
+programa parcial03062024
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso juntarPapeles(ES p:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin
+  proceso juntarUnaFlor(ES f:numero;ES noHayMas:boolean)
+  comenzar
+    si HayFlorEnLaEsquina   
+      tomarFlor
+      f:=f+1
+    sino
+      noHayMas:=V
+  fin
+  proceso atras
+  comenzar
+    repetir 2
+      derecha
+  fin
+  proceso juntarUnPapel(ES p:numero;ES noHyaMas:boolean)
+  comenzar
+    si HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+    sino
+      noHayMas:=V  
+  fin 
+areas
+  area1a:AreaP(1,7,5,7)
+  area1b:AreaP(7,5,11,5)
+  area2a:AreaP(1,5,5,5)
+  area2b:AreaP(7,7,11,7)
+  areaC:AreaPC(6,6,6,6)
+  areaF:AreaP(1,6,1,6)
+robots
+  robot corredor1
+  variables
+    id,f,p:numero
+    noHayMas:boolean
+  comenzar
+    RecibirMensaje(id,fiscal)
+    derecha
+    repetir 4
+      juntarFlores(f)
+      mover
+    noHayMas:=F  
+    mientras (noHayMas=F)
+      BloquearEsquina(6,6)
+      Pos(6,6)
+      juntarUnaFlor(f,noHayMas)
+      Pos(5,7)
+      LiberarEsquina(6,6)
+    Pos(7,5)
+    repetir 4
+      juntarFlores(f)
+      mover
+    atras
+    EnviarMensaje(id,fiscal)
+    EnviarMensaje(f,fiscal)
+    repetir 4
+      juntarPapeles(p)
+      mover
+    noHayMas:=F
+    mientras(noHayMas)
+      BloquearEsquina(6,6)
+      Pos(6,6)
+      juntarUnPapel(p,noHayMas)
+      Pos(7,5)
+      LiberarEsquina(6,6)
+    Pos(5,7)
+    repetir 4
+      juntarPapeles(p)
+      mover
+    EnviarMensaje(id,fiscal)
+    EnviarMensaje(p,fiscal)
+  fin
+  robot corredor2
+  variables
+    id,f,p:numero 
+    noHayMas:boolean
+  comenzar 
+    RecibirMensaje(id,fiscal)
+    derecha 
+    repetir 4 
+      juntarFlores(f) 
+      mover 
+    noHayMas:=F   
+    mientras (noHayMas=F) 
+      BloquearEsquina(6,6) 
+      Pos(6,6) 
+      juntarUnaFlor(f,noHayMas) 
+      Pos(5,5) 
+      LiberarEsquina(6,6) 
+    Pos(7,7) 
+    repetir 4 
+      juntarFlores(f) 
+      mover 
+    atras 
+    EnviarMensaje(id,fiscal)  
+    EnviarMensaje(f,fiscal) 
+    repetir 4 
+      juntarPapeles(p) 
+      mover 
+    noHayMas:=F 
+    mientras(noHayMas) 
+      BloquearEsquina(6,6) 
+      Pos(6,6) 
+      juntarUnPapel(p,noHayMas) 
+      Pos(7,7)
+      LiberarEsquina(6,6) 
+    Pos(5,5)
+    repetir 4
+      juntarPapeles(p) 
+      mover 
+    EnviarMensaje(id,fiscal) 
+    EnviarMensaje(p,fiscal) 
+  fin
+  robot fiscalizador
+  variables
+    id,f1,p1,f2,p2:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    repetir 2
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(f1,r1)
+      sino
+        RecibirMensaje(f2,r2)
+    si (f1>f2)
+      Informar('ElRobotQueJuntoMasFloresFue',1)
+    sino
+      Informar('ElRobotQueJuntoMasFloresFue',2)
+    repetir 2
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(p1,r1)
+      sino
+        RecibirMensaje(p2,r2)
+    si (p1>p2)
+      Informar('ElRobotQueJuntoMasPapelesFue',1) 
+    sino
+      Informar('ElRobotQueJuntoMasPapelesFue',2)        
+  fin
+variables
+  r1:corredor1
+  r2:corredor2
+  fiscal:fiscalizador
+comenzar
+  AsignarArea(r1,area1a)
+  AsignarArea(r1,area1b)
+  AsignarArea(r1,areaC)
+  AsignarArea(r2,area2a)
+  AsignarArea(r2,area2b)
+  AsignarArea(r2,areaC)
+  AsignarArea(fiscal,areaF)
+  Iniciar(r1,1,7)
+  Iniciar(r2,1,5)
+  Iniciar(fiscal,1,6)
+fin  
