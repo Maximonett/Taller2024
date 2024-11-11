@@ -1,0 +1,143 @@
+programa parcialRectangulo
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso juntarPapeles(ES p:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin
+  proceso depositarDeUnaFlor(E ai:numero;E ci:numero;E av:numero;E ca:numero;ES f:numero)
+  comenzar
+    repetir f  
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      si HayFlorEnLaBolsa
+        depositarFlor
+      Pos(ai,ci)
+      LiberarEsquina(av,ca)
+  fin
+  proceso depositarDeUnPapel(E ai:numero;E ci:numero;E av:numero;E ca:numero;ES p:numero)
+  comenzar
+    repetir p
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      si HayPapelEnLaBolsa
+        depositarPapel
+      Pos(ai,ci)
+      LiberarEsquina(av,ca)
+  fin
+areas
+  area1:AreaP(1,1,20,20)
+  area2:AreaP(21,1,40,20)
+  areaC1:AreaPC(21,21,21,21)
+  areaC2:AreaPC(22,22,22,22)
+  areaJ:AreaP(23,23,23,23)
+robots
+  robot trabajador
+  variables
+    id,f,p,alto,ancho,ft,pt:numero
+    ai,ci,av,ca:numero
+  comenzar
+    RecibirMensaje(id,jefe)
+    RecibirMensaje(alto,jefe)
+    RecibirMensaje(ancho,jefe)
+    repetir 2
+      f:=0
+      p:=0  
+      repetir alto
+        juntarFlores(f)
+        juntarPapeles(p)
+        mover
+      juntarFlores(f)
+      juntarPapeles(p)
+      ft:=ft+f
+      pt:=pt+p
+      derecha
+      ai:=PosAv
+      ci:=PosCa
+      depositarDeUnPapel(ai,ci,22,22,p)
+      depositarDeUnaFlor(ai,ci,21,21,f)
+      f:=0
+      f:=0
+      repetir ancho
+        juntarFlores(f)
+        juntarPapeles(p)
+        mover
+      juntarFlores(f)
+      juntarPapeles(p)
+      ft:=ft+f
+      pt:=pt+p
+      derecha
+      ai:=PosAv
+      ci:=PosCa
+      depositarDeUnPapel(ai,ci,22,22,p)
+      depositarDeUnaFlor(ai,ci,21,21,f)
+    EnviarMensaje(id,jefe)
+    EnviarMensaje(ft,jefe)
+    EnviarMensaje(pt,jefe)
+  fin
+  robot patron
+  variables
+    id,f1,f2,p1,p2:numero
+    idFMax,idPMax,fmax,pmax:numero
+    alto,ancho:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    Random(alto,1,19)
+    Random(ancho,1,19)
+    EnviarMensaje(alto,r1)
+    EnviarMensaje(ancho,r1)
+    Random(alto,1,19)
+    Random(ancho,1,19)
+    EnviarMensaje(alto,r2)
+    EnviarMensaje(ancho,r2)
+    idFMax:=-1
+    idPMax:=-1
+    fmax:=-1
+    pmax:=-1
+    repetir 2 
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(f1,r1)
+        RecibirMensaje(p1,r1)
+        si (f1>fmax)
+          fmax:=f1
+          idFMax:=1
+        si (p1>pmax)
+          pmax:=p1
+          idPMax:=1
+      sino
+        si (id=2)
+          RecibirMensaje(f2,r2)
+          RecibirMensaje(p2,r2)
+          si (f2>fmax)
+            fmax:=f2
+            idFMax:=2
+          si (p2>pmax)
+            pmax:=p2
+            idPMax:=2
+    Informar('ElRobotQueJuntoMasFlores',idFMax)
+    Informar('ElRobotQueJuntoMasPapeles',idPMax)    
+  fin
+variables
+  r1,r2:trabajador
+  jefe:patron
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r1,areaC1)
+  AsignarArea(r1,areaC2)
+  AsignarArea(r2,area2)
+  AsignarArea(r2,areaC1)
+  AsignarArea(r2,areaC2)
+  AsignarArea(jefe,areaJ)
+  Iniciar(r1,1,1)
+  Iniciar(r2,21,1)
+  Iniciar(jefe,23,23)
+fin
