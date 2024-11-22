@@ -23,7 +23,7 @@ program facultadDeInformatica;
 
 type
 
-	rango_nota=1..10;
+	rango_nota=0..10;
 	rango_nro=0..7000;
 	rango_materia=300..356;
 	
@@ -56,7 +56,7 @@ type
 	
 procedure leerAleatorioAlumno(var a:alumno);
 begin
-	a.nro:=random(70);
+	a.nro:=random(10);
 	if (a.nro<>0)then begin
 		a.materia:=300+random(356-300+1);
 		a.nota:=random(10)+1;
@@ -107,36 +107,57 @@ end;
 
 
 
-procedure nuevaEstructura(aA:arbolA; var aP:arbolP);
-var
-	promedio:real;suma:integer;i:integer;cant:integer;
+procedure insertarNodo(var aP: arbolP; alumno: alumno; notas: vNotas; promedio: real);
 begin
-	if (aP=nil) then begin
-		new(aP);
-		aP^.dato:=aA^.dato;
-		aP^.notas:=aA^.notas;
-		suma:=0;
-		cant:=0;
-		for i:=300 to 356 do begin
-			if (aA^.notas[i]<>0) then begin
-				suma:=suma+aA^.notas[i];
-				cant:=cant+1;
-			end;
-		end;
-		promedio:=suma/(cant);
-		aP^.promedio:=promedio;
-		aP^.hi:=nil;
-		aP^.hd:=nil;
-	end
-	else begin
-		if (promedio< aP^.promedio) then 
-			nuevaEstructura(aA^.hi,aP)
-		else
-			nuevaEstructura(aA^.hd,aP);
-	end;
+    if (aP = nil) then
+    begin
+        new(aP);
+        aP^.dato := alumno;
+        aP^.notas := notas;
+        aP^.promedio := promedio;
+        aP^.hi := nil;
+        aP^.hd := nil;
+    end
+    else if (promedio < aP^.promedio) then
+        insertarNodo(aP^.hi, alumno, notas, promedio)
+    else
+        insertarNodo(aP^.hd, alumno, notas, promedio);
 end;
 
-procedure mostrarArbolA(aA:arbolA);
+procedure nuevaEstructura(aA: arbolA; var aP: arbolP);
+var
+    suma, cant, i: integer;
+    promedio: real;
+begin
+    if (aA <> nil) then
+    begin
+        // Calcular promedio del nodo actual
+        suma := 0;
+        cant := 0;
+        for i := 300 to 356 do
+        begin
+            if (aA^.notas[i] <> 0) then
+            begin
+                suma := suma + aA^.notas[i];
+                cant := cant + 1;
+            end;
+        end;
+        if (cant > 0) then
+            promedio := suma / cant
+        else
+            promedio := 0;
+
+        // Insertar nodo actual en aP
+        insertarNodo(aP, aA^.dato, aA^.notas, promedio);
+
+        // Procesar subárbol izquierdo y derecho
+        nuevaEstructura(aA^.hi, aP);
+        nuevaEstructura(aA^.hd, aP);
+    end;
+end;
+
+
+procedure mostrarArbolA (aA:arbolA);
 var
 	i:integer;
 begin
@@ -158,10 +179,10 @@ begin
 		mostrarArbolP(aP^.hi);
 		writeln('Numero de Alumno: ',aP^.dato.nro);
 		for i:=300 to 356 do begin
-			if (aP^.notas[i]<>0) then 
+			if ((aP^.notas[i])<>0) then 
 				writeln('MATERIA: ',i,' la nota es: ',aP^.notas[i]);
 		end;
-		writeln('Promedio: ',aP^.promedio);
+		writeln('Promedio: ',(aP^.promedio):0:2);
 		mostrarArbolP(aP^.hd);
 	end;
 end;
@@ -172,7 +193,14 @@ begin
 	randomize();
 	aA:=nil;
 	cargarArbolAlumnos(aA);
+	aP:=nil;
 	nuevaEstructura(aA,aP);
+	writeln('--------------------');
+	writeln('arbol sin promedio');
+	writeln('--------------------');
 	mostrarArbolA(aA);
+	writeln('--------------------');
+	writeln('arbol con promedio');
+	writeln('--------------------');
 	mostrarArbolP(aP);
 end.
