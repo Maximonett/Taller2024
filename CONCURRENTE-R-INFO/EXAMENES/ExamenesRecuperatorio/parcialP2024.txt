@@ -1,0 +1,164 @@
+
+
+programa parcialP2024
+procesos 
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin  
+areas
+  area1:AreaPC(1,1,11,10)
+  area2:AreaPC(20,1,31,10)
+  areaF:AreaP(50,50,50,50)
+  areaC:AreaPC(25,25,25,25)  
+  
+robots
+  robot etapa1
+  variables
+    id,f,ai,ci:numero
+    ok:boolean
+  comenzar
+    ok:=V
+    RecibirMensaje(id,fiscal)
+    si id=1
+      BloquearEsquina(11,10)
+      Pos(11,10)
+    sino
+      si id=3
+        BloquearEsquina(31,10)
+        Pos(31,10)   
+    izquierda
+    repetir 10
+      juntarFlores(f)
+      mover
+    juntarFlores(f)
+    izquierda
+    repetir 9
+      juntarFlores(f)
+      mover
+    juntarFlores(f)
+    si id=1
+      EnviarMensaje(ok,robot2)
+    sino
+      si id=3 
+        EnviarMensaje(ok,robot4)
+    EnviarMensaje(id,fiscal)    
+    EnviarMensaje(f,fiscal)
+    ai:=PosAv
+    ci:=PosCa
+    repetir f
+      BloquearEsquina(25,25)
+      Pos(25,25)
+      si HayFlorEnLaBolsa
+        depositarFlor
+      Pos(ai,ci)
+      LiberarEsquina(25,25)      
+  fin
+  robot etapa2
+  variables
+    id,f,ai,ci:numero
+    ok:boolean
+  comenzar
+    RecibirMensaje(id,fiscal)
+    si id=2
+      Pos(2,1)
+    sino
+      si id=4
+        Pos(22,1)    
+    si id=2
+      RecibirMensaje(ok,robot1)
+    sino
+      si id=4
+        RecibirMensaje(ok,robot3)
+    derecha
+    repetir 9
+      juntarFlores(f)
+      mover
+    juntarFlores(f)
+    izquierda
+    repetir 9
+      juntarFlores(f)
+      mover
+    juntarFlores(f)
+    EnviarMensaje(id,fiscal)
+    EnviarMensaje(f,fiscal)
+    ai:=PosAv
+    ci:=PosCa 
+    repetir f 
+      BloquearEsquina(25,25) 
+      Pos(25,25) 
+      si HayFlorEnLaBolsa 
+        depositarFlor 
+      Pos(ai,ci) 
+      LiberarEsquina(25,25) 
+  fin
+  robot fiscal
+  variables
+    f,id,fa,fb:numero
+  comenzar
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    EnviarMensaje(4,robot4)
+    f:=0
+    fa:=0
+    fb:=0
+    repetir 4
+      RecibirMensaje(id,*)
+      si id=1
+        f:=0
+        RecibirMensaje(f,robot1)
+        fa:=fa+f
+      sino 
+        si id=2
+          f:=0
+          RecibirMensaje(f,robot2)
+          fb:=fb+f
+        sino
+          si id=3
+            f:=0
+            RecibirMensaje(f,robot3)
+            fa:=fa+f
+          sino
+            f:=0
+            RecibirMensaje(f,robot4)
+            fb:=fb+f
+    si fa>fb
+      Informar('ElEquipoAjuntomasFloresJunto',fa)
+    sino
+      si (fa<fb)
+        Informar('ElEquipoBjuntomasFloresJunto',fb)
+      sino 
+        si fa=fb
+          Informar('Empataron',0)
+  fin
+
+variables
+  robot1:etapa1
+  robot2:etapa2
+  robot3:etapa1
+  robot4:etapa2
+  fiscal:fiscal
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot1,areaC)
+  AsignarArea(robot2,area1)
+  AsignarArea(robot2,areaC)
+  AsignarArea(robot3,area2)
+  AsignarArea(robot3,areaC)
+  AsignarArea(robot4,area2)
+  AsignarArea(robot4,areaC)
+  AsignarArea(fiscal,areaF)
+  Iniciar(robot1,1,1)
+  Iniciar(robot2,11,10)
+  Iniciar(robot3,20,1)
+  Iniciar(robot4,31,10)
+  Iniciar(fiscal,50,50)
+fin
