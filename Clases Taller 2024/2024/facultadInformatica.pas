@@ -88,9 +88,14 @@ begin
 	end
 	else begin
 		if (a.nro<aA^.dato.nro) then 
-			agregarArbolAlumnos(aA^.hi,a)
-		else
-			agregarArbolAlumnos(aA^.hd,a);	
+			agregarArbolAlumnos(aA^.hi,a); //se agrega por izquierda 
+		if (a.nro>aA^.dato.nro) then
+			agregarArbolAlumnos(aA^.hd,a)	//se agrega por derecha
+		else begin
+			// si el alumno ya existe solo actualiza
+			materia:=a.materia; //obtiene el la posicion del vector 
+	    	aA^.notas[materia]:=a.nota; //actualiza con la nueva nota
+		end;
 	end;
 end;
 
@@ -134,15 +139,13 @@ begin
         // Calcular promedio del nodo actual
         suma := 0;
         cant := 0;
-        for i := 300 to 356 do
-        begin
-            if (aA^.notas[i] <> 0) then
-            begin
+        for i := 300 to 356 do begin
+            if (aA^.notas[i] <> 0) then begin//si la nota es distinata de cero quiere decir que la cargaron 
                 suma := suma + aA^.notas[i];
                 cant := cant + 1;
             end;
         end;
-        if (cant > 0) then
+        if (cant > 0) then   // para que no haya division por cero
             promedio := suma / cant
         else
             promedio := 0;
