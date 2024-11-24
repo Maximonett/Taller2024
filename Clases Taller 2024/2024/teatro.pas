@@ -95,24 +95,38 @@ begin
 	end;
 end;
 
-procedure agregarTotal(var L:listaT;codO:integer;cant:integer);
+procedure agregarTotal(var L: listaT; codO: integer; cant: integer);
 var
-	nue,act,ant:listaT;
+    nue, act, ant: listaT;
 begin
-	new(nue);
-	nue^.dato.codO:=codO;
-	nue^.dato.cant:=cant;
-	nue^.sig:=nil;
-	act:=L; ant:=nil;
-	while (act<>nil)and (codO>act^.dato.codO) do begin
-		ant:=act; act:=act^.sig;
-	end;
-	if (ant=nil) then
-		L:=nue
-	else
-		ant^.sig:=nue;
-	nue^.sig:=act;	
+    act := L;
+    ant := nil;
+
+    // Buscar la posición donde insertar o actualizar
+    while (act <> nil) and (codO > act^.dato.codO) do begin
+        ant := act;
+        act := act^.sig;
+    end;
+
+    // Si el código ya existe, actualizar la cantidad
+    if (act <> nil) and (act^.dato.codO = codO) then begin
+        act^.dato.cant := act^.dato.cant + cant;
+    end
+    else begin
+        // Crear un nuevo nodo si el código no existe
+        new(nue);
+        nue^.dato.codO := codO;
+        nue^.dato.cant := cant;
+        nue^.sig := act;
+
+        // Insertar el nodo en la lista
+        if (ant = nil) then
+            L := nue // Insertar al inicio
+        else
+            ant^.sig := nue; // Insertar en el medio o al final
+    end;
 end;
+
 
 procedure generarListaTotal(vL:vListasE;var L:listaT);
 var
