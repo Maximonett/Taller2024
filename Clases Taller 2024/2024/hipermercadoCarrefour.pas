@@ -89,11 +89,31 @@ begin
 	end;
 end;
 
+procedure todasLasVentas(aC:arbolC; x:integer;y:integer);
+begin
+	if (aC<>nil) then begin
+		if (aC^.dato.nroF>=x)and(aC^.dato.nroF<=y) then begin
+			writeln('-----------------------------------------');
+			writeln('Codigo de Cliente: ',aC^.dato.codC);
+			writeln('Numero de Factura: ',aC^.dato.nroF);
+			writeln('Cantidad de Productos: ',aC^.dato.cantP);
+			writeln('Monto por la compra: ',aC^.dato.monto:0:2);
+			writeln('-----------------------------------------');
+		end;
+		if (aC^.dato.nroF>x)then
+			todasLasVentas(aC^.hi,x,y);
+		
+		if (aC^.dato.nroF<y) then
+			todasLasVentas(aC^.hd,x,y);
+	end;
+end;
+
 var
 	aC:arbolC;
 	cant:integer;
 	montoT:real;
 	codC:integer;
+	x,y:integer;
 begin
 	randomize();
 	aC:=nil;
@@ -104,4 +124,8 @@ begin
 	readln(codC);
 	cantidadYMontoCompras(aC,codC,cant,montoT);
 	writeln('La cantidad de compras realizadas por el cliente ',codC,' fue de ',cant,' por un monto de $ ',montoT:0:2);
+	writeln('Elegir un rango inferior y un superio');
+	readln(x);
+	readln(y);
+	todasLasVentas(aC,x,y);	
 end.
