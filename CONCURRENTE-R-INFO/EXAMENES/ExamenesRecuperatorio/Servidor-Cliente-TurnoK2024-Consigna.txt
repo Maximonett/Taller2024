@@ -1,0 +1,116 @@
+programa ServidorClienteTurnoK2024
+
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso cuadrado(ES f:numero;E lado:numero)
+  comenzar
+    repetir 2
+      repetir lado
+        juntarFlores(f)
+        mover
+      juntarFlores(f)
+      derecha
+      repetir lado
+        juntarFlores(f)
+        mover
+      juntarFlores(f)
+      derecha
+  fin
+  
+  
+areas
+  area1:AreaP(1,1,6,20)
+  area2:AreaP(8,1,13,20)
+  area3:AreaP(15,1,20,20)
+  areaC:AreaC(50,50,50,50)
+  areaS:AreaP(22,1,22,1)
+robots
+  robot cliente
+  variables
+    id,f,lado,c,ai,ci:numero
+    ok,termine:boolean
+  comenzar
+    RecibirMensaje(id,servidor)
+    ok:=V
+    f:=0
+    c:=0
+    termine:=V
+    mientras (c<=3) and (ok=V)
+      EnviarMensaje(ok,servidor)
+      EnviarMensaje(id,servidor)
+      RecibirMensaje(lado,servidor)
+      ai:=PosAv
+      ci:=PosCa
+      cuadrado(f,lado)
+      Pos(ai,ci+6)
+      c:=c+1
+      si (c=3)
+        ok:=F
+      sino
+        ok:=V
+    ai:=PosAv
+    ci:=PosCa    
+    repetir f
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      depositarFlor
+      Pos(ai,ci)
+      LiberarEsquina(50,50)
+    EnviarMensaje(termine,servidor) 
+  fin
+  robot servidor
+  variables
+    f,lado,id,ai,ci:numero
+    ok,termine:boolean
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    ok:=F 
+    repetir 9 
+      RecibirMensaje(ok,*)
+      RecibirMensaje(id,*)
+      si id=1
+        Random(lado,1,5)
+        EnviarMensaje(lado,r1)
+      sino
+        si id=2
+          Random(lado,1,5)
+          EnviarMensaje(lado,r2)
+        sino
+          si id=3
+            Random(lado,1,5)
+            EnviarMensaje(lado,r3)
+    repetir 3
+      RecibirMensaje(termine,*) 
+    ai:=PosAv
+    ci:=PosCa
+    Pos(50,50)
+    juntarFlores(f)
+    Pos(ai,ci)
+    Informar('LaCantidadDeFloresEra',f) 
+  fin
+variables
+  r1:cliente
+  r2:cliente
+  r3:cliente
+  servidor:servidor
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r1,areaC)
+  AsignarArea(r2,area2)
+  AsignarArea(r2,areaC)
+  AsignarArea(r3,area3)
+  AsignarArea(r3,areaC)
+  AsignarArea(servidor,areaS)
+  AsignarArea(servidor,areaC)
+  Iniciar(servidor,22,1)
+  Iniciar(r1,1,1)
+  Iniciar(r2,8,1)
+  Iniciar(r3,15,1)  
+fin
