@@ -100,8 +100,8 @@ begin
 			writeln('Codigo de VideoJuego: ',aC^.dato.codV);
 			writeln('Fecha ',aC^.dato.dia,'/',aC^.dato.mes);
 		end;
-			comprasXporCliente(aC^.hi,codC);
-			comprasXporCliente(aC^.hd,codC);
+		comprasXporCliente(aC^.hi,codC);
+		comprasXporCliente(aC^.hd,codC);
 	end;
 end;
 
